@@ -1,0 +1,98 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "geminikit/schemas/task-schema",
+  "title": "Task",
+  "description": "Defines the structure of a task passed between orchestrator and agents.",
+  "type": "object",
+  "required": ["taskId", "command", "status"],
+  "additionalProperties": false,
+  "properties": {
+    "taskId": {
+      "type": "string",
+      "description": "Unique task identifier. Format: <phase>-<sequence> e.g. phase-01-001"
+    },
+    "command": {
+      "type": "string",
+      "description": "Human-readable instruction for the agent."
+    },
+    "agent": {
+      "type": "string",
+      "enum": ["planner", "developer", "tester", "reviewer", "researcher", "documenter", "comparator", "designer"],
+      "description": "Agent responsible for executing this task."
+    },
+    "skill": {
+      "type": "string",
+      "description": "Skill name to invoke, if applicable. Must match a skill in .gemini/skills/."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Optional execution mode hint passed to the agent or skill."
+    },
+    "priority": {
+      "type": "string",
+      "enum": ["P1", "P2", "P3"],
+      "default": "P2",
+      "description": "P1=critical, P2=normal, P3=low."
+    },
+    "status": {
+      "type": "string",
+      "enum": ["pending", "in_progress", "completed", "failed", "blocked"],
+      "description": "Lifecycle state of the task."
+    },
+    "blockedBy": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "List of taskIds that must complete before this task can start.",
+      "default": []
+    },
+    "dependencies": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Ordered list of taskIds whose outputs are required as input.",
+      "default": []
+    },
+    "fileOwnership": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Glob patterns for files this agent exclusively owns during execution.",
+      "default": []
+    },
+    "input": {
+      "type": "object",
+      "description": "Input payload for the agent or skill.",
+      "properties": {
+        "task": {
+          "type": "string",
+          "description": "Primary task description or prompt."
+        },
+        "context": {
+          "type": "object",
+          "description": "Supporting context: prior outputs, relevant file paths, references.",
+          "additionalProperties": true
+        },
+        "constraints": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Additional constraints specific to this task invocation."
+        }
+      },
+      "additionalProperties": true
+    },
+    "output": {
+      "type": "object",
+      "description": "Populated by the agent on completion. Must conform to report-schema.",
+      "additionalProperties": true
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Operational metadata: timestamps, retry counts, session info.",
+      "properties": {
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "retryCount": { "type": "integer", "minimum": 0, "default": 0 },
+        "sessionId": { "type": "string" }
+      },
+      "additionalProperties": true
+    }
+  }
+}

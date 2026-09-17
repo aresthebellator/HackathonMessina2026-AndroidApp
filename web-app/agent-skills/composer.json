@@ -1,0 +1,82 @@
+{
+  "name": "alizharb/agent-skills",
+  "description": "Advanced Laravel AI agent skills and guidelines for Laravel Boost, skills.sh, and modern AI coding assistants.",
+  "type": "library",
+  "keywords": [
+    "laravel",
+    "ai",
+    "agents",
+    "skills",
+    "guidelines",
+    "boost",
+    "claude",
+    "codex",
+    "cursor",
+    "windsurf",
+    "copilot"
+  ],
+  "homepage": "https://github.com/AlizHarb/agent-skills",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Ali Harb",
+      "email": "harbzali@gmail.com",
+      "homepage": "https://github.com/AlizHarb",
+      "role": "Developer"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/AlizHarb/agent-skills/issues",
+    "source": "https://github.com/AlizHarb/agent-skills",
+    "docs": "https://github.com/AlizHarb/agent-skills#readme"
+  },
+  "funding": [
+    {
+      "type": "github",
+      "url": "https://github.com/sponsors/AlizHarb"
+    }
+  ],
+  "require": {
+    "php": "^8.2",
+    "illuminate/support": "^11.0|^12.0|^13.0"
+  },
+  "require-dev": {
+    "laravel/pint": "^1.0",
+    "orchestra/testbench": "^9.0|^10.0|^11.0",
+    "pestphp/pest": "^3.0|^4.0",
+    "pestphp/pest-plugin-laravel": "^3.0|^4.0",
+    "phpstan/phpstan": "^2.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "AlizHarb\\AgentSkills\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "AlizHarb\\AgentSkills\\Tests\\": "tests/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "AlizHarb\\AgentSkills\\AgentSkillsServiceProvider"
+      ]
+    }
+  },
+  "scripts": {
+    "test": "vendor/bin/pest",
+    "format": "vendor/bin/pint",
+    "analyse": "vendor/bin/phpstan analyse --memory-limit=1G",
+    "validate-skills": "php scripts/validate-skills.php",
+    "sync-boost": "php scripts/sync-boost-skills.php"
+  },
+  "config": {
+    "sort-packages": true,
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    }
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true
+}

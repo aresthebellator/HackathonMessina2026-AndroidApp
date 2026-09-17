@@ -1,0 +1,110 @@
+{
+  "name": "ultraship",
+  "version": "2.13.2",
+  "description": "Claude Code plugin with a Currency Guard that keeps Claude on current docs (not stale training data), elite SEO strategy (GSC + Bing + GA4 keyword intelligence, index doctor, AI traffic tracking, IndexNow, cross-reference, CTR anomalies, brand filtering), sprint workflow, safety guardrails, canary monitoring, retrospectives, pre-deploy auditing (SEO, security, penetration testing, code profiling, bundle size), workflow enforcement (TDD, code review, planning), and project tooling (competitive analysis, architecture mapping, codebase indexing, incident response). 41 tools, 45 skills, 13 agents.",
+  "type": "module",
+  "bin": {
+    "ultraship": "bin/ultraship.mjs"
+  },
+  "author": {
+    "name": "Kailesk Khumar",
+    "email": "kailesk@houseofmvps.com",
+    "url": "https://www.kailxlabs.co"
+  },
+  "contributors": [
+    {
+      "name": "HouseofMVPs",
+      "url": "https://houseofmvps.com"
+    },
+    {
+      "name": "Kailxlabs",
+      "url": "https://www.kailxlabs.co"
+    }
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Houseofmvps/ultraship"
+  },
+  "homepage": "https://github.com/Houseofmvps/ultraship#readme",
+  "bugs": {
+    "url": "https://github.com/Houseofmvps/ultraship/issues"
+  },
+  "funding": [
+    {
+      "type": "github",
+      "url": "https://github.com/sponsors/Houseofmvps"
+    },
+    {
+      "type": "individual",
+      "url": "https://www.kailxlabs.co"
+    }
+  ],
+  "keywords": [
+    "claude-code",
+    "claude-code-plugin",
+    "claude",
+    "seo",
+    "geo",
+    "aeo",
+    "lighthouse",
+    "security",
+    "code-review",
+    "deploy",
+    "indie-hacker",
+    "saas",
+    "ai",
+    "developer-tools",
+    "performance",
+    "browser-testing",
+    "workflow",
+    "competitive-analysis",
+    "launch",
+    "incident-response",
+    "growth",
+    "cost-tracking",
+    "onboarding",
+    "architecture",
+    "visual-regression",
+    "demo",
+    "sprint",
+    "canary",
+    "retrospective",
+    "guard",
+    "safety",
+    "learnings",
+    "investigation",
+    "keyword-research",
+    "google-analytics",
+    "search-console",
+    "indexing",
+    "seo-strategy",
+    "bing-webmaster",
+    "indexnow",
+    "ai-traffic",
+    "chatgpt-search",
+    "perplexity",
+    "copilot"
+  ],
+  "files": [
+    "bin/",
+    ".claude-plugin/",
+    "skills/",
+    "agents/",
+    "commands/",
+    "tools/",
+    "hooks/",
+    "assets/",
+    ".mcp.json",
+    "README.md",
+    "LICENSE",
+    "SECURITY.md",
+    "CLAUDE.md",
+    "GEMINI.md",
+    "llms.txt"
+  ],
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "version": "node scripts/sync-version.mjs && git add .claude-plugin/plugin.json .claude-plugin/marketplace.json"
+  }
+}

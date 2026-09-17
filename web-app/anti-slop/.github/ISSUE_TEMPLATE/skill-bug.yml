@@ -1,0 +1,56 @@
+name: Skill bug
+description: A skill over-fired, under-fired, or produced a bad outcome.
+title: "[skill]: "
+labels: ["bug", "skill"]
+body:
+  - type: dropdown
+    id: skill
+    attributes:
+      label: Skill
+      options:
+        - kill-slop
+        - security-review
+        - pr-hygiene
+        - unsure / multiple
+    validations:
+      required: true
+  - type: dropdown
+    id: mode
+    attributes:
+      label: What went wrong?
+      options:
+        - Over-fired — skill applied when it shouldn't have
+        - Under-fired — skill should have applied but didn't
+        - Bad outcome — skill applied, guidance was wrong or harmful
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: expect
+    attributes:
+      label: What did you expect?
+      placeholder: e.g. kill-slop should allow a split when the file is already 600 lines…
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: What happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Repro
+      description: Agent, model (if known), prompt, and relevant snippet of the skill output.
+      placeholder: |
+        Agent: Cursor / Claude Code / …
+        Prompt: …
+        Notes: …
+    validations:
+      required: true
+  - type: input
+    id: agent
+    attributes:
+      label: Agent
+      placeholder: Cursor, Claude Code, Codex, …

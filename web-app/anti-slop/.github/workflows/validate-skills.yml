@@ -1,0 +1,58 @@
+name: Validate skills
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  frontmatter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check SKILL.md name + description
+        run: |
+          set -euo pipefail
+          python3 <<'PY'
+          from pathlib import Path
+          import re
+          import sys
+
+          skills = sorted(Path("skills").glob("*/SKILL.md"))
+          if not skills:
+              print("No skills/*/SKILL.md found", file=sys.stderr)
+              sys.exit(1)
+
+          errors = []
+          for path in skills:
+              text = path.read_text(encoding="utf-8")
+              if not text.startswith("---"):
+                  errors.append(f"{path}: missing opening YAML frontmatter")
+                  continue
+              end = text.find("\n---", 3)
+              if end == -1:
+                  errors.append(f"{path}: missing closing YAML frontmatter")
+                  continue
+              fm = text[3:end]
+              if not re.search(r"(?m)^name:\s*\S+", fm):
+                  errors.append(f"{path}: missing name")
+              if not re.search(r"(?m)^description:\s*\S+", fm) and "description: >-" not in fm and "description: |" not in fm:
+                  errors.append(f"{path}: missing description")
+              # name must match parent folder
+              name_m = re.search(r"(?m)^name:\s*[\"']?([a-z0-9-]+)[\"']?\s*$", fm)
+              folder = path.parent.name
+              if name_m and name_m.group(1) != folder:
+                  errors.append(f"{path}: name {name_m.group(1)!r} != folder {folder!r}")
+              # folder name conventions
+              if not re.fullmatch(r"[a-z0-9-]+", folder):
+                  errors.append(f"{path}: folder must be lowercase/hyphens only")
+
+          if errors:
+              print("\n".join(errors), file=sys.stderr)
+              sys.exit(1)
+
+          print(f"OK — {len(skills)} skill(s)")
+          for path in skills:
+              print(f"  - {path}")
+          PY

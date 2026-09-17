@@ -1,0 +1,120 @@
+{
+  "name": "agent-skills-presets",
+  "version": "1.0.0",
+  "presets": {
+    "core": {
+      "description": "Essential Laravel agent skills for safe AI-assisted development.",
+      "skills": [
+        "create-action",
+        "create-request",
+        "create-dto",
+        "write-tests",
+        "review-feature",
+        "review-security",
+        "review-static-analysis",
+        "debug-failing-tests",
+        "debug-phpstan",
+        "format-codebase-pint"
+      ]
+    },
+    "filament": {
+      "description": "Skills for Filament panels, resources, permissions, and UI review.",
+      "skills": [
+        "filament-development",
+        "filament-shield",
+        "reuse-filament-resources",
+        "review-tailwind-flux",
+        "review-accessibility",
+        "write-tests",
+        "review-security"
+      ]
+    },
+    "api": {
+      "description": "Skills for secure Laravel API and integration development.",
+      "skills": [
+        "create-api-endpoint",
+        "create-api-integration",
+        "implement-webhooks",
+        "implement-api-rate-limiting",
+        "create-request",
+        "create-policy",
+        "write-tests",
+        "review-security"
+      ]
+    },
+    "saas": {
+      "description": "Skills for SaaS workflows, billing, permissions, feature flags, and operations.",
+      "skills": [
+        "implement-subscription-billing",
+        "laravel-pennant-feature-flags",
+        "implement-permissions",
+        "implement-notifications",
+        "design-multi-tenant-feature",
+        "implement-observability",
+        "review-security",
+        "write-tests"
+      ]
+    },
+    "package": {
+      "description": "Skills for building, validating, documenting, and releasing Laravel packages.",
+      "skills": [
+        "create-laravel-package",
+        "create-laravel-boost-guidelines",
+        "prepare-package-release",
+        "write-release-notes",
+        "review-package-readme",
+        "fix-github-actions",
+        "debug-composer-conflicts",
+        "review-open-source-package"
+      ]
+    },
+    "security": {
+      "description": "Skills for security reviews, storage, policies, and AI safety.",
+      "skills": [
+        "review-security",
+        "configure-secure-storage",
+        "create-policy",
+        "implement-webhooks",
+        "audit-ai-agent-instructions",
+        "review-ai-generated-code",
+        "write-tests"
+      ]
+    },
+    "testing": {
+      "description": "Skills for Pest, architecture tests, PHPStan, and failing test diagnosis.",
+      "skills": [
+        "write-tests",
+        "write-pest-test",
+        "create-architecture-test",
+        "review-static-analysis",
+        "debug-failing-tests",
+        "debug-phpstan",
+        "format-codebase-pint"
+      ]
+    },
+    "frontend": {
+      "description": "Skills for Blade, Livewire, Inertia, Tailwind, Flux, localization, and accessibility.",
+      "skills": [
+        "design-blade-component",
+        "create-livewire-component",
+        "create-inertia-page",
+        "manage-frontend-styling",
+        "manage-localization",
+        "review-tailwind-flux",
+        "review-accessibility"
+      ]
+    },
+    "devops": {
+      "description": "Skills for local environments, queues, cloud deployment, GitHub Actions, and observability.",
+      "skills": [
+        "configure-local-environment",
+        "deploying-laravel-cloud",
+        "schedule-artisan-task",
+        "laravel-pulse-monitoring",
+        "implement-observability",
+        "fix-github-actions",
+        "debug-composer-conflicts"
+      ]
+    }
+  }
+}

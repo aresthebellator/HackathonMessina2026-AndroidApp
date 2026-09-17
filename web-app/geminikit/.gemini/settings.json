@@ -1,0 +1,55 @@
+{
+  "general": {
+    "defaultApprovalMode": "auto_edit"
+  },
+  "model": {
+    //"name": "gemini-3-flash-preview",
+    //"maxSessionTurns": 100
+  },
+  "ui": {
+    "theme": "Default",
+    "hideBanner": false
+  },
+  "tools": {
+    "shell": {
+      "allowed": true
+    }
+  },
+  "security": {
+    "disableYoloMode": true
+  },
+  "context": {
+    "fileName": "GEMINI.md"
+  },
+  "python_path": null,
+  "mcpServers": {},
+  "hooks": {
+    "SessionStart": [
+      { "hooks": [{ "type": "command", "command": "node .gemini/hooks/session-start.js", "timeout": 5000 }] }
+    ],
+    "BeforeAgent": [
+      { "hooks": [{ "type": "command", "command": "node .gemini/hooks/before-agent-rules-inject.js", "timeout": 5000 }] }
+    ],
+    "BeforeTool": [
+      { "hooks": [{ "type": "command", "command": "node .gemini/hooks/before-tool-privacy-block.js", "timeout": 3000 }] }
+    ],
+    "AfterTool": [
+      { "hooks": [{ "type": "command", "command": "node .gemini/hooks/after-tool.js", "timeout": 5000 }] }
+    ],
+    "BeforeModel": [
+      { "hooks": [{ "type": "command", "command": "node .gemini/hooks/before-model.js", "timeout": 5000 }] }
+    ],
+    "BeforeToolSelection": [
+      { "hooks": [{ "type": "command", "command": "node .gemini/hooks/before-tool-selection.js", "timeout": 3000 }] }
+    ],
+    "AfterModel": [
+      { "hooks": [{ "type": "command", "command": "node .gemini/hooks/after-model.js", "timeout": 30000 }] }
+    ],
+    "PreCompress": [
+      { "hooks": [{ "type": "command", "command": "node .gemini/hooks/pre-compress.js", "timeout": 10000 }] }
+    ],
+    "SessionEnd": [
+      { "hooks": [{ "type": "command", "command": "node .gemini/hooks/session-end.js", "timeout": 10000 }] }
+    ]
+  }
+}
