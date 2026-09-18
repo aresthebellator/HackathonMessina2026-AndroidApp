@@ -1,0 +1,50 @@
+[
+    {
+        "merged": "com.hackaton.wikitrainer.app-debug-58:/drawable_ic_bolt.xml.flat",
+        "source": "com.hackaton.wikitrainer.app-main-60:/drawable/ic_bolt.xml"
+    },
+    {
+        "merged": "com.hackaton.wikitrainer.app-debug-58:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "com.hackaton.wikitrainer.app-main-60:/mipmap-anydpi-v26/ic_launcher.xml"
+    },
+    {
+        "merged": "com.hackaton.wikitrainer.app-debug-58:/xml_data_extraction_rules.xml.flat",
+        "source": "com.hackaton.wikitrainer.app-main-60:/xml/data_extraction_rules.xml"
+    },
+    {
+        "merged": "com.hackaton.wikitrainer.app-debug-58:/drawable_ic_launcher_foreground.xml.flat",
+        "source": "com.hackaton.wikitrainer.app-main-60:/drawable/ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "com.hackaton.wikitrainer.app-debug-58:/xml_backup_rules.xml.flat",
+        "source": "com.hackaton.wikitrainer.app-main-60:/xml/backup_rules.xml"
+    },
+    {
+        "merged": "com.hackaton.wikitrainer.app-debug-58:/drawable_ic_launcher_background.xml.flat",
+        "source": "com.hackaton.wikitrainer.app-main-60:/drawable/ic_launcher_background.xml"
+    },
+    {
+        "merged": "com.hackaton.wikitrainer.app-debug-58:/drawable_ic_heart.xml.flat",
+        "source": "com.hackaton.wikitrainer.app-main-60:/drawable/ic_heart.xml"
+    },
+    {
+        "merged": "com.hackaton.wikitrainer.app-debug-58:/drawable_ic_flame.xml.flat",
+        "source": "com.hackaton.wikitrainer.app-main-60:/drawable/ic_flame.xml"
+    },
+    {
+        "merged": "com.hackaton.wikitrainer.app-debug-58:/drawable_ic_duo_owl.xml.flat",
+        "source": "com.hackaton.wikitrainer.app-main-60:/drawable/ic_duo_owl.xml"
+    },
+    {
+        "merged": "com.hackaton.wikitrainer.app-debug-58:/drawable_ic_check.xml.flat",
+        "source": "com.hackaton.wikitrainer.app-main-60:/drawable/ic_check.xml"
+    },
+    {
+        "merged": "com.hackaton.wikitrainer.app-debug-58:/drawable_ic_close.xml.flat",
+        "source": "com.hackaton.wikitrainer.app-main-60:/drawable/ic_close.xml"
+    },
+    {
+        "merged": "com.hackaton.wikitrainer.app-debug-58:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "com.hackaton.wikitrainer.app-main-60:/mipmap-anydpi-v26/ic_launcher_round.xml"
+    }
+]

@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.hackaton.wikitrainer.app-mergeDebugResources-56:/values-v18/values-v18.xml",
+            "map": [
+                {
+                    "source": "/Users/andreacreati/.gradle/caches/9.6.0/transforms/b96c630473ffcdb1f43ebaf4275d4ceb/transformed/appcompat-1.7.0/res/values-v18/values-v18.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "48",
+                        "endOffsets": "99"
+                    }
+                }
+            ]
+        }
+    ]
+}

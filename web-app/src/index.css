@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-duo-green: #58CC02;
+    --color-duo-green-dark: #46A302;
+    --color-duo-blue: #1CB0F6;
+    --color-duo-coral: #FF4B4B;
+    --color-duo-yellow: #FFC800;
+  }
+
+  body {
+    @apply bg-[#F7F7F7] text-[#3C3C3C] font-sans antialiased overflow-x-hidden;
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+@layer utilities {
+  /* Duolingo tactile 3D button effects */
+  .btn-tactile-green {
+    @apply bg-[#58CC02] border-b-4 border-[#46A302] text-white font-bold active:translate-y-[3px] active:border-b-0 hover:bg-[#61E002] transition-all;
+  }
+  
+  .btn-tactile-blue {
+    @apply bg-[#1CB0F6] border-b-4 border-[#1899D6] text-white font-bold active:translate-y-[3px] active:border-b-0 hover:bg-[#20BEFF] transition-all;
+  }
+
+  .btn-tactile-coral {
+    @apply bg-[#FF4B4B] border-b-4 border-[#EA2B2B] text-white font-bold active:translate-y-[3px] active:border-b-0 hover:bg-[#FF5F5F] transition-all;
+  }
+
+  .btn-tactile-yellow {
+    @apply bg-[#FFC800] border-b-4 border-[#E5A500] text-[#7A5200] font-bold active:translate-y-[3px] active:border-b-0 hover:bg-[#FFD124] transition-all;
+  }
+
+  .btn-tactile-outline {
+    @apply bg-white border-2 border-b-4 border-[#E5E5E5] text-[#4B4B4B] font-bold active:translate-y-[2px] active:border-b-2 hover:bg-[#F7F7F7] hover:border-[#D5D5D5] transition-all;
+  }
+
+  /* Shimmer / Gloss animation on progress bar */
+  .progress-gloss {
+    background: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.45) 0%,
+      rgba(255, 255, 255, 0.15) 50%,
+      rgba(0, 0, 0, 0.05) 51%,
+      rgba(0, 0, 0, 0.1) 100%
+    );
+  }
+}

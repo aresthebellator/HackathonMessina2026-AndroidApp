@@ -1,0 +1,20 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.hackaton.wikitrainer.app-mergeDebugResources-56:/values-watch-v21/values-watch-v21.xml",
+            "map": [
+                {
+                    "source": "/Users/andreacreati/.gradle/caches/9.6.0/transforms/b96c630473ffcdb1f43ebaf4275d4ceb/transformed/appcompat-1.7.0/res/values-watch-v21/values-watch-v21.xml",
+                    "from": {
+                        "startLines": "2,6,10",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "55,271,499",
+                        "endLines": "5,9,13",
+                        "endColumns": "12,12,12",
+                        "endOffsets": "266,494,724"
+                    }
+                }
+            ]
+        }
+    ]
+}

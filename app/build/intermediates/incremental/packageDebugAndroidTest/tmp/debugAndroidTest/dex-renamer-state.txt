@@ -1,0 +1,7 @@
+#Thu Sep 17 18:47:48 CEST 2026
+base.0=/Users/andreacreati/Documents/HackatonMessina/app/build/intermediates/dex/debugAndroidTest/mergeProjectDexDebugAndroidTest/0/classes.dex
+base.1=/Users/andreacreati/Documents/HackatonMessina/app/build/intermediates/global_synthetics_dex/debugAndroidTest/generateDebugAndroidTestGlobalSynthetics/classes.dex
+path.0=0/classes.dex
+path.1=classes.dex
+renamed.0=classes.dex
+renamed.1=classes2.dex
