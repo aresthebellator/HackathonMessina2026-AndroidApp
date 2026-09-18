@@ -1,3 +1,0 @@
-[tool.pip-tools]
-emit_index_url = false
-emit_trusted_host = false

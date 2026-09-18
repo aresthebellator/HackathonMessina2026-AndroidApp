@@ -7,6 +7,7 @@ import com.hackaton.wikitrainer.core.network.NetworkResult
 import com.hackaton.wikitrainer.domain.model.LessonSession
 import com.hackaton.wikitrainer.domain.model.UserStats
 import com.hackaton.wikitrainer.domain.usecase.CompleteLessonUseCase
+import com.hackaton.wikitrainer.domain.usecase.GetLessonForTopicUseCase
 import com.hackaton.wikitrainer.domain.usecase.GetRandomLessonUseCase
 import com.hackaton.wikitrainer.domain.usecase.GetUserStatsUseCase
 import com.hackaton.wikitrainer.domain.usecase.SubmitAnswerUseCase
@@ -22,7 +23,8 @@ class TrainerViewModel(
     private val submitAnswerUseCase: SubmitAnswerUseCase,
     private val completeLessonUseCase: CompleteLessonUseCase,
     getUserStatsUseCase: GetUserStatsUseCase,
-    private val soundFeedbackManager: SoundFeedbackManager
+    private val soundFeedbackManager: SoundFeedbackManager,
+    private val getLessonForTopicUseCase: GetLessonForTopicUseCase? = null
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<TrainerUiState>(TrainerUiState.Loading())
@@ -51,10 +53,22 @@ class TrainerViewModel(
     }
 
     fun loadNewLesson(language: String = "it") {
-        viewModelScope.launch {
-            _uiState.value = TrainerUiState.Loading("Esploro Wikipedia per una nuova lezione...")
+        loadLesson(language = language)
+    }
 
-            when (val result = getRandomLessonUseCase(language)) {
+    fun loadLesson(language: String = "it", topic: String? = null, lessonNumber: Int? = null) {
+        viewModelScope.launch {
+            _uiState.value = TrainerUiState.Loading(
+                if (topic != null) "Carico la lezione: $topic..." else "Esploro Wikipedia per una nuova lezione..."
+            )
+
+            val result = if (!topic.isNullOrBlank() && getLessonForTopicUseCase != null) {
+                getLessonForTopicUseCase(topic, language)
+            } else {
+                getRandomLessonUseCase(language)
+            }
+
+            when (result) {
                 is NetworkResult.Success -> {
                     val session = result.data
                     val firstQuestion = session.currentQuestion
@@ -73,7 +87,6 @@ class TrainerViewModel(
                     } else {
                         _uiState.value = TrainerUiState.Error("Nessuna domanda generata per questo argomento.")
                     }
-
                 }
                 is NetworkResult.Offline -> {
                     _uiState.value = TrainerUiState.Error(

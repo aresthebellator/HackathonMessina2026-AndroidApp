@@ -21,13 +21,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.hackaton.wikitrainer.R
-import com.hackaton.wikitrainer.core.designsystem.DuoInkSecondary
-import com.hackaton.wikitrainer.core.designsystem.DuoRed
-import com.hackaton.wikitrainer.core.designsystem.DuoYellowDark
+import com.hackaton.wikitrainer.core.designsystem.WikiBlack
+import com.hackaton.wikitrainer.core.designsystem.WikiShuttleGray
 
 /**
- * Duolingo-styled Top Stat Header:
- * Displays Streak Flame, XP Gems/Lightning, and Life Hearts.
+ * Top Stat Header styled with Wikipedia Brand and Logo Colors:
+ * Displays Streak Flame, XP Bolt, and Hearts in crisp Wikipedia monochrome styling.
  */
 @Composable
 fun StreakHeader(
@@ -48,7 +47,7 @@ fun StreakHeader(
             Icon(
                 imageVector = Icons.Default.Close,
                 contentDescription = "Esci",
-                tint = DuoInkSecondary,
+                tint = WikiShuttleGray,
                 modifier = Modifier
                     .size(24.dp)
                     .clickable { onCloseClick() }
@@ -73,7 +72,7 @@ fun StreakHeader(
                     text = "$streakDays",
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Black,
-                    color = DuoYellowDark
+                    color = WikiBlack
                 )
             }
 
@@ -89,7 +88,7 @@ fun StreakHeader(
                     text = "$totalXp",
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Black,
-                    color = DuoYellowDark
+                    color = WikiBlack
                 )
             }
 
@@ -105,7 +104,7 @@ fun StreakHeader(
                     text = "$hearts",
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Black,
-                    color = DuoRed
+                    color = WikiBlack
                 )
             }
         }

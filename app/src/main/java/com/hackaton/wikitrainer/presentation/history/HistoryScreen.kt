@@ -57,6 +57,7 @@ import com.hackaton.wikitrainer.core.designsystem.DuoInkSecondary
 import com.hackaton.wikitrainer.core.designsystem.DuoRed
 import com.hackaton.wikitrainer.core.designsystem.DuoSurface
 import com.hackaton.wikitrainer.core.designsystem.DuoYellowDark
+import com.hackaton.wikitrainer.core.i18n.i18n
 import com.hackaton.wikitrainer.domain.model.TopicHistory
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -77,7 +78,7 @@ fun HistoryScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = "Cronologia & Streak",
+                        text = i18n("history.title"),
                         fontSize = 19.sp,
                         fontWeight = FontWeight.Black,
                         color = DuoInk
@@ -87,7 +88,7 @@ fun HistoryScreen(
                     IconButton(onClick = onBackClick) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Indietro",
+                            contentDescription = i18n("common.back"),
                             tint = DuoInk
                         )
                     }
@@ -108,7 +109,7 @@ fun HistoryScreen(
             when (val state = uiState) {
                 is HistoryUiState.Loading -> {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        CircularProgressIndicator(color = DuoGreen)
+                        CircularProgressIndicator(color = com.hackaton.wikitrainer.core.designsystem.WikiBlack)
                     }
                 }
                 is HistoryUiState.Success -> {
@@ -134,21 +135,21 @@ fun HistoryScreen(
                                 ) {
                                     StatSummaryItem(
                                         iconRes = R.drawable.ic_flame,
-                                        value = "${state.stats.currentStreak} gg",
-                                        label = "Streak Attuale",
-                                        color = DuoRed
+                                        value = "${state.stats.currentStreak} ${i18n("dashboard.streak_unit")}",
+                                        label = i18n("history.current_streak"),
+                                        color = com.hackaton.wikitrainer.core.designsystem.WikiBlack
                                     )
                                     StatSummaryItem(
                                         iconRes = R.drawable.ic_bolt,
-                                        value = "${state.stats.totalXp} XP",
-                                        label = "Punti Esperienza",
-                                        color = DuoYellowDark
+                                        value = "${state.stats.totalXp} ${i18n("dashboard.xp_suffix")}",
+                                        label = i18n("history.experience_points"),
+                                        color = com.hackaton.wikitrainer.core.designsystem.WikiBlack
                                     )
                                     StatSummaryItem(
                                         iconRes = R.drawable.ic_check,
                                         value = "${state.stats.totalLessonsCompleted}",
-                                        label = "Lezioni Fatte",
-                                        color = DuoGreen
+                                        label = i18n("history.lessons_completed"),
+                                        color = com.hackaton.wikitrainer.core.designsystem.WikiBlack
                                     )
                                 }
                             }
@@ -180,13 +181,13 @@ fun HistoryScreen(
                                     )
                                     Spacer(modifier = Modifier.height(12.dp))
                                     Text(
-                                        text = "Nessuna lezione ancora completata",
+                                        text = i18n("history.empty_title"),
                                         fontSize = 16.sp,
                                         fontWeight = FontWeight.Bold,
                                         color = DuoInk
                                     )
                                     Text(
-                                        text = "Avvia la tua prima sessione con Wikipedia per iniziare la streak!",
+                                        text = i18n("history.empty_description"),
                                         fontSize = 13.sp,
                                         color = DuoInkSecondary,
                                         textAlign = TextAlign.Center,
@@ -247,14 +248,14 @@ private fun TopicHistoryItem(
                 Box(
                     modifier = Modifier
                         .clip(RoundedCornerShape(8.dp))
-                        .background(DuoGreenLight)
+                        .background(com.hackaton.wikitrainer.core.designsystem.WikiSilverSand)
                         .padding(horizontal = 8.dp, vertical = 4.dp)
                 ) {
                     Text(
                         text = "${topic.score}/${topic.totalQuestions}",
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Black,
-                        color = DuoGreenDark
+                        color = com.hackaton.wikitrainer.core.designsystem.WikiBlack
                     )
                 }
             }
@@ -285,7 +286,7 @@ private fun TopicHistoryItem(
                     text = "+${topic.xpEarned} XP",
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Bold,
-                    color = DuoYellowDark
+                    color = com.hackaton.wikitrainer.core.designsystem.WikiBlack
                 )
             }
         }

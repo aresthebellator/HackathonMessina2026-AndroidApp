@@ -7,10 +7,14 @@ import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
 
+import com.hackaton.wikitrainer.core.i18n.I18nManager
+
 class WikiTrainerApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+        I18nManager.load(this)
 
         startKoin {
             androidLogger(Level.ERROR)

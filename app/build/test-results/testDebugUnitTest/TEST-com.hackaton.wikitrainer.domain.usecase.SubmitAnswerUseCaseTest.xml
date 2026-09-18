@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.hackaton.wikitrainer.domain.usecase.SubmitAnswerUseCaseTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-09-17T20:36:20.551Z" hostname="MacBook-Air-di-Andrea.local" time="0.0">
-  <properties/>
-  <testcase name="submitting wrong answer returns isCorrect false and retains previous score" classname="com.hackaton.wikitrainer.domain.usecase.SubmitAnswerUseCaseTest" time="0.0"/>
-  <testcase name="submitting correct answer returns isCorrect true and increments score" classname="com.hackaton.wikitrainer.domain.usecase.SubmitAnswerUseCaseTest" time="0.0"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>

@@ -28,20 +28,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.hackaton.wikitrainer.core.designsystem.DuoBackground
-import com.hackaton.wikitrainer.core.designsystem.DuoBorder
-import com.hackaton.wikitrainer.core.designsystem.DuoGreen
-import com.hackaton.wikitrainer.core.designsystem.DuoGreenDark
-import com.hackaton.wikitrainer.core.designsystem.DuoGreenLight
-import com.hackaton.wikitrainer.core.designsystem.DuoInk
-import com.hackaton.wikitrainer.core.designsystem.DuoRed
-import com.hackaton.wikitrainer.core.designsystem.DuoRedDark
-import com.hackaton.wikitrainer.core.designsystem.DuoRedLight
+import com.hackaton.wikitrainer.core.designsystem.WikiBlack
+import com.hackaton.wikitrainer.core.designsystem.WikiOsloGray
+import com.hackaton.wikitrainer.core.designsystem.WikiShuttleGray
+import com.hackaton.wikitrainer.core.designsystem.WikiSilverSand
+import com.hackaton.wikitrainer.core.designsystem.WikiWhite
+import com.hackaton.wikitrainer.core.i18n.i18n
 
 /**
- * Duolingo-styled Animated Feedback Bottom Banner:
+ * Animated Feedback Bottom Banner styled with Wikipedia Brand and Logo Colors:
  * Slides up immediately when the user validates their answer.
- * Displays vibrant positive validation or informative error correction with Wikipedia context.
+ * Displays high-contrast Wikipedia brand styling for validation and Wikipedia context.
  */
 @Composable
 fun FeedbackSheet(
@@ -57,13 +54,12 @@ fun FeedbackSheet(
         enter = slideInVertically(initialOffsetY = { it }) + fadeIn(),
         modifier = modifier
     ) {
-        val sheetBg = if (isCorrect) DuoGreenLight else DuoRedLight
-        val sheetTitle = if (isCorrect) "Fantastico!" else "Risposta errata"
-        val titleColor = if (isCorrect) DuoGreenDark else DuoRedDark
+        val sheetBg = if (isCorrect) WikiBlack else WikiShuttleGray
+        val sheetTitle = if (isCorrect) i18n("trainer.correct_title") else i18n("trainer.wrong_title")
+        val titleColor = WikiWhite
         val icon = if (isCorrect) Icons.Default.Check else Icons.Default.Close
-        val iconBg = if (isCorrect) DuoGreen else DuoRed
-        val buttonStyle = if (isCorrect) DuolingoButtonStyle.PRIMARY else DuolingoButtonStyle.DANGER
-        val buttonText = if (isCorrect) "CONTINUA" else "HO CAPITO"
+        val iconTint = if (isCorrect) WikiBlack else WikiShuttleGray
+        val buttonText = if (isCorrect) i18n("dashboard.continue_button") else i18n("common.got_it").uppercase()
 
         Box(
             modifier = Modifier
@@ -81,13 +77,13 @@ fun FeedbackSheet(
                         modifier = Modifier
                             .size(36.dp)
                             .clip(CircleShape)
-                            .background(DuoBackground),
+                            .background(WikiWhite),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
                             imageVector = icon,
                             contentDescription = null,
-                            tint = iconBg,
+                            tint = iconTint,
                             modifier = Modifier.size(22.dp)
                         )
                     }
@@ -105,14 +101,14 @@ fun FeedbackSheet(
                 if (!isCorrect) {
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = "Risposta corretta:",
-                        color = DuoRedDark,
+                        text = i18n("trainer.correct_answer_label"),
+                        color = WikiSilverSand,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
                         text = correctAnswerText,
-                        color = DuoInk,
+                        color = WikiWhite,
                         fontSize = 15.sp,
                         fontWeight = FontWeight.SemiBold,
                         modifier = Modifier.padding(top = 2.dp)
@@ -125,22 +121,22 @@ fun FeedbackSheet(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clip(RoundedCornerShape(12.dp))
-                                .background(DuoBackground)
-                                .border(1.dp, DuoBorder, RoundedCornerShape(12.dp))
+                                .background(WikiWhite)
+                                .border(1.dp, WikiSilverSand, RoundedCornerShape(12.dp))
                                 .padding(12.dp)
                         ) {
                             Column {
                                 Text(
-                                    text = "📖 Dal riassunto di Wikipedia:",
+                                    text = i18n("trainer.wiki_explanation_label"),
                                     fontSize = 12.sp,
                                     fontWeight = FontWeight.Bold,
-                                    color = DuoGreenDark
+                                    color = WikiShuttleGray
                                 )
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Text(
                                     text = explanation,
                                     fontSize = 13.sp,
-                                    color = DuoInk,
+                                    color = WikiBlack,
                                     lineHeight = 18.sp
                                 )
                             }
@@ -153,7 +149,7 @@ fun FeedbackSheet(
                 DuolingoButton(
                     text = buttonText,
                     onClick = onContinue,
-                    style = buttonStyle,
+                    style = DuolingoButtonStyle.INVERTED,
                     modifier = Modifier.fillMaxWidth()
                 )
             }

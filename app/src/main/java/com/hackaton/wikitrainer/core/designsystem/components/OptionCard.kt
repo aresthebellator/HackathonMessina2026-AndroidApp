@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -24,21 +23,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.hackaton.wikitrainer.core.designsystem.DuoBackground
-import com.hackaton.wikitrainer.core.designsystem.DuoBlue
-import com.hackaton.wikitrainer.core.designsystem.DuoBlueDark
-import com.hackaton.wikitrainer.core.designsystem.DuoBorder
-import com.hackaton.wikitrainer.core.designsystem.DuoBorderDark
-import com.hackaton.wikitrainer.core.designsystem.DuoCardSelectedBg
-import com.hackaton.wikitrainer.core.designsystem.DuoCardSelectedBorder
-import com.hackaton.wikitrainer.core.designsystem.DuoGreen
-import com.hackaton.wikitrainer.core.designsystem.DuoGreenDark
-import com.hackaton.wikitrainer.core.designsystem.DuoGreenLight
-import com.hackaton.wikitrainer.core.designsystem.DuoInk
-import com.hackaton.wikitrainer.core.designsystem.DuoInkSecondary
-import com.hackaton.wikitrainer.core.designsystem.DuoRed
-import com.hackaton.wikitrainer.core.designsystem.DuoRedDark
-import com.hackaton.wikitrainer.core.designsystem.DuoRedLight
+import com.hackaton.wikitrainer.core.designsystem.WikiBlack
+import com.hackaton.wikitrainer.core.designsystem.WikiOsloGray
+import com.hackaton.wikitrainer.core.designsystem.WikiShuttleGray
+import com.hackaton.wikitrainer.core.designsystem.WikiSilverSand
+import com.hackaton.wikitrainer.core.designsystem.WikiSurfaceAlt
+import com.hackaton.wikitrainer.core.designsystem.WikiWhite
 
 enum class OptionCardState {
     IDLE,
@@ -48,9 +38,9 @@ enum class OptionCardState {
 }
 
 /**
- * Duolingo-inspired interactive Option Card for micro-questions:
+ * Interactive Option Card styled with Wikipedia Brand and Logo Colors:
  * Features tactile bottom border bevel, animated state transition,
- * and clear keyboard/touch visual feedback.
+ * and high-contrast Wikipedia monochromatic visual feedback.
  */
 @Composable
 fun OptionCard(
@@ -62,31 +52,52 @@ fun OptionCard(
     enabled: Boolean = true
 ) {
     val targetBgColor = when (state) {
-        OptionCardState.IDLE -> DuoBackground
-        OptionCardState.SELECTED -> DuoCardSelectedBg
-        OptionCardState.CORRECT -> DuoGreenLight
-        OptionCardState.WRONG -> DuoRedLight
+        OptionCardState.IDLE -> WikiWhite
+        OptionCardState.SELECTED -> WikiSurfaceAlt
+        OptionCardState.CORRECT -> WikiBlack
+        OptionCardState.WRONG -> WikiShuttleGray
     }
 
     val targetBorderColor = when (state) {
-        OptionCardState.IDLE -> DuoBorder
-        OptionCardState.SELECTED -> DuoCardSelectedBorder
-        OptionCardState.CORRECT -> DuoGreen
-        OptionCardState.WRONG -> DuoRed
+        OptionCardState.IDLE -> WikiSilverSand
+        OptionCardState.SELECTED -> WikiBlack
+        OptionCardState.CORRECT -> WikiBlack
+        OptionCardState.WRONG -> WikiBlack
     }
 
     val targetBottomBevelColor = when (state) {
-        OptionCardState.IDLE -> DuoBorderDark
-        OptionCardState.SELECTED -> DuoBlueDark
-        OptionCardState.CORRECT -> DuoGreenDark
-        OptionCardState.WRONG -> DuoRedDark
+        OptionCardState.IDLE -> WikiSilverSand
+        OptionCardState.SELECTED -> WikiShuttleGray
+        OptionCardState.CORRECT -> WikiShuttleGray
+        OptionCardState.WRONG -> WikiBlack
     }
 
     val targetTextColor = when (state) {
-        OptionCardState.CORRECT -> DuoGreenDark
-        OptionCardState.WRONG -> DuoRedDark
-        OptionCardState.SELECTED -> DuoBlueDark
-        OptionCardState.IDLE -> DuoInk
+        OptionCardState.CORRECT -> WikiWhite
+        OptionCardState.WRONG -> WikiWhite
+        OptionCardState.SELECTED -> WikiBlack
+        OptionCardState.IDLE -> WikiBlack
+    }
+
+    val badgeBg = when (state) {
+        OptionCardState.CORRECT -> WikiWhite
+        OptionCardState.WRONG -> WikiSilverSand
+        OptionCardState.SELECTED -> WikiBlack
+        OptionCardState.IDLE -> WikiWhite
+    }
+
+    val badgeBorder = when (state) {
+        OptionCardState.CORRECT -> WikiWhite
+        OptionCardState.WRONG -> WikiSilverSand
+        OptionCardState.SELECTED -> WikiBlack
+        OptionCardState.IDLE -> WikiSilverSand
+    }
+
+    val badgeTextColor = when (state) {
+        OptionCardState.CORRECT -> WikiBlack
+        OptionCardState.WRONG -> WikiBlack
+        OptionCardState.SELECTED -> WikiWhite
+        OptionCardState.IDLE -> WikiShuttleGray
     }
 
     val animatedBg by animateColorAsState(targetBgColor, animationSpec = tween(200), label = "optionBg")
@@ -130,17 +141,17 @@ fun OptionCard(
                         .clip(RoundedCornerShape(8.dp))
                         .border(
                             width = 1.5.dp,
-                            color = if (state == OptionCardState.SELECTED) DuoBlue else DuoBorderDark,
+                            color = badgeBorder,
                             shape = RoundedCornerShape(8.dp)
                         )
-                        .background(if (state == OptionCardState.SELECTED) DuoBlue.copy(alpha = 0.15f) else DuoBackground),
+                        .background(badgeBg),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = indexLabel,
                         fontWeight = FontWeight.Bold,
                         fontSize = 13.sp,
-                        color = if (state == OptionCardState.SELECTED) DuoBlueDark else DuoInkSecondary
+                        color = badgeTextColor
                     )
                 }
 

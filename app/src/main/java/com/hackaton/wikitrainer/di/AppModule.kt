@@ -11,6 +11,7 @@ import com.hackaton.wikitrainer.data.remote.WikipediaClient
 import com.hackaton.wikitrainer.data.repository.LessonRepositoryImpl
 import com.hackaton.wikitrainer.domain.repository.LessonRepository
 import com.hackaton.wikitrainer.domain.usecase.CompleteLessonUseCase
+import com.hackaton.wikitrainer.domain.usecase.GetLessonForTopicUseCase
 import com.hackaton.wikitrainer.domain.usecase.GetRandomLessonUseCase
 import com.hackaton.wikitrainer.domain.usecase.GetTopicHistoryUseCase
 import com.hackaton.wikitrainer.domain.usecase.GetUserStatsUseCase
@@ -120,6 +121,7 @@ val repositoryModule = module {
 
 val useCaseModule = module {
     factory { GetRandomLessonUseCase(get()) }
+    factory { GetLessonForTopicUseCase(get()) }
     factory { SubmitAnswerUseCase() }
     factory { CompleteLessonUseCase(get()) }
     factory { GetUserStatsUseCase(get()) }
@@ -133,7 +135,8 @@ val viewModelModule = module {
             submitAnswerUseCase = get(),
             completeLessonUseCase = get(),
             getUserStatsUseCase = get(),
-            soundFeedbackManager = get()
+            soundFeedbackManager = get(),
+            getLessonForTopicUseCase = get()
         )
     }
 

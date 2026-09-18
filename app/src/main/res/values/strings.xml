@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">WikiTrainer</string>
+    <string name="app_name">Wikingo</string>
     <string name="app_tagline">Impara ogni giorno con Wikipedia</string>
     <string name="continue_button">Continua</string>
     <string name="check_button">Verifica</string>

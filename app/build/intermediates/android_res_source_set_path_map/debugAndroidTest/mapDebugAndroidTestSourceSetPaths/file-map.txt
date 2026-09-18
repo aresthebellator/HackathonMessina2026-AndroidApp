@@ -1,6 +1,0 @@
-com.hackaton.wikitrainer.test.app-androidTest-0 /Users/andreacreati/Documents/HackatonMessina/app/build/generated/res/resValues/androidTest/debug
-com.hackaton.wikitrainer.test.app-updated_navigation_xml-1 /Users/andreacreati/Documents/HackatonMessina/app/build/generated/updated_navigation_xml/debugAndroidTest
-com.hackaton.wikitrainer.test.app-mergeDebugAndroidTestResources-2 /Users/andreacreati/Documents/HackatonMessina/app/build/intermediates/incremental/debugAndroidTest/mergeDebugAndroidTestResources/merged.dir
-com.hackaton.wikitrainer.test.app-mergeDebugAndroidTestResources-3 /Users/andreacreati/Documents/HackatonMessina/app/build/intermediates/incremental/debugAndroidTest/mergeDebugAndroidTestResources/stripped.dir
-com.hackaton.wikitrainer.test.app-debugAndroidTest-4 /Users/andreacreati/Documents/HackatonMessina/app/build/intermediates/merged_res/debugAndroidTest/mergeDebugAndroidTestResources
-gradleHome-0 /Users/andreacreati/.gradle

@@ -71,82 +71,86 @@ class MainActivity : ComponentActivity() {
                         SavedArticleStore(this@MainActivity)
                     }
 
-                    Crossfade(
-                        targetState = currentDestination,
-                        label = "mainNavCrossfade"
-                    ) { destination ->
-                        when (destination) {
-                            AppDestination.DASHBOARD -> {
-                                val stats = (historyState as? com.hackaton.wikitrainer.presentation.history.HistoryUiState.Success)?.stats
-                                    ?: com.hackaton.wikitrainer.domain.model.UserStats(0, 0, 0, 0, "")
-                                DashboardScreen(
-                                    stats = stats,
-                                    language = language,
-                                    onLanguageToggle = { language = if (language == "it") "en" else "it" },
-                                    onStartLesson = {
-                                        trainerViewModel.loadNewLesson(language)
-                                        currentDestination = AppDestination.TRAINER
-                                    },
-                                    onQuickQuiz = {
-                                        trainerViewModel.loadNewLesson(language)
-                                        currentDestination = AppDestination.TRAINER
-                                    },
-                                    onHistory = { currentDestination = AppDestination.HISTORY },
-                                    onSettings = { settingsOpen = true },
-                                    onSavedArticles = { currentDestination = AppDestination.SAVED }
-                                )
-                            }
-                            AppDestination.TRAINER -> {
-                                TrainerScreen(
-                                    viewModel = trainerViewModel,
-                                    onNavigateToHistory = {
-                                        currentDestination = AppDestination.DASHBOARD
-                                    },
-                                    onSaveArticle = { savedArticleStore.toggle(it) }
-                                )
-                            }
-                            AppDestination.HISTORY -> {
-                                HistoryScreen(
-                                    viewModel = historyViewModel,
-                                    onBackClick = {
-                                        currentDestination = AppDestination.DASHBOARD
-                                    }
-                                )
-                            }
-                            AppDestination.SAVED -> {
-                                SavedArticlesScreen(
-                                    onBackClick = { currentDestination = AppDestination.DASHBOARD }
-                                )
+                    androidx.compose.runtime.CompositionLocalProvider(
+                        com.hackaton.wikitrainer.core.i18n.LocalI18nLanguage provides language
+                    ) {
+                        Crossfade(
+                            targetState = currentDestination,
+                            label = "mainNavCrossfade"
+                        ) { destination ->
+                            when (destination) {
+                                AppDestination.DASHBOARD -> {
+                                    val stats = (historyState as? com.hackaton.wikitrainer.presentation.history.HistoryUiState.Success)?.stats
+                                        ?: com.hackaton.wikitrainer.domain.model.UserStats(0, 0, 0, 0, "")
+                                    DashboardScreen(
+                                        stats = stats,
+                                        language = language,
+                                        onLanguageToggle = { language = if (language == "it") "en" else "it" },
+                                        onStartLesson = { topic, lessonNumber ->
+                                            trainerViewModel.loadLesson(language = language, topic = topic, lessonNumber = lessonNumber)
+                                            currentDestination = AppDestination.TRAINER
+                                        },
+                                        onQuickQuiz = {
+                                            trainerViewModel.loadNewLesson(language)
+                                            currentDestination = AppDestination.TRAINER
+                                        },
+                                        onHistory = { currentDestination = AppDestination.HISTORY },
+                                        onSettings = { settingsOpen = true },
+                                        onSavedArticles = { currentDestination = AppDestination.SAVED }
+                                    )
+                                }
+                                AppDestination.TRAINER -> {
+                                    TrainerScreen(
+                                        viewModel = trainerViewModel,
+                                        onNavigateToHistory = {
+                                            currentDestination = AppDestination.DASHBOARD
+                                        },
+                                        onSaveArticle = { savedArticleStore.toggle(it) }
+                                    )
+                                }
+                                AppDestination.HISTORY -> {
+                                    HistoryScreen(
+                                        viewModel = historyViewModel,
+                                        onBackClick = {
+                                            currentDestination = AppDestination.DASHBOARD
+                                        }
+                                    )
+                                }
+                                AppDestination.SAVED -> {
+                                    SavedArticlesScreen(
+                                        onBackClick = { currentDestination = AppDestination.DASHBOARD }
+                                    )
+                                }
                             }
                         }
-                    }
 
-                    if (settingsOpen) {
-                        AlertDialog(
-                            onDismissRequest = { settingsOpen = false },
-                            title = { Text("Impostazioni & Accessibilità") },
-                            text = {
-                                Column {
-                                    PreferenceRow("Tema scuro", darkMode) { darkMode = !darkMode }
-                                    PreferenceRow("Effetti sonori", soundEnabled) {
-                                        soundEnabled = !soundEnabled
-                                        trainerViewModel.setSoundEnabled(soundEnabled)
+                        if (settingsOpen) {
+                            AlertDialog(
+                                onDismissRequest = { settingsOpen = false },
+                                title = { Text(com.hackaton.wikitrainer.core.i18n.i18n("settings.title")) },
+                                text = {
+                                    Column {
+                                        PreferenceRow(com.hackaton.wikitrainer.core.i18n.i18n("settings.dark_theme"), darkMode) { darkMode = !darkMode }
+                                        PreferenceRow(com.hackaton.wikitrainer.core.i18n.i18n("settings.sound_effects"), soundEnabled) {
+                                            soundEnabled = !soundEnabled
+                                            trainerViewModel.setSoundEnabled(soundEnabled)
+                                        }
+                                        PreferenceRow(com.hackaton.wikitrainer.core.i18n.i18n("settings.reduce_motion"), reducedMotion) { reducedMotion = !reducedMotion }
+                                        PreferenceRow(com.hackaton.wikitrainer.core.i18n.i18n("settings.large_text"), largeText) { largeText = !largeText }
+                                        PreferenceRow(com.hackaton.wikitrainer.core.i18n.i18n("settings.high_contrast"), highContrast) { highContrast = !highContrast }
+                                        HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+                                        Text("${com.hackaton.wikitrainer.core.i18n.i18n("settings.language_prefix")} ${language.uppercase()}", style = MaterialTheme.typography.bodyMedium)
+                                        OutlinedButton(
+                                            onClick = { language = if (language == "it") "en" else "it" },
+                                            modifier = Modifier.padding(top = 8.dp)
+                                        ) { Text(com.hackaton.wikitrainer.core.i18n.i18n("settings.change_language")) }
                                     }
-                                    PreferenceRow("Riduci animazioni", reducedMotion) { reducedMotion = !reducedMotion }
-                                    PreferenceRow("Testo grande", largeText) { largeText = !largeText }
-                                    PreferenceRow("Alto contrasto", highContrast) { highContrast = !highContrast }
-                                    HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
-                                    Text("Lingua: ${language.uppercase()}", style = MaterialTheme.typography.bodyMedium)
-                                    OutlinedButton(
-                                        onClick = { language = if (language == "it") "en" else "it" },
-                                        modifier = Modifier.padding(top = 8.dp)
-                                    ) { Text("Cambia lingua") }
+                                },
+                                confirmButton = {
+                                    TextButton(onClick = { settingsOpen = false }) { Text(com.hackaton.wikitrainer.core.i18n.i18n("settings.save_and_close")) }
                                 }
-                            },
-                            confirmButton = {
-                                TextButton(onClick = { settingsOpen = false }) { Text("Salva e chiudi") }
-                            }
-                        )
+                            )
+                        }
                     }
                 }
             }

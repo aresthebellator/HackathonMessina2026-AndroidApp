@@ -70,6 +70,7 @@ import com.hackaton.wikitrainer.core.designsystem.components.MascotReaction
 import com.hackaton.wikitrainer.core.designsystem.components.OptionCard
 import com.hackaton.wikitrainer.core.designsystem.components.OptionCardState
 import com.hackaton.wikitrainer.core.designsystem.components.StreakHeader
+import com.hackaton.wikitrainer.core.i18n.i18n
 import com.hackaton.wikitrainer.data.local.SavedArticle
 
 @Composable
@@ -164,7 +165,7 @@ private fun QuestionView(
 
                 Icon(
                     imageVector = if (state.isSoundEnabled) Icons.Default.VolumeUp else Icons.Default.VolumeMute,
-                    contentDescription = "Suono",
+                    contentDescription = i18n("common.sound"),
                     tint = DuoInkSecondary,
                     modifier = Modifier
                         .size(26.dp)
@@ -195,7 +196,7 @@ private fun QuestionView(
 
             // Companion tip or prompt
             MascotReaction(
-                message = "Domanda ${state.questionNumber} di ${state.totalQuestions}: Metti alla prova la tua cultura!",
+                message = i18n("trainer.question_header", "current" to state.questionNumber, "total" to state.totalQuestions),
                 modifier = Modifier.padding(horizontal = 20.dp)
             )
 
@@ -265,7 +266,7 @@ private fun QuestionView(
                     .padding(horizontal = 20.dp, vertical = 16.dp)
             ) {
                 DuolingoButton(
-                    text = "VERIFICA",
+                    text = i18n("trainer.verify_button"),
                     onClick = onCheckAnswer,
                     enabled = state.canCheckAnswer,
                     modifier = Modifier.fillMaxWidth()
@@ -311,7 +312,7 @@ private fun CompleteView(
             modifier = Modifier
                 .size(100.dp)
                 .clip(CircleShape)
-                .background(DuoYellowLight),
+                .background(com.hackaton.wikitrainer.core.designsystem.WikiSurfaceAlt),
             contentAlignment = Alignment.Center
         ) {
             Image(
@@ -324,7 +325,7 @@ private fun CompleteView(
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = "Lezione Completata!",
+            text = i18n("trainer.lesson_complete_title"),
             fontSize = 26.sp,
             fontWeight = FontWeight.Black,
             color = DuoInk,
@@ -332,7 +333,7 @@ private fun CompleteView(
         )
 
         Text(
-            text = "Hai ampliato le tue conoscenze con Wikipedia!",
+            text = i18n("trainer.lesson_complete_subtitle"),
             fontSize = 15.sp,
             color = DuoInkSecondary,
             textAlign = TextAlign.Center,
@@ -401,27 +402,27 @@ private fun CompleteView(
             // XP Tile
             StatTile(
                 iconRes = R.drawable.ic_bolt,
-                label = "XP TOTALI",
+                label = i18n("trainer.stat_total_xp"),
                 value = "+${state.xpEarned}",
-                color = DuoYellowDark,
+                color = com.hackaton.wikitrainer.core.designsystem.WikiBlack,
                 modifier = Modifier.weight(1f)
             )
 
             // Accuracy Tile
             StatTile(
                 iconRes = R.drawable.ic_check,
-                label = "PRECISIONE",
+                label = i18n("trainer.stat_accuracy"),
                 value = "${state.accuracy}%",
-                color = DuoGreen,
+                color = com.hackaton.wikitrainer.core.designsystem.WikiBlack,
                 modifier = Modifier.weight(1f)
             )
 
             // Streak Tile
             StatTile(
                 iconRes = R.drawable.ic_flame,
-                label = "STREAK",
-                value = "${state.userStats.currentStreak} gg",
-                color = DuoRed,
+                label = i18n("trainer.stat_streak"),
+                value = "${state.userStats.currentStreak} ${i18n("dashboard.streak_unit")}",
+                color = com.hackaton.wikitrainer.core.designsystem.WikiBlack,
                 modifier = Modifier.weight(1f)
             )
         }
@@ -430,7 +431,7 @@ private fun CompleteView(
 
         // Action Buttons
         DuolingoButton(
-            text = "NUOVA LEZIONE",
+            text = i18n("trainer.new_lesson_button"),
             style = DuolingoButtonStyle.PRIMARY,
             onClick = onNewLesson,
             modifier = Modifier.fillMaxWidth()
@@ -439,7 +440,7 @@ private fun CompleteView(
         Spacer(modifier = Modifier.height(12.dp))
 
         DuolingoButton(
-            text = "APPROFONDISCI SU WIKIPEDIA",
+            text = i18n("trainer.read_on_wiki"),
             style = DuolingoButtonStyle.OUTLINE,
             onClick = {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(state.wikiUrl))
@@ -451,7 +452,7 @@ private fun CompleteView(
         Spacer(modifier = Modifier.height(12.dp))
 
         DuolingoButton(
-            text = "SALVA QUESTA VOCE",
+            text = i18n("trainer.save_article"),
             style = DuolingoButtonStyle.OUTLINE,
             onClick = {
                 onSaveArticle(
@@ -471,10 +472,10 @@ private fun CompleteView(
         Spacer(modifier = Modifier.height(12.dp))
 
         Text(
-            text = "Vedi Cronologia e Statistiche",
+            text = i18n("trainer.view_history_stats"),
             fontSize = 14.sp,
             fontWeight = FontWeight.Bold,
-            color = DuoBlueDark,
+            color = com.hackaton.wikitrainer.core.designsystem.WikiShuttleGray,
             modifier = Modifier
                 .clickable { onOpenHistory() }
                 .padding(8.dp)
@@ -532,14 +533,14 @@ private fun LoadingView(message: String) {
     ) {
         Image(
             painter = painterResource(id = R.drawable.ic_duo_owl),
-            contentDescription = "Caricamento",
+            contentDescription = i18n("common.loading"),
             modifier = Modifier.size(90.dp)
         )
 
         Spacer(modifier = Modifier.height(24.dp))
 
         CircularProgressIndicator(
-            color = DuoGreen,
+            color = com.hackaton.wikitrainer.core.designsystem.WikiBlack,
             strokeWidth = 4.dp,
             modifier = Modifier.size(42.dp)
         )
@@ -557,7 +558,7 @@ private fun LoadingView(message: String) {
         Spacer(modifier = Modifier.height(6.dp))
 
         Text(
-            text = "Preparo le micro-domande della sessione...",
+            text = i18n("trainer.loading_subtitle"),
             fontSize = 13.sp,
             color = DuoInkSecondary,
             textAlign = TextAlign.Center
@@ -579,14 +580,14 @@ private fun ErrorView(
     ) {
         Image(
             painter = painterResource(id = R.drawable.ic_duo_owl),
-            contentDescription = "Errore",
+            contentDescription = i18n("common.error"),
             modifier = Modifier.size(80.dp)
         )
 
         Spacer(modifier = Modifier.height(20.dp))
 
         Text(
-            text = "Ops! Qualcosa è andato storto",
+            text = i18n("trainer.error_title"),
             fontSize = 20.sp,
             fontWeight = FontWeight.Black,
             color = DuoInk,
@@ -606,7 +607,7 @@ private fun ErrorView(
         Spacer(modifier = Modifier.height(24.dp))
 
         DuolingoButton(
-            text = "RIPROVA",
+            text = i18n("common.retry").uppercase(),
             onClick = onRetry,
             style = DuolingoButtonStyle.PRIMARY,
             modifier = Modifier.fillMaxWidth()

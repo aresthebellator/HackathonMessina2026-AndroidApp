@@ -3,34 +3,65 @@ package com.hackaton.wikitrainer.core.designsystem
 import androidx.compose.ui.graphics.Color
 
 /**
- * Duolingo-inspired color tokens based on web-app/duolingo-design-system specifications:
- * High contrast, playful, bold action colors, and semantic feedback tokens.
+ * Wikipedia Brand and Logo Colors:
+ * - Black: #000000 (RGB: 0, 0, 0)
+ * - Shuttle Gray: #636466 (RGB: 99, 100, 102)
+ * - Oslo Gray: #939598 (RGB: 147, 149, 152)
+ * - Silver Sand: #C7C8CA (RGB: 199, 200, 202)
+ * - White: #FFFFFF (RGB: 255, 255, 255)
  */
-val DuoGreen = Color(0xFF58CC02)
-val DuoGreenDark = Color(0xFF1F8A00)
-val DuoGreenLight = Color(0xFFD7FFB8)
-val DuoGreenBackground = Color(0xFFEDFBD8)
+val WikiBlack = Color(0xFF000000)
+val WikiShuttleGray = Color(0xFF636466)
+val WikiOsloGray = Color(0xFF939598)
+val WikiSilverSand = Color(0xFFC7C8CA)
+val WikiWhite = Color(0xFFFFFFFF)
 
-val DuoRed = Color(0xFFFF4B4B)
-val DuoRedDark = Color(0xFFEA2B2B)
-val DuoRedLight = Color(0xFFFFDFE0)
+// Semantic UI Tokens mapped to Wikipedia Brand palette:
+val WikiBackground = WikiWhite
+val WikiSurface = WikiWhite
+val WikiSurfaceAlt = WikiSilverSand.copy(alpha = 0.15f)
+val WikiBorder = WikiSilverSand
+val WikiBorderDark = WikiOsloGray
+val WikiTextPrimary = WikiBlack
+val WikiTextSecondary = WikiShuttleGray
+val WikiTextMuted = WikiOsloGray
 
-val DuoYellow = Color(0xFFFFC800)
-val DuoYellowDark = Color(0xFFD7A700)
-val DuoYellowLight = Color(0xFFFFF7D6)
+// App Theme Color mappings (also mapped to legacy Duo* tokens for complete compatibility):
+val DuoGreen = WikiBlack
+val DuoGreenDark = WikiShuttleGray
+val DuoGreenLight = WikiSilverSand
+val DuoGreenBackground = WikiWhite
 
-val DuoBlue = Color(0xFF1CB0F6)
-val DuoBlueDark = Color(0xFF1899D6)
-val DuoBlueLight = Color(0xFFDDF4FF)
+val DuoRed = WikiShuttleGray
+val DuoRedDark = WikiBlack
+val DuoRedLight = WikiSilverSand
 
-val DuoPurple = Color(0xFFCE82FF)
-val DuoPurpleDark = Color(0xFFA855F7)
+val DuoYellow = WikiOsloGray
+val DuoYellowDark = WikiBlack
+val DuoYellowLight = WikiSilverSand
 
-val DuoInk = Color(0xFF3C3C3C)
-val DuoInkSecondary = Color(0xFF777777)
-val DuoSurface = Color(0xFFF7F7F7)
-val DuoBackground = Color(0xFFFFFFFF)
-val DuoBorder = Color(0xFFE5E5E5)
-val DuoBorderDark = Color(0xFFCECECE)
-val DuoCardSelectedBg = Color(0xFFEDF8FF)
-val DuoCardSelectedBorder = Color(0xFF1CB0F6)
+val DuoBlue = WikiBlack
+val DuoBlueDark = WikiShuttleGray
+val DuoBlueLight = WikiSilverSand.copy(alpha = 0.15f)
+
+val DuoPurple = WikiShuttleGray
+val DuoPurpleDark = WikiBlack
+val DuoPurpleLight = WikiSilverSand
+
+val DuoOrange = WikiShuttleGray
+val DuoOrangeDark = WikiBlack
+val DuoOrangeLight = WikiSilverSand
+
+val DuoTeal = WikiBlack
+val DuoTealDark = WikiShuttleGray
+val DuoTealLight = WikiSilverSand
+
+val DuoInk = WikiBlack
+val DuoInkSecondary = WikiShuttleGray
+val DuoSurface = WikiWhite
+val DuoBackground = WikiWhite
+val DuoBorder = WikiSilverSand
+val DuoBorderDark = WikiOsloGray
+val DuoCardSelectedBg = WikiSilverSand.copy(alpha = 0.15f)
+val DuoCardSelectedBorder = WikiBlack
+

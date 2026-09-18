@@ -43,6 +43,7 @@ import com.hackaton.wikitrainer.core.designsystem.DuoBackground
 import com.hackaton.wikitrainer.core.designsystem.DuoBorder
 import com.hackaton.wikitrainer.core.designsystem.DuoInk
 import com.hackaton.wikitrainer.core.designsystem.DuoInkSecondary
+import com.hackaton.wikitrainer.core.i18n.i18n
 import com.hackaton.wikitrainer.data.local.SavedArticle
 import com.hackaton.wikitrainer.data.local.SavedArticleStore
 import coil.compose.AsyncImage
@@ -57,10 +58,10 @@ fun SavedArticlesScreen(onBackClick: () -> Unit, modifier: Modifier = Modifier) 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Voci salvate", fontWeight = FontWeight.Black) },
+                title = { Text(i18n("saved.title"), fontWeight = FontWeight.Black) },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, "Indietro")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, i18n("common.back"))
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = DuoBackground)
@@ -75,9 +76,9 @@ fun SavedArticlesScreen(onBackClick: () -> Unit, modifier: Modifier = Modifier) 
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                Text("Nessuna voce salvata", fontSize = 18.sp, fontWeight = FontWeight.Black, color = DuoInk)
+                Text(i18n("saved.empty_title"), fontSize = 18.sp, fontWeight = FontWeight.Black, color = DuoInk)
                 Spacer(Modifier.height(8.dp))
-                Text("Usa il segnalibro al termine di un quiz per creare la tua biblioteca.", color = DuoInkSecondary)
+                Text(i18n("saved.empty_description"), color = DuoInkSecondary)
             }
         } else {
             LazyColumn(
@@ -114,8 +115,8 @@ private fun SavedArticleCard(article: SavedArticle, onOpen: () -> Unit, onDelete
                 Spacer(Modifier.padding(4.dp))
             }
             Text(article.title, modifier = Modifier.weight(1f), fontWeight = FontWeight.Black, color = DuoInk)
-            IconButton(onClick = onOpen) { Icon(Icons.Default.OpenInBrowser, "Apri su Wikipedia") }
-            IconButton(onClick = onDelete) { Icon(Icons.Default.Delete, "Rimuovi") }
+            IconButton(onClick = onOpen) { Icon(Icons.Default.OpenInBrowser, i18n("saved.open_in_browser")) }
+            IconButton(onClick = onDelete) { Icon(Icons.Default.Delete, i18n("saved.remove")) }
         }
         if (article.description.isNotBlank()) {
             Text(article.description, fontSize = 12.sp, color = DuoInkSecondary)

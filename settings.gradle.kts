@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "WikiTrainer"
+rootProject.name = "Wikingo"
 include(":app")
