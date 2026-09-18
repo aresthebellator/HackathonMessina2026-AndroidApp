@@ -15,3 +15,8 @@ build/
 .externalNativeBuild
 .cxx
 local.properties
+
+# Cartelle esterne / branch alternativi
+web-app/
+android-app/
+
