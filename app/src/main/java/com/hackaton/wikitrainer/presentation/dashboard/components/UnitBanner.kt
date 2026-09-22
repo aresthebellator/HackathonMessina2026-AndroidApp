@@ -18,8 +18,10 @@ import androidx.compose.material.icons.filled.AccountBalance
 import androidx.compose.material.icons.filled.AutoStories
 import androidx.compose.material.icons.filled.Explore
 import androidx.compose.material.icons.filled.Lightbulb
+import androidx.compose.material.icons.filled.MusicNote
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.RocketLaunch
+import androidx.compose.material.icons.filled.Science
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -45,6 +47,8 @@ fun UnitBanner(
         "Palette" -> Icons.Default.Palette
         "Compass" -> Icons.Default.Explore
         "Lightbulb" -> Icons.Default.Lightbulb
+        "Music" -> Icons.Default.MusicNote
+        "Science" -> Icons.Default.Science
         else -> Icons.Default.AutoStories
     }
 

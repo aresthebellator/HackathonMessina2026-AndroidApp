@@ -41,8 +41,8 @@ fun MascotReaction(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
-            painter = painterResource(id = R.drawable.ic_duo_owl),
-            contentDescription = "Mascot",
+            painter = painterResource(id = R.drawable.ic_launcher_image),
+            contentDescription = "Vichingo",
             modifier = Modifier.size(68.dp)
         )
 

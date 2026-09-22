@@ -175,7 +175,7 @@ fun HistoryScreen(
                                     horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
                                     Image(
-                                        painter = painterResource(id = R.drawable.ic_duo_owl),
+                                        painter = painterResource(id = R.drawable.ic_launcher_image),
                                         contentDescription = null,
                                         modifier = Modifier.size(70.dp)
                                     )

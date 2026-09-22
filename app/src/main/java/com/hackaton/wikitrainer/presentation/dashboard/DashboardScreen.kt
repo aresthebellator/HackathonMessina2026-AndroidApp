@@ -1,5 +1,6 @@
 package com.hackaton.wikitrainer.presentation.dashboard
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -44,10 +45,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.hackaton.wikitrainer.R
 import com.hackaton.wikitrainer.core.designsystem.DuoBackground
 import com.hackaton.wikitrainer.core.designsystem.DuoBlue
 import com.hackaton.wikitrainer.core.designsystem.DuoBlueLight
@@ -62,6 +66,7 @@ import com.hackaton.wikitrainer.core.designsystem.DuoRed
 import com.hackaton.wikitrainer.core.designsystem.DuoSurface
 import com.hackaton.wikitrainer.core.i18n.i18n
 import com.hackaton.wikitrainer.domain.model.UserStats
+import com.hackaton.wikitrainer.domain.model.MAX_LESSON_NUMBER
 import com.hackaton.wikitrainer.domain.model.getLessonTitle
 import com.hackaton.wikitrainer.domain.model.getUnitForLesson
 import com.hackaton.wikitrainer.presentation.dashboard.components.DuolingoPath
@@ -78,7 +83,7 @@ fun DashboardScreen(
     onSavedArticles: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val currentLesson = (stats.totalLessonsCompleted + 1).coerceAtMost(60)
+    val currentLesson = (stats.totalLessonsCompleted + 1).coerceAtMost(MAX_LESSON_NUMBER)
     val currentUnit = getUnitForLesson(currentLesson)
     val currentLessonTitle = getLessonTitle(currentLesson)
     val unitCompletedCount = (currentUnit.startLesson..currentUnit.endLesson)
@@ -105,16 +110,23 @@ fun DashboardScreen(
                             .padding(horizontal = 16.dp, vertical = 10.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        // Owl Logo Box
+                        // Viking Logo Box
                         Box(
                             modifier = Modifier
                                 .size(42.dp)
                                 .clip(RoundedCornerShape(14.dp))
-                                .background(com.hackaton.wikitrainer.core.designsystem.WikiBlack)
-                                .border(width = 1.dp, color = com.hackaton.wikitrainer.core.designsystem.WikiShuttleGray, shape = RoundedCornerShape(14.dp)),
+                                .background(Color.White)
+                                .border(width = 1.dp, color = DuoBorder, shape = RoundedCornerShape(14.dp)),
                             contentAlignment = Alignment.Center
                         ) {
-                            Text("🦉", fontSize = 22.sp)
+                            Image(
+                                painter = painterResource(id = R.drawable.ic_launcher_image),
+                                contentDescription = "Logo Wikingo",
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier
+                                    .size(38.dp)
+                                    .clip(RoundedCornerShape(11.dp))
+                            )
                         }
 
                         Spacer(Modifier.width(10.dp))
@@ -194,7 +206,7 @@ fun DashboardScreen(
                      ) {
                          StatPill("🔥", "${stats.currentStreak} ${i18n("dashboard.streak_unit")}", i18n("dashboard.streak_label"), com.hackaton.wikitrainer.core.designsystem.WikiBlack)
                          StatPill("⚡", "${stats.totalXp} ${i18n("dashboard.xp_suffix")}", i18n("dashboard.xp_label"), com.hackaton.wikitrainer.core.designsystem.WikiBlack)
-                         StatPill("✓", "${stats.totalLessonsCompleted}/60", i18n("dashboard.lessons_label"), com.hackaton.wikitrainer.core.designsystem.WikiBlack)
+                         StatPill("✓", "${stats.totalLessonsCompleted}/$MAX_LESSON_NUMBER", i18n("dashboard.lessons_label"), com.hackaton.wikitrainer.core.designsystem.WikiBlack)
                          IconButton(onClick = onHistory, modifier = Modifier.size(36.dp)) {
                              Icon(
                                  Icons.Default.History,
@@ -228,7 +240,7 @@ fun DashboardScreen(
                              )
                              Spacer(Modifier.width(8.dp))
                              Text(
-                                 text = "${currentUnit.title}: ${currentUnit.topic} ($unitCompletedCount/10)",
+                                 text = "${currentUnit.title}: ${currentUnit.topic} ($unitCompletedCount/${currentUnit.endLesson - currentUnit.startLesson + 1})",
                                  fontSize = 12.sp,
                                  fontWeight = FontWeight.Bold,
                                  color = DuoInk,

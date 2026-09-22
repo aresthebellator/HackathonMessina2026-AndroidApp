@@ -29,72 +29,54 @@ class LessonRepositoryImpl(
 
         return when (result) {
             is NetworkResult.Success -> {
-                val summary = result.data
-                val questions = questionGenerator.generateQuestions(summary)
-                val wikiUrl = summary.contentUrls?.mobile?.page
-                    ?: summary.contentUrls?.desktop?.page
-                    ?: "https://$language.wikipedia.org/wiki/${summary.title}"
-
-                val session = LessonSession(
-                    id = UUID.randomUUID().toString(),
-                    topicTitle = summary.title,
-                    topicDescription = summary.description ?: "Argomento di cultura generale",
-                    topicExtract = summary.extract ?: "",
-                    thumbnailUrl = summary.thumbnail?.source ?: summary.originalImage?.source,
-                    wikiUrl = wikiUrl,
-                    pageId = summary.pageId ?: System.currentTimeMillis(),
-                    questions = questions
+                NetworkResult.Success(createSession(result.data, language))
+            }
+            is NetworkResult.Offline,
+            is NetworkResult.Error -> NetworkResult.Success(
+                createSession(
+                    questionGenerator.getCuratedOfflineSummary(),
+                    language,
+                    offline = true
                 )
-                NetworkResult.Success(session)
-            }
-            is NetworkResult.Offline -> {
-                // Guaranteed offline learning fallback
-                val fallbackSummary = questionGenerator.getCuratedOfflineSummary()
-                val questions = questionGenerator.generateQuestions(fallbackSummary)
-                val session = LessonSession(
-                    id = UUID.randomUUID().toString(),
-                    topicTitle = "${fallbackSummary.title} (Offline)",
-                    topicDescription = fallbackSummary.description ?: "Lezione salvata offline",
-                    topicExtract = fallbackSummary.extract ?: "",
-                    thumbnailUrl = null,
-                    wikiUrl = "https://$language.wikipedia.org/wiki/${fallbackSummary.title}",
-                    pageId = fallbackSummary.pageId ?: 0L,
-                    questions = questions
-                )
-                NetworkResult.Success(session)
-            }
-            is NetworkResult.Error -> {
-                result
-            }
+            )
         }
     }
 
     override suspend fun getLessonForTopic(topic: String, language: String): NetworkResult<LessonSession> {
         val result = wikipediaClient.fetchArticleByTitle(topic, language)
         return when (result) {
-            is NetworkResult.Success -> {
-                val summary = result.data
-                val questions = questionGenerator.generateQuestions(summary)
-                val wikiUrl = summary.contentUrls?.mobile?.page
-                    ?: "https://$language.wikipedia.org/wiki/${summary.title}"
-
-                val session = LessonSession(
-                    id = UUID.randomUUID().toString(),
-                    topicTitle = summary.title,
-                    topicDescription = summary.description ?: "Argomento selezionato",
-                    topicExtract = summary.extract ?: "",
-                    thumbnailUrl = summary.thumbnail?.source,
-                    wikiUrl = wikiUrl,
-                    pageId = summary.pageId ?: System.currentTimeMillis(),
-                    questions = questions
+            is NetworkResult.Success -> NetworkResult.Success(createSession(result.data, language))
+            is NetworkResult.Offline,
+            is NetworkResult.Error -> NetworkResult.Success(
+                createSession(
+                    questionGenerator.getCuratedOfflineSummary(topic),
+                    language,
+                    offline = true
                 )
-                NetworkResult.Success(session)
-            }
-            is NetworkResult.Offline -> {
-                getRandomLesson(language)
-            }
-            is NetworkResult.Error -> result
+            )
         }
+    }
+
+    private fun createSession(
+        summary: com.hackaton.wikitrainer.data.remote.dto.WikiSummaryDto,
+        language: String,
+        offline: Boolean = false
+    ): LessonSession {
+        val title = summary.title.ifBlank { "Cultura generale" }
+        val wikiUrl = summary.contentUrls?.mobile?.page
+            ?: summary.contentUrls?.desktop?.page
+            ?: "https://$language.wikipedia.org/wiki/${title.replace(' ', '_')}"
+
+        return LessonSession(
+            id = UUID.randomUUID().toString(),
+            topicTitle = if (offline) "$title (Offline)" else title,
+            topicDescription = summary.description ?: "Argomento di cultura generale",
+            topicExtract = summary.extract.orEmpty(),
+            thumbnailUrl = summary.thumbnail?.source ?: summary.originalImage?.source,
+            wikiUrl = wikiUrl,
+            pageId = summary.pageId ?: System.currentTimeMillis(),
+            questions = questionGenerator.generateQuestions(summary)
+        )
     }
 
     override suspend fun saveCompletedLesson(session: LessonSession): Long {

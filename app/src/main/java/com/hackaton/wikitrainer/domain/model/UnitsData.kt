@@ -98,6 +98,36 @@ val UNITS_DATA: List<PathUnit> = listOf(
         darkColor = WikiBlack,
         lightColor = WikiSilverSand,
         textColor = WikiWhite
+    ),
+    PathUnit(
+        id = 7,
+        title = "Sezione 7",
+        subtitle = "Lezioni 61 - 70",
+        topic = "Musica, Cinema & Cultura Pop",
+        description = "Dalla musica classica al cinema moderno: scopri gli artisti, le opere e le idee che hanno segnato l'immaginario collettivo.",
+        startLesson = 61,
+        endLesson = 70,
+        iconName = "Music",
+        keywords = listOf("Musica", "Cinema", "Compositore", "Regista", "Jazz", "Fotografia", "Cultura pop"),
+        primaryColor = WikiBlack,
+        darkColor = WikiShuttleGray,
+        lightColor = WikiSilverSand,
+        textColor = WikiWhite
+    ),
+    PathUnit(
+        id = 8,
+        title = "Sezione 8",
+        subtitle = "Lezioni 71 - 80",
+        topic = "Natura, Tecnologia & Futuro",
+        description = "Il rapporto tra esseri umani, ambiente e innovazione: ecosistemi, invenzioni e sfide del futuro.",
+        startLesson = 71,
+        endLesson = 80,
+        iconName = "Science",
+        keywords = listOf("Ecologia", "Tecnologia", "Robotica", "Clima", "Energia", "Medicina", "Innovazione"),
+        primaryColor = WikiShuttleGray,
+        darkColor = WikiBlack,
+        lightColor = WikiSilverSand,
+        textColor = WikiWhite
     )
 )
 
@@ -166,8 +196,32 @@ val LESSON_TITLES: Map<Int, String> = mapOf(
     57 to "La Poesia Moderna e i Versi Liberi",
     58 to "Il Fascino del Realismo Magico",
     59 to "I Capolavori del Premio Nobel",
-    60 to "🏆 Sfida Finale: Sommo Sapiente di Wikingo"
+    60 to "🏆 Sfida Finale: Sommo Sapiente di Wikingo",
+
+    61 to "Le Origini della Musica e degli Strumenti",
+    62 to "I Grandi Compositori della Musica Classica",
+    63 to "Jazz, Blues e la Rivoluzione del Ritmo",
+    64 to "La Nascita del Cinema",
+    65 to "I Maestri della Regia Mondiale",
+    66 to "La Fotografia tra Arte e Memoria",
+    67 to "Le Colonne Sonore più Celebri",
+    68 to "La Cultura Pop e i Nuovi Linguaggi",
+    69 to "Festival, Premi e Opere Indimenticabili",
+    70 to "🏆 Sfida Epica: Maestro della Cultura",
+
+    71 to "Gli Ecosistemi e la Biodiversità",
+    72 to "Il Cambiamento Climatico",
+    73 to "Energie Rinnovabili e Sostenibilità",
+    74 to "Robotica e Intelligenza Artificiale",
+    75 to "L'Esplorazione degli Abissi",
+    76 to "La Medicina del Futuro",
+    77 to "Materiali, Nanotecnologie e Nuove Idee",
+    78 to "Le Città del Futuro",
+    79 to "Le Grandi Sfide dell'Umanità",
+    80 to "🏆 Sfida Finale: Visionario di Wikingo"
 )
+
+val MAX_LESSON_NUMBER: Int = UNITS_DATA.maxOf { it.endLesson }
 
 fun getUnitForLesson(lessonNumber: Int): PathUnit {
     return UNITS_DATA.find { lessonNumber in it.startLesson..it.endLesson } ?: UNITS_DATA.first()

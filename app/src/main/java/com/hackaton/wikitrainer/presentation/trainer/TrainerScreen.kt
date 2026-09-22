@@ -316,7 +316,7 @@ private fun CompleteView(
             contentAlignment = Alignment.Center
         ) {
             Image(
-                painter = painterResource(id = R.drawable.ic_duo_owl),
+                painter = painterResource(id = R.drawable.ic_launcher_image),
                 contentDescription = "Completato",
                 modifier = Modifier.size(80.dp)
             )
@@ -532,7 +532,7 @@ private fun LoadingView(message: String) {
         verticalArrangement = Arrangement.Center
     ) {
         Image(
-            painter = painterResource(id = R.drawable.ic_duo_owl),
+            painter = painterResource(id = R.drawable.ic_launcher_image),
             contentDescription = i18n("common.loading"),
             modifier = Modifier.size(90.dp)
         )
@@ -579,7 +579,7 @@ private fun ErrorView(
         verticalArrangement = Arrangement.Center
     ) {
         Image(
-            painter = painterResource(id = R.drawable.ic_duo_owl),
+            painter = painterResource(id = R.drawable.ic_launcher_image),
             contentDescription = i18n("common.error"),
             modifier = Modifier.size(80.dp)
         )

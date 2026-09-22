@@ -269,7 +269,7 @@ class QuestionGenerator {
     /**
      * Curated offline fallback lessons guaranteeing 100% functionality without internet.
      */
-    fun getCuratedOfflineSummary(): WikiSummaryDto {
+    fun getCuratedOfflineSummary(topic: String? = null): WikiSummaryDto {
         val fallbacks = listOf(
             WikiSummaryDto(
                 title = "Leonardo da Vinci",
@@ -298,8 +298,71 @@ class QuestionGenerator {
                 description = "grande telescopio spaziale a infrarossi per l'astronomia",
                 extract = "Il telescopio spaziale James Webb è un osservatorio spaziale sviluppato dalla NASA in collaborazione con l'ESA e la CSA. Lanciato nel dicembre 2021, opera in orbita attorno al punto di Lagrange L2 per osservare le prime galassie dell'universo.",
                 lang = "it"
+            ),
+            WikiSummaryDto(
+                title = "Acropoli di Atene",
+                pageId = 125,
+                description = "cittadella monumentale dell'antica Atene",
+                extract = "L'Acropoli di Atene è una cittadella rocciosa che domina la capitale greca. Il Partenone, costruito nel V secolo avanti Cristo, è il suo monumento più celebre e uno dei simboli dell'architettura classica.",
+                lang = "it"
+            ),
+            WikiSummaryDto(
+                title = "Galileo Galilei",
+                pageId = 1354,
+                description = "astronomo, fisico e matematico italiano",
+                extract = "Galileo Galilei è stato un astronomo, fisico e matematico italiano. Con le sue osservazioni telescopiche sostenne l'astronomia eliocentrica e contribuì allo sviluppo del metodo sperimentale.",
+                lang = "it"
+            ),
+            WikiSummaryDto(
+                title = "Alpi",
+                pageId = 2361,
+                description = "sistema montuoso dell'Europa centrale",
+                extract = "Le Alpi sono una catena montuosa dell'Europa centrale che attraversa diversi Paesi. Il Monte Bianco è la vetta più alta e la regione alpina ospita ambienti, culture e paesaggi molto diversi.",
+                lang = "it"
+            ),
+            WikiSummaryDto(
+                title = "Dante Alighieri",
+                pageId = 816,
+                description = "poeta e scrittore italiano del Medioevo",
+                extract = "Dante Alighieri è stato un poeta e scrittore italiano. La Divina Commedia, composta nel Medioevo, racconta il viaggio immaginario del poeta attraverso Inferno, Purgatorio e Paradiso.",
+                lang = "it"
+            ),
+            WikiSummaryDto(
+                title = "Wolfgang Amadeus Mozart",
+                pageId = 206,
+                description = "compositore e musicista austriaco",
+                extract = "Wolfgang Amadeus Mozart è stato un compositore e musicista austriaco del XVIII secolo. La sua produzione comprende opere, sinfonie, concerti e musica da camera, ancora oggi eseguiti in tutto il mondo.",
+                lang = "it"
+            ),
+            WikiSummaryDto(
+                title = "Cinema",
+                pageId = 5842,
+                description = "arte e industria delle immagini in movimento",
+                extract = "Il cinema è l'arte di rappresentare storie e idee attraverso immagini in movimento. Nato tra la fine dell'Ottocento e l'inizio del Novecento, è diventato una delle forme culturali più diffuse al mondo.",
+                lang = "it"
+            ),
+            WikiSummaryDto(
+                title = "Biodiversità",
+                pageId = 532,
+                description = "varietà della vita sulla Terra",
+                extract = "La biodiversità indica la varietà degli organismi viventi, degli ecosistemi e dei patrimoni genetici. La sua conservazione è importante per l'equilibrio naturale e per il benessere delle società umane.",
+                lang = "it"
+            ),
+            WikiSummaryDto(
+                title = "Intelligenza artificiale",
+                pageId = 198,
+                description = "disciplina che studia sistemi capaci di svolgere compiti intelligenti",
+                extract = "L'intelligenza artificiale è la disciplina che studia metodi e sistemi capaci di svolgere compiti associati all'intelligenza umana. Comprende apprendimento automatico, elaborazione del linguaggio e visione artificiale.",
+                lang = "it"
             )
         )
-        return fallbacks.random()
+        val normalizedTopic = topic.orEmpty().lowercase()
+        return fallbacks.firstOrNull { summary ->
+            val searchable = "${summary.title} ${summary.description} ${summary.extract}".lowercase()
+            normalizedTopic.isNotBlank() &&
+                    normalizedTopic.split(Regex("\\s+")).any { word ->
+                        word.length >= 5 && searchable.contains(word)
+                    }
+        } ?: fallbacks.random()
     }
 }

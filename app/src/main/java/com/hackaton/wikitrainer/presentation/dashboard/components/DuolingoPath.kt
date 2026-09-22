@@ -45,7 +45,7 @@ fun DuolingoPath(
     LaunchedEffect(currentLessonIndex) {
         // Find rough index in list (unit banners + nodes)
         // Each unit has 1 banner + 10 nodes = 11 items per unit
-        val unitIndex = ((currentLessonIndex - 1) / 10).coerceIn(0, 5)
+        val unitIndex = ((currentLessonIndex - 1) / 10).coerceIn(0, UNITS_DATA.lastIndex)
         val lessonInUnit = (currentLessonIndex - 1) % 10
         val targetIndex = (unitIndex * 11 + lessonInUnit).coerceAtLeast(0)
         listState.animateScrollToItem((targetIndex - 1).coerceAtLeast(0))
