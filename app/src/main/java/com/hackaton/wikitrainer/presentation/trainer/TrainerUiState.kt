@@ -27,6 +27,7 @@ sealed interface TrainerUiState {
         val selectedOptionIndex: Int? = null,
         val feedback: AnswerFeedback? = null,
         val userStats: UserStats,
+        val hearts: Int = 10,
         val isSoundEnabled: Boolean = true
     ) : TrainerUiState {
         val isAnswerChecked: Boolean get() = feedback != null

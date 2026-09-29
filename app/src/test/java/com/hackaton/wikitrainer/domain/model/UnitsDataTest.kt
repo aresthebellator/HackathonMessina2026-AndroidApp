@@ -9,10 +9,10 @@ import org.junit.Test
 class UnitsDataTest {
 
     @Test
-    fun `UNITS_DATA contains exactly 6 sections spanning 60 lessons`() {
-        assertEquals(6, UNITS_DATA.size)
+    fun `UNITS_DATA contains exactly 10 sections spanning 100 lessons`() {
+        assertEquals(10, UNITS_DATA.size)
         assertEquals(1, UNITS_DATA.first().startLesson)
-        assertEquals(60, UNITS_DATA.last().endLesson)
+        assertEquals(100, UNITS_DATA.last().endLesson)
 
         UNITS_DATA.forEachIndexed { index, unit ->
             assertEquals(index + 1, unit.id)
@@ -33,6 +33,10 @@ class UnitsDataTest {
         assertEquals(4, getUnitForLesson(35).id)
         assertEquals(5, getUnitForLesson(45).id)
         assertEquals(6, getUnitForLesson(60).id)
+        assertEquals(7, getUnitForLesson(61).id)
+        assertEquals(8, getUnitForLesson(80).id)
+        assertEquals(9, getUnitForLesson(81).id)
+        assertEquals(10, getUnitForLesson(100).id)
     }
 
     @Test
@@ -51,9 +55,9 @@ class UnitsDataTest {
     }
 
     @Test
-    fun `LESSON_TITLES contains all 60 lesson titles`() {
-        assertEquals(60, LESSON_TITLES.size)
-        for (i in 1..60) {
+    fun `LESSON_TITLES contains all 100 lesson titles`() {
+        assertEquals(100, LESSON_TITLES.size)
+        for (i in 1..100) {
             val title = getLessonTitle(i)
             assertTrue("Title for lesson $i should not be empty", title.isNotBlank())
         }
@@ -70,5 +74,18 @@ class UnitsDataTest {
         assertTrue(o2.value < 0f)
         assertTrue(o3.value < o2.value)
         assertTrue(o7.value > 0f)
+    }
+
+    @Test
+    fun `every lesson has a predefined Italian and English topic`() {
+        val italianTopics = (1..MAX_LESSON_NUMBER).map { getLessonTopic(it, "it") }
+        val englishTopics = (1..MAX_LESSON_NUMBER).map { getLessonTopic(it, "en") }
+
+        assertEquals(MAX_LESSON_NUMBER, italianTopics.distinct().size)
+        assertEquals(MAX_LESSON_NUMBER, englishTopics.distinct().size)
+        assertTrue(italianTopics.all { it.isNotBlank() })
+        assertTrue(englishTopics.all { it.isNotBlank() })
+        assertEquals("Sport", getUnitForLesson(81).topic.substringBefore(","))
+        assertTrue(getLessonTopic(91, "en").contains("Algorithm"))
     }
 }

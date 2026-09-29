@@ -30,6 +30,8 @@ import com.hackaton.wikitrainer.domain.model.getLessonTitle
 import com.hackaton.wikitrainer.domain.model.getSerpentineOffset
 import com.hackaton.wikitrainer.domain.model.getUnitForLesson
 import com.hackaton.wikitrainer.domain.model.isCheckpointLesson
+import com.hackaton.wikitrainer.domain.model.getLessonTopic
+import com.hackaton.wikitrainer.core.i18n.LocalI18nLanguage
 
 @Composable
 fun DuolingoPath(
@@ -40,6 +42,7 @@ fun DuolingoPath(
     listState: LazyListState = rememberLazyListState()
 ) {
     var previewLessonNumber by remember { mutableStateOf<Int?>(null) }
+    val language = LocalI18nLanguage.current
 
     // Auto-scroll gently to the current active lesson node on first load
     LaunchedEffect(currentLessonIndex) {
@@ -165,7 +168,7 @@ fun DuolingoPath(
             unit = unit,
             status = status,
             onStartLesson = {
-                val topic = unit.keywords.firstOrNull() ?: unit.topic
+                val topic = getLessonTopic(lessonNum, language)
                 previewLessonNumber = null
                 onStartLesson(lessonNum, topic)
             },

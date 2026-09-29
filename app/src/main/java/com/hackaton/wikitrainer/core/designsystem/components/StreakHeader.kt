@@ -32,7 +32,7 @@ import com.hackaton.wikitrainer.core.designsystem.WikiShuttleGray
 fun StreakHeader(
     streakDays: Int,
     totalXp: Int,
-    hearts: Int = 5,
+    hearts: Int = 10,
     onCloseClick: (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {

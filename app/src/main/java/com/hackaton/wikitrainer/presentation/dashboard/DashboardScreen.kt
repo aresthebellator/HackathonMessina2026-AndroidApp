@@ -69,6 +69,7 @@ import com.hackaton.wikitrainer.domain.model.UserStats
 import com.hackaton.wikitrainer.domain.model.MAX_LESSON_NUMBER
 import com.hackaton.wikitrainer.domain.model.getLessonTitle
 import com.hackaton.wikitrainer.domain.model.getUnitForLesson
+import com.hackaton.wikitrainer.domain.model.getLessonTopic
 import com.hackaton.wikitrainer.presentation.dashboard.components.DuolingoPath
 
 @Composable
@@ -85,7 +86,7 @@ fun DashboardScreen(
 ) {
     val currentLesson = (stats.totalLessonsCompleted + 1).coerceAtMost(MAX_LESSON_NUMBER)
     val currentUnit = getUnitForLesson(currentLesson)
-    val currentLessonTitle = getLessonTitle(currentLesson)
+    val currentLessonTitle = getLessonTitle(currentLesson, language)
     val unitCompletedCount = (currentUnit.startLesson..currentUnit.endLesson)
         .count { it <= stats.totalLessonsCompleted }
 
@@ -240,7 +241,7 @@ fun DashboardScreen(
                              )
                              Spacer(Modifier.width(8.dp))
                              Text(
-                                 text = "${currentUnit.title}: ${currentUnit.topic} ($unitCompletedCount/${currentUnit.endLesson - currentUnit.startLesson + 1})",
+                                 text = "${currentUnit.localizedTitle(language)}: ${currentUnit.localizedTopic(language)} ($unitCompletedCount/${currentUnit.endLesson - currentUnit.startLesson + 1})",
                                  fontSize = 12.sp,
                                  fontWeight = FontWeight.Bold,
                                  color = DuoInk,
@@ -285,8 +286,8 @@ fun DashboardScreen(
             DuolingoPath(
                 currentLessonIndex = currentLesson,
                 completedLessonsCount = stats.totalLessonsCompleted,
-                onStartLesson = { lessonNum, topic ->
-                    onStartLesson(topic, lessonNum)
+                onStartLesson = { lessonNum, _ ->
+                    onStartLesson(getLessonTopic(lessonNum, language), lessonNum)
                 },
                 modifier = Modifier.weight(1f)
             )
@@ -298,7 +299,7 @@ fun DashboardScreen(
             lessonTitle = currentLessonTitle,
             unit = currentUnit,
             onContinue = {
-                val topic = currentUnit.keywords.firstOrNull() ?: currentUnit.topic
+                val topic = getLessonTopic(currentLesson, language)
                 onStartLesson(topic, currentLesson)
             },
             modifier = Modifier

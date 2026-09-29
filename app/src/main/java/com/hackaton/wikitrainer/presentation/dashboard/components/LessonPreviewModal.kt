@@ -48,6 +48,7 @@ import com.hackaton.wikitrainer.core.i18n.i18n
 import com.hackaton.wikitrainer.domain.model.PathUnit
 import com.hackaton.wikitrainer.domain.model.getLessonTitle
 import com.hackaton.wikitrainer.domain.model.isCheckpointLesson
+import com.hackaton.wikitrainer.core.i18n.LocalI18nLanguage
 
 /**
  * Lesson Preview Modal styled with Wikipedia Brand and Logo Colors
@@ -63,7 +64,8 @@ fun LessonPreviewModal(
     val isCheckpoint = isCheckpointLesson(lessonNumber)
     val isLocked = status == PathNodeStatus.LOCKED
     val isCompleted = status == PathNodeStatus.COMPLETED
-    val title = getLessonTitle(lessonNumber)
+    val language = LocalI18nLanguage.current
+    val title = getLessonTitle(lessonNumber, language)
 
     val xpReward = i18n("path_modal.xp_reward_format", "xp" to if (isCheckpoint) 150 else 90)
     val gemReward = i18n("path_modal.gems_reward_format", "gems" to if (isCheckpoint) 25 else 10)
@@ -104,7 +106,7 @@ fun LessonPreviewModal(
                             .padding(horizontal = 12.dp, vertical = 5.dp)
                     ) {
                         Text(
-                            text = "${unit.title.uppercase()} • ${unit.topic.uppercase()}",
+                            text = "${unit.localizedTitle(language).uppercase()} • ${unit.localizedTopic(language).uppercase()}",
                             color = WikiWhite,
                             fontSize = 11.sp,
                             fontWeight = FontWeight.Black,

@@ -14,7 +14,10 @@ import com.hackaton.wikitrainer.domain.repository.LessonRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
 import java.time.temporal.ChronoUnit
+import java.util.Locale
 import java.util.UUID
 
 class LessonRepositoryImpl(
@@ -34,7 +37,7 @@ class LessonRepositoryImpl(
             is NetworkResult.Offline,
             is NetworkResult.Error -> NetworkResult.Success(
                 createSession(
-                    questionGenerator.getCuratedOfflineSummary(),
+                    questionGenerator.getCuratedOfflineSummary(language = language),
                     language,
                     offline = true
                 )
@@ -49,7 +52,7 @@ class LessonRepositoryImpl(
             is NetworkResult.Offline,
             is NetworkResult.Error -> NetworkResult.Success(
                 createSession(
-                    questionGenerator.getCuratedOfflineSummary(topic),
+                    questionGenerator.getCuratedOfflineSummary(topic, language),
                     language,
                     offline = true
                 )
@@ -69,13 +72,19 @@ class LessonRepositoryImpl(
 
         return LessonSession(
             id = UUID.randomUUID().toString(),
-            topicTitle = if (offline) "$title (Offline)" else title,
-            topicDescription = summary.description ?: "Argomento di cultura generale",
+            topicTitle = if (offline) {
+                if (language == "en") "$title (Offline)" else "$title (Offline)"
+            } else title,
+            topicDescription = summary.description ?: if (language == "en") {
+                "General knowledge topic"
+            } else {
+                "Argomento di cultura generale"
+            },
             topicExtract = summary.extract.orEmpty(),
             thumbnailUrl = summary.thumbnail?.source ?: summary.originalImage?.source,
             wikiUrl = wikiUrl,
             pageId = summary.pageId ?: System.currentTimeMillis(),
-            questions = questionGenerator.generateQuestions(summary)
+            questions = questionGenerator.generateQuestions(summary, language)
         )
     }
 
@@ -123,7 +132,7 @@ class LessonRepositoryImpl(
         if (lastDateStr.isBlank()) {
             newStreak = 1
         } else {
-            val lastDate = runCatching { LocalDate.parse(lastDateStr) }.getOrNull()
+            val lastDate = parseStoredDate(lastDateStr)
             if (lastDate == null) {
                 newStreak = 1
             } else {
@@ -148,6 +157,23 @@ class LessonRepositoryImpl(
             lastActiveDate = todayString
         )
         userStreakDao.saveStreak(updatedEntity)
+    }
+
+    private fun parseStoredDate(value: String): LocalDate? {
+        val normalized = value.trim()
+        if (normalized.isBlank()) return null
+        val formats = listOf(
+            DateTimeFormatter.ISO_LOCAL_DATE,
+            DateTimeFormatter.ofPattern("yyyy:MM-dd", Locale.ROOT),
+            DateTimeFormatter.ofPattern("yyyy:MM- dd", Locale.ROOT)
+        )
+        return formats.firstNotNullOfOrNull { formatter ->
+            try {
+                LocalDate.parse(normalized, formatter)
+            } catch (_: DateTimeParseException) {
+                null
+            }
+        }
     }
 
     override fun getTopicHistory(): Flow<List<TopicHistory>> {

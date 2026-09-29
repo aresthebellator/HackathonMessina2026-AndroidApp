@@ -111,6 +111,7 @@ class TrainerViewModelTest {
         assertEquals(1, questionState.questionNumber)
         assertEquals(2, questionState.totalQuestions)
         assertEquals("Roma", questionState.session.topicTitle)
+        assertEquals(10, questionState.hearts)
     }
 
     @Test
@@ -134,6 +135,25 @@ class TrainerViewModelTest {
 
         // Verify correct sound played
         io.mockk.verify { soundFeedbackManager.playCorrectFeedback() }
+    }
+
+    @Test
+    fun `wrong answer decrements a heart`() = runTest {
+        val viewModel = TrainerViewModel(
+            getRandomLessonUseCase,
+            submitAnswerUseCase,
+            completeLessonUseCase,
+            getUserStatsUseCase,
+            soundFeedbackManager
+        )
+        advanceUntilIdle()
+
+        viewModel.onEvent(TrainerUiEvent.SelectOption(0))
+        viewModel.onEvent(TrainerUiEvent.CheckAnswer)
+
+        val state = viewModel.uiState.value as TrainerUiState.QuestionState
+        assertEquals(9, state.hearts)
+        assertTrue(!state.feedback!!.isCorrect)
     }
 
     @Test

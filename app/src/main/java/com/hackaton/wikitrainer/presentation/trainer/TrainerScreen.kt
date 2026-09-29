@@ -70,6 +70,7 @@ import com.hackaton.wikitrainer.core.designsystem.components.MascotReaction
 import com.hackaton.wikitrainer.core.designsystem.components.OptionCard
 import com.hackaton.wikitrainer.core.designsystem.components.OptionCardState
 import com.hackaton.wikitrainer.core.designsystem.components.StreakHeader
+import com.hackaton.wikitrainer.core.designsystem.LocalReduceMotion
 import com.hackaton.wikitrainer.core.i18n.i18n
 import com.hackaton.wikitrainer.data.local.SavedArticle
 
@@ -81,6 +82,7 @@ fun TrainerScreen(
     modifier: Modifier = Modifier
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val reduceMotion = LocalReduceMotion.current
 
     Scaffold(
         containerColor = DuoBackground,
@@ -94,7 +96,8 @@ fun TrainerScreen(
             AnimatedContent(
                 targetState = uiState,
                 transitionSpec = {
-                    fadeIn(animationSpec = tween(250)) togetherWith fadeOut(animationSpec = tween(200))
+                    fadeIn(animationSpec = tween(if (reduceMotion) 0 else 250)) togetherWith
+                        fadeOut(animationSpec = tween(if (reduceMotion) 0 else 200))
                 },
                 label = "screenTransition"
             ) { state ->
@@ -146,6 +149,7 @@ private fun QuestionView(
             StreakHeader(
                 streakDays = state.userStats.currentStreak,
                 totalXp = state.userStats.totalXp,
+                hearts = state.hearts,
                 onCloseClick = onOpenHistory
             )
 
@@ -532,9 +536,9 @@ private fun LoadingView(message: String) {
         verticalArrangement = Arrangement.Center
     ) {
         Image(
-            painter = painterResource(id = R.drawable.ic_launcher_image),
-            contentDescription = i18n("common.loading"),
-            modifier = Modifier.size(90.dp)
+            painter = painterResource(id = R.drawable.viking_loading),
+            contentDescription = "Caricamento della nuova lezione",
+            modifier = Modifier.size(150.dp)
         )
 
         Spacer(modifier = Modifier.height(24.dp))

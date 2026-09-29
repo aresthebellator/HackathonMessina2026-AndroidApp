@@ -10,6 +10,7 @@ import com.hackaton.wikitrainer.domain.usecase.CompleteLessonUseCase
 import com.hackaton.wikitrainer.domain.usecase.GetLessonForTopicUseCase
 import com.hackaton.wikitrainer.domain.usecase.GetRandomLessonUseCase
 import com.hackaton.wikitrainer.domain.usecase.GetUserStatsUseCase
+import com.hackaton.wikitrainer.domain.usecase.HeartsManager
 import com.hackaton.wikitrainer.domain.usecase.SubmitAnswerUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -17,6 +18,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.Job
 
 class TrainerViewModel(
     private val getRandomLessonUseCase: GetRandomLessonUseCase,
@@ -24,7 +26,8 @@ class TrainerViewModel(
     private val completeLessonUseCase: CompleteLessonUseCase,
     getUserStatsUseCase: GetUserStatsUseCase,
     private val soundFeedbackManager: SoundFeedbackManager,
-    private val getLessonForTopicUseCase: GetLessonForTopicUseCase? = null
+    private val getLessonForTopicUseCase: GetLessonForTopicUseCase? = null,
+    private val heartsManager: HeartsManager? = null
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<TrainerUiState>(TrainerUiState.Loading())
@@ -36,6 +39,10 @@ class TrainerViewModel(
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = UserStats(0, 0, 0, 0, "")
         )
+    private var lessonLoadJob: Job? = null
+    private var lastLanguage = "it"
+    private var lastTopic: String? = null
+    private var lastLessonNumber: Int? = null
 
     init {
         loadNewLesson()
@@ -47,7 +54,7 @@ class TrainerViewModel(
             is TrainerUiEvent.CheckAnswer -> handleCheckAnswer()
             is TrainerUiEvent.NextQuestion -> handleNextQuestion()
             is TrainerUiEvent.StartNewLesson -> loadNewLesson()
-            is TrainerUiEvent.Retry -> loadNewLesson()
+            is TrainerUiEvent.Retry -> loadLesson(lastLanguage, lastTopic, lastLessonNumber)
             is TrainerUiEvent.ToggleSound -> handleToggleSound()
         }
     }
@@ -57,9 +64,17 @@ class TrainerViewModel(
     }
 
     fun loadLesson(language: String = "it", topic: String? = null, lessonNumber: Int? = null) {
-        viewModelScope.launch {
+        lessonLoadJob?.cancel()
+        lastLanguage = language
+        lastTopic = topic
+        lastLessonNumber = lessonNumber
+        lessonLoadJob = viewModelScope.launch {
             _uiState.value = TrainerUiState.Loading(
-                if (topic != null) "Carico la lezione: $topic..." else "Esploro Wikipedia per una nuova lezione..."
+                if (topic != null) {
+                    if (language == "en") "Loading lesson: $topic..." else "Carico la lezione: $topic..."
+                } else {
+                    if (language == "en") "Exploring Wikipedia for a new lesson..." else "Esploro Wikipedia per una nuova lezione..."
+                }
             )
 
             val result = if (!topic.isNullOrBlank() && getLessonForTopicUseCase != null) {
@@ -73,6 +88,18 @@ class TrainerViewModel(
                     val session = result.data
                     val firstQuestion = session.currentQuestion
                     if (firstQuestion != null) {
+                        val hearts = heartsManager?.getState()?.count ?: 10
+                        if (hearts == 0) {
+                            _uiState.value = TrainerUiState.Error(
+                                message = if (language == "en") {
+                                    "You are out of hearts. Come back in 2 hours to recharge one."
+                                } else {
+                                    "Hai esaurito i cuori. Torna tra 2 ore per ricaricarne uno."
+                                },
+                                canRetry = true
+                            )
+                            return@launch
+                        }
                         _uiState.value = TrainerUiState.QuestionState(
                             session = session,
                             currentQuestion = firstQuestion,
@@ -82,6 +109,7 @@ class TrainerViewModel(
                             selectedOptionIndex = null,
                             feedback = null,
                             userStats = userStatsFlow.value,
+                            hearts = hearts,
                             isSoundEnabled = soundFeedbackManager.isSoundEnabled()
                         )
                     } else {
@@ -126,6 +154,11 @@ class TrainerViewModel(
         if (currentState.isAnswerChecked) return
 
         val evaluation = submitAnswerUseCase(currentState.session, selectedIndex)
+        val hearts = if (evaluation.isCorrect) {
+            currentState.hearts
+        } else {
+            heartsManager?.consumeHeart()?.count ?: (currentState.hearts - 1).coerceAtLeast(0)
+        }
 
         // Trigger Audio & Haptic Feedback immediately
         if (evaluation.isCorrect) {
@@ -142,7 +175,8 @@ class TrainerViewModel(
                 correctOptionIndex = evaluation.correctOptionIndex,
                 correctAnswerText = evaluation.correctAnswerText,
                 explanation = evaluation.explanation
-            )
+            ),
+            hearts = hearts
         )
     }
 
@@ -165,6 +199,7 @@ class TrainerViewModel(
                 selectedOptionIndex = null,
                 feedback = null,
                 userStats = userStatsFlow.value,
+                hearts = heartsManager?.getState()?.count ?: currentState.hearts,
                 isSoundEnabled = soundFeedbackManager.isSoundEnabled()
             )
         } else {

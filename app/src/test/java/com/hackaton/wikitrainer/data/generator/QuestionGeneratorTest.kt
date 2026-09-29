@@ -88,4 +88,71 @@ class QuestionGeneratorTest {
         val questions = generator.generateQuestions(offlineSummary)
         assertTrue(questions.size in 5..7)
     }
+
+    @Test
+    fun `generated questions use different prompts and multiple question styles`() {
+        val summary = WikiSummaryDto(
+            title = "Ada Lovelace",
+            pageId = 1,
+            description = "matematica e pioniera della programmazione",
+            extract = "Ada Lovelace è stata una matematica inglese. È considerata la prima programmatrice della storia per il suo lavoro sulla macchina analitica. I suoi appunti descrivevano algoritmi capaci di elaborare simboli oltre ai numeri.",
+            lang = "it"
+        )
+
+        val questions = generator.generateQuestions(summary)
+
+        assertEquals(questions.size, questions.map { it.text }.distinct().size)
+        assertTrue(questions.map { it.type }.distinct().size >= 2)
+        assertTrue(questions.map { it.options[it.correctOptionIndex] }.distinct().size >= 2)
+    }
+
+    @Test
+    fun `same article keeps a stable varied question set`() {
+        val summary = WikiSummaryDto(
+            title = "Basket",
+            pageId = 2,
+            description = "sport di squadra con palla",
+            extract = "Il basket è uno sport di squadra nato negli Stati Uniti. Due squadre cercano di segnare in un canestro avversario. La partita richiede coordinazione, velocità e lettura dello spazio.",
+            lang = "it"
+        )
+
+        val first = generator.generateQuestions(summary).map { it.text to it.options }
+        val second = generator.generateQuestions(summary).map { it.text to it.options }
+
+        assertEquals(first, second)
+    }
+
+    @Test
+    fun `fallback context question asks about a concrete fact`() {
+        val summary = WikiSummaryDto(
+            title = "Basket",
+            pageId = 3,
+            description = "sport di squadra",
+            extract = "Il basket è uno sport di squadra nato negli Stati Uniti. Due squadre cercano di segnare in un canestro avversario.",
+            lang = "it"
+        )
+
+        val questions = generator.generateQuestions(summary)
+
+        assertTrue(questions.none { it.text.contains("natura generale", ignoreCase = true) })
+        assertTrue(questions.any { it.text.contains("fatto concreto", ignoreCase = true) })
+    }
+
+    @Test
+    fun `English question set uses English prompts and answer labels`() {
+        val summary = WikiSummaryDto(
+            title = "Computer",
+            pageId = 4,
+            description = "a machine that processes information",
+            extract = "A computer is a machine that processes information. It follows algorithms to transform input into output.",
+            lang = "en"
+        )
+
+        val questions = generator.generateQuestions(summary, "en")
+
+        assertTrue(questions.all { !it.text.contains("Qual", ignoreCase = true) })
+        assertTrue(questions.all { it.options.none { option -> option.contains("Vero") || option.contains("Falso") } })
+        assertTrue(questions.any { it.options.contains("True") && it.options.contains("False") })
+        assertTrue(questions.all { !it.explanation.contains("La voce", ignoreCase = true) })
+    }
 }

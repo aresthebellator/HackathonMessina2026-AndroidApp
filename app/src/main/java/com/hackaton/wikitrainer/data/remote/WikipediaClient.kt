@@ -11,6 +11,7 @@ import retrofit2.HttpException
 import java.io.IOException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
+import android.net.Uri
 
 /**
  * Service Client for Wikipedia REST API:
@@ -104,7 +105,7 @@ class WikipediaClient(
         }
 
         try {
-            val url = "https://$language.wikipedia.org/api/rest_v1/page/summary/$title"
+            val url = "https://$language.wikipedia.org/api/rest_v1/page/summary/${Uri.encode(title)}"
             val summary = apiService.getSummaryFromUrl(url)
             NetworkResult.Success(summary)
         } catch (e: HttpException) {

@@ -6,10 +6,17 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.unit.Density
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.core.view.WindowCompat
+
+val LocalReduceMotion = staticCompositionLocalOf { false }
 
 private val LightColorScheme = lightColorScheme(
     primary = WikiBlack,
@@ -54,11 +61,28 @@ private val DarkColorScheme = darkColorScheme(
 @Composable
 fun WikiTrainerTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
+    highContrast: Boolean = false,
+    largeText: Boolean = false,
+    reduceMotion: Boolean = false,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
+    val baseColorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
+    val colorScheme = if (highContrast) {
+        baseColorScheme.copy(
+            primary = if (darkTheme) Color.White else Color.Black,
+            onPrimary = if (darkTheme) Color.Black else Color.White,
+            background = if (darkTheme) Color.Black else Color.White,
+            onBackground = if (darkTheme) Color.White else Color.Black,
+            surface = if (darkTheme) Color.Black else Color.White,
+            onSurface = if (darkTheme) Color.White else Color.Black,
+            outline = if (darkTheme) Color.White else Color.Black
+        )
+    } else {
+        baseColorScheme
+    }
 
     val view = LocalView.current
+    val density = LocalDensity.current
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
@@ -67,9 +91,17 @@ fun WikiTrainerTheme(
         }
     }
 
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = DuolingoTypography,
-        content = content
-    )
+    CompositionLocalProvider(
+        LocalReduceMotion provides reduceMotion,
+        LocalDensity provides androidx.compose.ui.unit.Density(
+        density = density.density,
+        fontScale = if (largeText) maxOf(density.fontScale, 1.2f) else density.fontScale
+        )
+    ) {
+        MaterialTheme(
+            colorScheme = colorScheme,
+            typography = DuolingoTypography,
+            content = content
+        )
+    }
 }

@@ -158,7 +158,7 @@ fun HistoryScreen(
                         // Topics List Header
                         item {
                             Text(
-                                text = "Argomenti Affrontati (${state.topics.size})",
+                                text = "${i18n("history.topics_heading")} (${state.topics.size})",
                                 fontSize = 17.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = DuoInk,

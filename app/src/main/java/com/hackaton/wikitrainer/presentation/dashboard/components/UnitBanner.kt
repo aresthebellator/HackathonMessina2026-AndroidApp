@@ -22,6 +22,8 @@ import androidx.compose.material.icons.filled.MusicNote
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.RocketLaunch
 import androidx.compose.material.icons.filled.Science
+import androidx.compose.material.icons.filled.Computer
+import androidx.compose.material.icons.filled.SportsSoccer
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,6 +36,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.hackaton.wikitrainer.domain.model.PathUnit
+import com.hackaton.wikitrainer.core.i18n.LocalI18nLanguage
 
 @Composable
 fun UnitBanner(
@@ -41,6 +44,7 @@ fun UnitBanner(
     completedCount: Int,
     modifier: Modifier = Modifier
 ) {
+    val language = LocalI18nLanguage.current
     val watermarkIcon: ImageVector = when (unit.iconName) {
         "Landmark" -> Icons.Default.AccountBalance
         "Rocket" -> Icons.Default.RocketLaunch
@@ -49,6 +53,8 @@ fun UnitBanner(
         "Lightbulb" -> Icons.Default.Lightbulb
         "Music" -> Icons.Default.MusicNote
         "Science" -> Icons.Default.Science
+        "Sports" -> Icons.Default.SportsSoccer
+        "Computer" -> Icons.Default.Computer
         else -> Icons.Default.AutoStories
     }
 
@@ -101,7 +107,7 @@ fun UnitBanner(
                             .padding(horizontal = 8.dp, vertical = 3.dp)
                     ) {
                         Text(
-                            text = "${unit.title.uppercase()} • ${unit.subtitle.uppercase()}",
+                            text = "${unit.localizedTitle(language).uppercase()} • ${unit.localizedSubtitle(language).uppercase()}",
                             color = Color.White,
                             fontSize = 11.sp,
                             fontWeight = FontWeight.Black,
@@ -116,7 +122,7 @@ fun UnitBanner(
                             .padding(horizontal = 8.dp, vertical = 3.dp)
                     ) {
                         Text(
-                            text = "$completedCount/10 completate",
+                            text = "$completedCount/10 ${if (language == "en") "completed" else "completate"}",
                             color = Color.White,
                             fontSize = 10.sp,
                             fontWeight = FontWeight.ExtraBold
@@ -127,7 +133,7 @@ fun UnitBanner(
                 Spacer(modifier = Modifier.height(2.dp))
 
                 Text(
-                    text = unit.topic,
+                    text = unit.localizedTopic(language),
                     color = Color.White,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Black,
@@ -135,7 +141,7 @@ fun UnitBanner(
                 )
 
                 Text(
-                    text = unit.description,
+                    text = unit.localizedDescription(language),
                     color = Color.White.copy(alpha = 0.92f),
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Medium,

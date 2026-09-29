@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.hackaton.wikitrainer.core.designsystem.WikiBlack
 import com.hackaton.wikitrainer.core.designsystem.WikiSilverSand
+import com.hackaton.wikitrainer.core.designsystem.LocalReduceMotion
 
 /**
  * Step Progress Bar styled with Wikipedia Brand and Logo Colors:
@@ -32,9 +33,10 @@ fun DuolingoProgressBar(
     modifier: Modifier = Modifier,
     height: Dp = 16.dp
 ) {
+    val reduceMotion = LocalReduceMotion.current
     val animatedProgress by animateFloatAsState(
         targetValue = progress.coerceIn(0f, 1f),
-        animationSpec = tween(durationMillis = 400, easing = FastOutSlowInEasing),
+        animationSpec = tween(durationMillis = if (reduceMotion) 0 else 400, easing = FastOutSlowInEasing),
         label = "progressBarAnimation"
     )
 

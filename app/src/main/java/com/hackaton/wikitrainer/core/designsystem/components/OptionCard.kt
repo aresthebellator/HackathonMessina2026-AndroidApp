@@ -29,6 +29,7 @@ import com.hackaton.wikitrainer.core.designsystem.WikiShuttleGray
 import com.hackaton.wikitrainer.core.designsystem.WikiSilverSand
 import com.hackaton.wikitrainer.core.designsystem.WikiSurfaceAlt
 import com.hackaton.wikitrainer.core.designsystem.WikiWhite
+import com.hackaton.wikitrainer.core.designsystem.LocalReduceMotion
 
 enum class OptionCardState {
     IDLE,
@@ -51,6 +52,7 @@ fun OptionCard(
     modifier: Modifier = Modifier,
     enabled: Boolean = true
 ) {
+    val reduceMotion = LocalReduceMotion.current
     val targetBgColor = when (state) {
         OptionCardState.IDLE -> WikiWhite
         OptionCardState.SELECTED -> WikiSurfaceAlt
@@ -100,8 +102,9 @@ fun OptionCard(
         OptionCardState.IDLE -> WikiShuttleGray
     }
 
-    val animatedBg by animateColorAsState(targetBgColor, animationSpec = tween(200), label = "optionBg")
-    val animatedBorder by animateColorAsState(targetBorderColor, animationSpec = tween(200), label = "optionBorder")
+    val animationDuration = if (reduceMotion) 0 else 200
+    val animatedBg by animateColorAsState(targetBgColor, animationSpec = tween(animationDuration), label = "optionBg")
+    val animatedBorder by animateColorAsState(targetBorderColor, animationSpec = tween(animationDuration), label = "optionBorder")
 
     val shape = RoundedCornerShape(16.dp)
 

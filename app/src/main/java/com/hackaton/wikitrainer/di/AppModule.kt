@@ -6,6 +6,7 @@ import com.hackaton.wikitrainer.core.network.ConnectivityObserver
 import com.hackaton.wikitrainer.core.network.NetworkConnectivityObserver
 import com.hackaton.wikitrainer.data.generator.QuestionGenerator
 import com.hackaton.wikitrainer.data.local.WikiTrainerDatabase
+import com.hackaton.wikitrainer.data.local.SharedPreferencesHeartStorage
 import com.hackaton.wikitrainer.data.remote.WikipediaApiService
 import com.hackaton.wikitrainer.data.remote.WikipediaClient
 import com.hackaton.wikitrainer.data.repository.LessonRepositoryImpl
@@ -15,6 +16,8 @@ import com.hackaton.wikitrainer.domain.usecase.GetLessonForTopicUseCase
 import com.hackaton.wikitrainer.domain.usecase.GetRandomLessonUseCase
 import com.hackaton.wikitrainer.domain.usecase.GetTopicHistoryUseCase
 import com.hackaton.wikitrainer.domain.usecase.GetUserStatsUseCase
+import com.hackaton.wikitrainer.domain.usecase.HeartStorage
+import com.hackaton.wikitrainer.domain.usecase.HeartsManager
 import com.hackaton.wikitrainer.domain.usecase.SubmitAnswerUseCase
 import com.hackaton.wikitrainer.presentation.history.HistoryViewModel
 import com.hackaton.wikitrainer.presentation.trainer.TrainerViewModel
@@ -104,6 +107,11 @@ val databaseModule = module {
 
     single { get<WikiTrainerDatabase>().topicHistoryDao() }
     single { get<WikiTrainerDatabase>().userStreakDao() }
+    single<HeartStorage> {
+        SharedPreferencesHeartStorage(
+            androidContext().getSharedPreferences("wikingo_hearts", android.content.Context.MODE_PRIVATE)
+        )
+    }
 }
 
 val repositoryModule = module {
@@ -126,6 +134,7 @@ val useCaseModule = module {
     factory { CompleteLessonUseCase(get()) }
     factory { GetUserStatsUseCase(get()) }
     factory { GetTopicHistoryUseCase(get()) }
+    single { HeartsManager(get()) }
 }
 
 val viewModelModule = module {
@@ -136,7 +145,8 @@ val viewModelModule = module {
             completeLessonUseCase = get(),
             getUserStatsUseCase = get(),
             soundFeedbackManager = get(),
-            getLessonForTopicUseCase = get()
+            getLessonForTopicUseCase = get(),
+            heartsManager = get()
         )
     }
 
