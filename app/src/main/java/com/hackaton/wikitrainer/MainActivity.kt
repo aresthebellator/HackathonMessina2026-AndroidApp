@@ -1,43 +1,62 @@
 package com.hackaton.wikitrainer
 
-import androidx.compose.foundation.layout.Column
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Checkbox
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Surface
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccessibilityNew
+import androidx.compose.material.icons.filled.DarkMode
+import androidx.compose.material.icons.filled.Language
+import androidx.compose.material.icons.filled.TextFields
+import androidx.compose.material.icons.filled.VolumeUp
+import androidx.compose.material3.Button
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.Surface
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.shape.RoundedCornerShape
 import com.hackaton.wikitrainer.core.designsystem.DuoBackground
+import com.hackaton.wikitrainer.core.designsystem.DuoBorder
+import com.hackaton.wikitrainer.core.designsystem.DuoInk
+import com.hackaton.wikitrainer.core.designsystem.DuoInkSecondary
+import com.hackaton.wikitrainer.core.designsystem.DuoSurface
 import com.hackaton.wikitrainer.core.designsystem.WikiTrainerTheme
+import com.hackaton.wikitrainer.data.local.SavedArticleStore
+import com.hackaton.wikitrainer.presentation.dashboard.DashboardScreen
 import com.hackaton.wikitrainer.presentation.history.HistoryScreen
 import com.hackaton.wikitrainer.presentation.history.HistoryViewModel
-import com.hackaton.wikitrainer.presentation.dashboard.DashboardScreen
+import com.hackaton.wikitrainer.presentation.saved.SavedArticlesScreen
 import com.hackaton.wikitrainer.presentation.trainer.TrainerScreen
 import com.hackaton.wikitrainer.presentation.trainer.TrainerViewModel
-import com.hackaton.wikitrainer.presentation.saved.SavedArticlesScreen
-import com.hackaton.wikitrainer.data.local.SavedArticleStore
 import org.koin.androidx.compose.koinViewModel
-import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.unit.dp
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.ui.graphics.Color
 
 enum class AppDestination {
     DASHBOARD,
@@ -98,9 +117,14 @@ class MainActivity : ComponentActivity() {
                                     DashboardScreen(
                                         stats = stats,
                                         language = language,
+                                        darkMode = darkMode,
                                         onLanguageToggle = {
                                             language = if (language == "it") "en" else "it"
                                             settings.edit().putString("language", language).apply()
+                                        },
+                                        onThemeToggle = {
+                                            darkMode = !darkMode
+                                            settings.edit().putBoolean("dark_mode", darkMode).apply()
                                         },
                                         onStartLesson = { topic, lessonNumber ->
                                             trainerViewModel.loadLesson(language = language, topic = topic, lessonNumber = lessonNumber)
@@ -141,45 +165,38 @@ class MainActivity : ComponentActivity() {
                         }
 
                         if (settingsOpen) {
-                            AlertDialog(
-                                onDismissRequest = { settingsOpen = false },
-                                title = { Text(com.hackaton.wikitrainer.core.i18n.i18n("settings.title")) },
-                                text = {
-                                    Column {
-                                        PreferenceRow(com.hackaton.wikitrainer.core.i18n.i18n("settings.dark_theme"), darkMode) {
-                                            darkMode = !darkMode
-                                            settings.edit().putBoolean("dark_mode", darkMode).apply()
-                                        }
-                                        PreferenceRow(com.hackaton.wikitrainer.core.i18n.i18n("settings.sound_effects"), soundEnabled) {
-                                            soundEnabled = !soundEnabled
-                                            settings.edit().putBoolean("sound_enabled", soundEnabled).apply()
-                                            trainerViewModel.setSoundEnabled(soundEnabled)
-                                        }
-                                        PreferenceRow(com.hackaton.wikitrainer.core.i18n.i18n("settings.reduce_motion"), reducedMotion) {
-                                            reducedMotion = !reducedMotion
-                                            settings.edit().putBoolean("reduced_motion", reducedMotion).apply()
-                                        }
-                                        PreferenceRow(com.hackaton.wikitrainer.core.i18n.i18n("settings.large_text"), largeText) {
-                                            largeText = !largeText
-                                            settings.edit().putBoolean("large_text", largeText).apply()
-                                        }
-                                        PreferenceRow(com.hackaton.wikitrainer.core.i18n.i18n("settings.high_contrast"), highContrast) {
-                                            highContrast = !highContrast
-                                            settings.edit().putBoolean("high_contrast", highContrast).apply()
-                                        }
-                                        HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
-                                        Text("${com.hackaton.wikitrainer.core.i18n.i18n("settings.language_prefix")} ${language.uppercase()}", style = MaterialTheme.typography.bodyMedium)
-                                        OutlinedButton(
-                                            onClick = {
-                                                language = if (language == "it") "en" else "it"
-                                                settings.edit().putString("language", language).apply()
-                                            },
-                                            modifier = Modifier.padding(top = 8.dp)
-                                        ) { Text(com.hackaton.wikitrainer.core.i18n.i18n("settings.change_language")) }
-                                    }
+                            SettingsSheet(
+                                language = language,
+                                darkMode = darkMode,
+                                soundEnabled = soundEnabled,
+                                reducedMotion = reducedMotion,
+                                largeText = largeText,
+                                highContrast = highContrast,
+                                onDismiss = { settingsOpen = false },
+                                onDarkModeChange = {
+                                    darkMode = it
+                                    settings.edit().putBoolean("dark_mode", it).apply()
                                 },
-                                confirmButton = {
-                                    TextButton(onClick = { settingsOpen = false }) { Text(com.hackaton.wikitrainer.core.i18n.i18n("settings.save_and_close")) }
+                                onSoundChange = {
+                                    soundEnabled = it
+                                    settings.edit().putBoolean("sound_enabled", it).apply()
+                                    trainerViewModel.setSoundEnabled(it)
+                                },
+                                onReducedMotionChange = {
+                                    reducedMotion = it
+                                    settings.edit().putBoolean("reduced_motion", it).apply()
+                                },
+                                onLargeTextChange = {
+                                    largeText = it
+                                    settings.edit().putBoolean("large_text", it).apply()
+                                },
+                                onHighContrastChange = {
+                                    highContrast = it
+                                    settings.edit().putBoolean("high_contrast", it).apply()
+                                },
+                                onLanguageChange = {
+                                    language = it
+                                    settings.edit().putString("language", it).apply()
                                 }
                             )
                         }
@@ -190,13 +207,161 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @androidx.compose.runtime.Composable
-private fun PreferenceRow(label: String, checked: Boolean, onCheckedChange: () -> Unit) {
-    androidx.compose.foundation.layout.Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+private fun SettingsSheet(
+    language: String,
+    darkMode: Boolean,
+    soundEnabled: Boolean,
+    reducedMotion: Boolean,
+    largeText: Boolean,
+    highContrast: Boolean,
+    onDismiss: () -> Unit,
+    onDarkModeChange: (Boolean) -> Unit,
+    onSoundChange: (Boolean) -> Unit,
+    onReducedMotionChange: (Boolean) -> Unit,
+    onLargeTextChange: (Boolean) -> Unit,
+    onHighContrastChange: (Boolean) -> Unit,
+    onLanguageChange: (String) -> Unit
+) {
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        sheetState = sheetState,
+        containerColor = DuoBackground,
+        dragHandle = {
+            Surface(
+                modifier = Modifier.padding(vertical = 8.dp).size(width = 42.dp, height = 5.dp),
+                shape = RoundedCornerShape(50),
+                color = DuoBorder
+            ) {}
+        }
     ) {
-        Text(label, modifier = Modifier.weight(1f))
-        Checkbox(checked = checked, onCheckedChange = { onCheckedChange() })
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp)
+                .padding(bottom = 28.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Text(
+                text = com.hackaton.wikitrainer.core.i18n.i18n("settings.title"),
+                style = MaterialTheme.typography.headlineSmall,
+                color = DuoInk
+            )
+            Text(
+                text = com.hackaton.wikitrainer.core.i18n.i18n("settings.subtitle"),
+                style = MaterialTheme.typography.bodyMedium,
+                color = DuoInkSecondary
+            )
+            Spacer(modifier = Modifier.height(6.dp))
+
+            SettingItem(
+                icon = Icons.Default.DarkMode,
+                title = com.hackaton.wikitrainer.core.i18n.i18n("settings.dark_theme"),
+                description = com.hackaton.wikitrainer.core.i18n.i18n("settings.dark_theme_description"),
+                checked = darkMode,
+                onCheckedChange = onDarkModeChange
+            )
+            SettingItem(
+                icon = Icons.Default.VolumeUp,
+                title = com.hackaton.wikitrainer.core.i18n.i18n("settings.sound_effects"),
+                description = com.hackaton.wikitrainer.core.i18n.i18n("settings.sound_effects_description"),
+                checked = soundEnabled,
+                onCheckedChange = onSoundChange
+            )
+            SettingItem(
+                icon = Icons.Default.AccessibilityNew,
+                title = com.hackaton.wikitrainer.core.i18n.i18n("settings.reduce_motion"),
+                description = com.hackaton.wikitrainer.core.i18n.i18n("settings.reduce_motion_description"),
+                checked = reducedMotion,
+                onCheckedChange = onReducedMotionChange
+            )
+            SettingItem(
+                icon = Icons.Default.TextFields,
+                title = com.hackaton.wikitrainer.core.i18n.i18n("settings.large_text"),
+                description = com.hackaton.wikitrainer.core.i18n.i18n("settings.large_text_description"),
+                checked = largeText,
+                onCheckedChange = onLargeTextChange
+            )
+            SettingItem(
+                icon = Icons.Default.AccessibilityNew,
+                title = com.hackaton.wikitrainer.core.i18n.i18n("settings.high_contrast"),
+                description = com.hackaton.wikitrainer.core.i18n.i18n("settings.high_contrast_description"),
+                checked = highContrast,
+                onCheckedChange = onHighContrastChange
+            )
+
+            HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp), color = DuoBorder)
+            Text(
+                text = com.hackaton.wikitrainer.core.i18n.i18n("settings.language_prefix"),
+                style = MaterialTheme.typography.labelLarge,
+                color = DuoInkSecondary
+            )
+            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                listOf("it" to "Italiano", "en" to "English").forEach { (code, label) ->
+                    Button(
+                        onClick = { onLanguageChange(code) },
+                        modifier = Modifier.weight(1f),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = if (language == code) MaterialTheme.colorScheme.primary else DuoSurface,
+                            contentColor = if (language == code) MaterialTheme.colorScheme.onPrimary else DuoInk
+                        )
+                    ) {
+                        Icon(Icons.Default.Language, contentDescription = null, modifier = Modifier.size(18.dp))
+                        Spacer(modifier = Modifier.size(6.dp))
+                        Text(label)
+                    }
+                }
+            }
+            TextButton(
+                onClick = onDismiss,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(com.hackaton.wikitrainer.core.i18n.i18n("settings.save_and_close"))
+            }
+        }
+    }
+}
+
+@androidx.compose.runtime.Composable
+private fun SettingItem(
+    icon: ImageVector,
+    title: String,
+    description: String,
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit
+) {
+    Surface(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(18.dp),
+        color = DuoSurface,
+        border = androidx.compose.foundation.BorderStroke(1.dp, DuoBorder)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 14.dp, vertical = 12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Surface(
+                modifier = Modifier.size(40.dp),
+                shape = RoundedCornerShape(12.dp),
+                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)
+            ) {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.padding(10.dp)
+                )
+            }
+            Spacer(modifier = Modifier.size(12.dp))
+            Column(modifier = Modifier.weight(1f)) {
+                Text(title, style = MaterialTheme.typography.titleMedium, color = DuoInk)
+                Text(description, style = MaterialTheme.typography.bodySmall, color = DuoInkSecondary)
+            }
+            Switch(checked = checked, onCheckedChange = onCheckedChange)
+        }
     }
 }

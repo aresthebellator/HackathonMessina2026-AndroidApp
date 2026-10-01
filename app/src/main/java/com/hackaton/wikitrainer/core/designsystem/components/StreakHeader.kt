@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -21,7 +22,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.hackaton.wikitrainer.R
-import com.hackaton.wikitrainer.core.designsystem.WikiBlack
 import com.hackaton.wikitrainer.core.designsystem.WikiShuttleGray
 
 /**
@@ -72,7 +72,7 @@ fun StreakHeader(
                     text = "$streakDays",
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Black,
-                    color = WikiBlack
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
 
@@ -88,7 +88,7 @@ fun StreakHeader(
                     text = "$totalXp",
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Black,
-                    color = WikiBlack
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
 
@@ -104,7 +104,7 @@ fun StreakHeader(
                     text = "$hearts",
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Black,
-                    color = WikiBlack
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
         }

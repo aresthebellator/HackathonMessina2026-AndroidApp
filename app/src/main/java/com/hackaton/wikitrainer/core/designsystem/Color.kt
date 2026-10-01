@@ -1,5 +1,7 @@
 package com.hackaton.wikitrainer.core.designsystem
 
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 /**
@@ -19,7 +21,8 @@ val WikiWhite = Color(0xFFFFFFFF)
 // Semantic UI Tokens mapped to Wikipedia Brand palette:
 val WikiBackground = WikiWhite
 val WikiSurface = WikiWhite
-val WikiSurfaceAlt = WikiSilverSand.copy(alpha = 0.15f)
+val WikiSurfaceAlt: Color
+    @Composable get() = MaterialTheme.colorScheme.surfaceVariant
 val WikiBorder = WikiSilverSand
 val WikiBorderDark = WikiOsloGray
 val WikiTextPrimary = WikiBlack
@@ -27,41 +30,70 @@ val WikiTextSecondary = WikiShuttleGray
 val WikiTextMuted = WikiOsloGray
 
 // App Theme Color mappings (also mapped to legacy Duo* tokens for complete compatibility):
-val DuoGreen = WikiBlack
-val DuoGreenDark = WikiShuttleGray
-val DuoGreenLight = WikiSilverSand
-val DuoGreenBackground = WikiWhite
+val DuoGreen: Color
+    @Composable get() = MaterialTheme.colorScheme.primary
+val DuoGreenDark: Color
+    @Composable get() = MaterialTheme.colorScheme.onPrimary
+val DuoGreenLight: Color
+    @Composable get() = MaterialTheme.colorScheme.primaryContainer
+val DuoGreenBackground: Color
+    @Composable get() = MaterialTheme.colorScheme.surfaceVariant
 
-val DuoRed = WikiShuttleGray
-val DuoRedDark = WikiBlack
-val DuoRedLight = WikiSilverSand
+val DuoRed: Color
+    @Composable get() = MaterialTheme.colorScheme.error
+val DuoRedDark: Color
+    @Composable get() = MaterialTheme.colorScheme.onError
+val DuoRedLight: Color
+    @Composable get() = MaterialTheme.colorScheme.errorContainer
 
-val DuoYellow = WikiOsloGray
-val DuoYellowDark = WikiBlack
-val DuoYellowLight = WikiSilverSand
+val DuoYellow: Color
+    @Composable get() = MaterialTheme.colorScheme.tertiary
+val DuoYellowDark: Color
+    @Composable get() = MaterialTheme.colorScheme.onTertiary
+val DuoYellowLight: Color
+    @Composable get() = MaterialTheme.colorScheme.tertiaryContainer
 
-val DuoBlue = WikiBlack
-val DuoBlueDark = WikiShuttleGray
-val DuoBlueLight = WikiSilverSand.copy(alpha = 0.15f)
+val DuoBlue: Color
+    @Composable get() = MaterialTheme.colorScheme.secondary
+val DuoBlueDark: Color
+    @Composable get() = MaterialTheme.colorScheme.onSecondary
+val DuoBlueLight: Color
+    @Composable get() = MaterialTheme.colorScheme.secondaryContainer
 
-val DuoPurple = WikiShuttleGray
-val DuoPurpleDark = WikiBlack
-val DuoPurpleLight = WikiSilverSand
+val DuoPurple: Color
+    @Composable get() = MaterialTheme.colorScheme.tertiary
+val DuoPurpleDark: Color
+    @Composable get() = MaterialTheme.colorScheme.onTertiary
+val DuoPurpleLight: Color
+    @Composable get() = MaterialTheme.colorScheme.tertiaryContainer
 
-val DuoOrange = WikiShuttleGray
-val DuoOrangeDark = WikiBlack
-val DuoOrangeLight = WikiSilverSand
+val DuoOrange: Color
+    @Composable get() = MaterialTheme.colorScheme.error
+val DuoOrangeDark: Color
+    @Composable get() = MaterialTheme.colorScheme.onError
+val DuoOrangeLight: Color
+    @Composable get() = MaterialTheme.colorScheme.errorContainer
 
-val DuoTeal = WikiBlack
-val DuoTealDark = WikiShuttleGray
-val DuoTealLight = WikiSilverSand
+val DuoTeal: Color
+    @Composable get() = MaterialTheme.colorScheme.secondary
+val DuoTealDark: Color
+    @Composable get() = MaterialTheme.colorScheme.onSecondary
+val DuoTealLight: Color
+    @Composable get() = MaterialTheme.colorScheme.secondaryContainer
 
-val DuoInk = WikiBlack
-val DuoInkSecondary = WikiShuttleGray
-val DuoSurface = WikiWhite
-val DuoBackground = WikiWhite
-val DuoBorder = WikiSilverSand
-val DuoBorderDark = WikiOsloGray
-val DuoCardSelectedBg = WikiSilverSand.copy(alpha = 0.15f)
-val DuoCardSelectedBorder = WikiBlack
-
+val DuoInk: Color
+    @Composable get() = MaterialTheme.colorScheme.onSurface
+val DuoInkSecondary: Color
+    @Composable get() = MaterialTheme.colorScheme.onSurfaceVariant
+val DuoSurface: Color
+    @Composable get() = MaterialTheme.colorScheme.surface
+val DuoBackground: Color
+    @Composable get() = MaterialTheme.colorScheme.background
+val DuoBorder: Color
+    @Composable get() = MaterialTheme.colorScheme.outlineVariant
+val DuoBorderDark: Color
+    @Composable get() = MaterialTheme.colorScheme.outline
+val DuoCardSelectedBg: Color
+    @Composable get() = MaterialTheme.colorScheme.secondaryContainer
+val DuoCardSelectedBorder: Color
+    @Composable get() = MaterialTheme.colorScheme.primary

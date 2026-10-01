@@ -1,8 +1,12 @@
 package com.hackaton.wikitrainer.core.designsystem.components
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -20,6 +24,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -28,11 +33,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.hackaton.wikitrainer.core.designsystem.WikiBlack
-import com.hackaton.wikitrainer.core.designsystem.WikiOsloGray
-import com.hackaton.wikitrainer.core.designsystem.WikiShuttleGray
-import com.hackaton.wikitrainer.core.designsystem.WikiSilverSand
-import com.hackaton.wikitrainer.core.designsystem.WikiWhite
+import com.hackaton.wikitrainer.core.designsystem.LocalReduceMotion
 import com.hackaton.wikitrainer.core.i18n.i18n
 
 /**
@@ -49,16 +50,19 @@ fun FeedbackSheet(
     onContinue: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val reduceMotion = LocalReduceMotion.current
     AnimatedVisibility(
         visible = visible,
-        enter = slideInVertically(initialOffsetY = { it }) + fadeIn(),
+        enter = if (reduceMotion) EnterTransition.None else slideInVertically(initialOffsetY = { it }) + fadeIn(),
+        exit = if (reduceMotion) ExitTransition.None else slideOutVertically(targetOffsetY = { it }) + fadeOut(),
         modifier = modifier
     ) {
-        val sheetBg = if (isCorrect) WikiBlack else WikiShuttleGray
+        val colors = MaterialTheme.colorScheme
+        val sheetBg = if (isCorrect) colors.primary else colors.error
         val sheetTitle = if (isCorrect) i18n("trainer.correct_title") else i18n("trainer.wrong_title")
-        val titleColor = WikiWhite
+        val titleColor = if (isCorrect) colors.onPrimary else colors.onError
         val icon = if (isCorrect) Icons.Default.Check else Icons.Default.Close
-        val iconTint = if (isCorrect) WikiBlack else WikiShuttleGray
+        val iconTint = if (isCorrect) colors.primary else colors.error
         val buttonText = if (isCorrect) i18n("dashboard.continue_button") else i18n("common.got_it").uppercase()
 
         Box(
@@ -77,7 +81,7 @@ fun FeedbackSheet(
                         modifier = Modifier
                             .size(36.dp)
                             .clip(CircleShape)
-                            .background(WikiWhite),
+                            .background(if (isCorrect) colors.onPrimary else colors.onError),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
@@ -102,13 +106,13 @@ fun FeedbackSheet(
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = i18n("trainer.correct_answer_label"),
-                        color = WikiSilverSand,
+                        color = if (isCorrect) colors.onPrimary.copy(alpha = 0.75f) else colors.onError.copy(alpha = 0.75f),
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
                         text = correctAnswerText,
-                        color = WikiWhite,
+                        color = if (isCorrect) colors.onPrimary else colors.onError,
                         fontSize = 15.sp,
                         fontWeight = FontWeight.SemiBold,
                         modifier = Modifier.padding(top = 2.dp)
@@ -121,8 +125,8 @@ fun FeedbackSheet(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clip(RoundedCornerShape(12.dp))
-                                .background(WikiWhite)
-                                .border(1.dp, WikiSilverSand, RoundedCornerShape(12.dp))
+                                .background(colors.surface)
+                                .border(1.dp, colors.outlineVariant, RoundedCornerShape(12.dp))
                                 .padding(12.dp)
                         ) {
                             Column {
@@ -130,13 +134,13 @@ fun FeedbackSheet(
                                     text = i18n("trainer.wiki_explanation_label"),
                                     fontSize = 12.sp,
                                     fontWeight = FontWeight.Bold,
-                                    color = WikiShuttleGray
+                                    color = colors.onSurfaceVariant
                                 )
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Text(
                                     text = explanation,
                                     fontSize = 13.sp,
-                                    color = WikiBlack,
+                                    color = colors.onSurface,
                                     lineHeight = 18.sp
                                 )
                             }

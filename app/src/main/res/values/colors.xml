@@ -34,4 +34,7 @@
     <color name="duo_card_stroke">@color/wiki_silver_sand</color>
     <color name="duo_background">@color/wiki_white</color>
     <color name="duo_surface">#F8F9FA</color>
+
+    <!-- Adaptive launcher icons use this as the mask-independent base layer. -->
+    <color name="launcher_background">#FFFFFF</color>
 </resources>

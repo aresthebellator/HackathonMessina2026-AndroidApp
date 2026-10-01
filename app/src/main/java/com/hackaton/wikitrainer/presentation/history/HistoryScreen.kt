@@ -109,7 +109,7 @@ fun HistoryScreen(
             when (val state = uiState) {
                 is HistoryUiState.Loading -> {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        CircularProgressIndicator(color = com.hackaton.wikitrainer.core.designsystem.WikiBlack)
+                        CircularProgressIndicator(color = DuoInk)
                     }
                 }
                 is HistoryUiState.Success -> {
@@ -137,19 +137,19 @@ fun HistoryScreen(
                                         iconRes = R.drawable.ic_flame,
                                         value = "${state.stats.currentStreak} ${i18n("dashboard.streak_unit")}",
                                         label = i18n("history.current_streak"),
-                                        color = com.hackaton.wikitrainer.core.designsystem.WikiBlack
+                                        color = DuoInk
                                     )
                                     StatSummaryItem(
                                         iconRes = R.drawable.ic_bolt,
                                         value = "${state.stats.totalXp} ${i18n("dashboard.xp_suffix")}",
                                         label = i18n("history.experience_points"),
-                                        color = com.hackaton.wikitrainer.core.designsystem.WikiBlack
+                                        color = DuoInk
                                     )
                                     StatSummaryItem(
                                         iconRes = R.drawable.ic_check,
                                         value = "${state.stats.totalLessonsCompleted}",
                                         label = i18n("history.lessons_completed"),
-                                        color = com.hackaton.wikitrainer.core.designsystem.WikiBlack
+                                        color = DuoInk
                                     )
                                 }
                             }
@@ -175,7 +175,7 @@ fun HistoryScreen(
                                     horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
                                     Image(
-                                        painter = painterResource(id = R.drawable.ic_launcher_image),
+                                        painter = painterResource(id = R.drawable.ic_launcher_viking),
                                         contentDescription = null,
                                         modifier = Modifier.size(70.dp)
                                     )
@@ -255,7 +255,7 @@ private fun TopicHistoryItem(
                         text = "${topic.score}/${topic.totalQuestions}",
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Black,
-                        color = com.hackaton.wikitrainer.core.designsystem.WikiBlack
+                        color = DuoInk
                     )
                 }
             }
@@ -286,7 +286,7 @@ private fun TopicHistoryItem(
                     text = "+${topic.xpEarned} XP",
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Bold,
-                    color = com.hackaton.wikitrainer.core.designsystem.WikiBlack
+                    color = DuoInk
                 )
             }
         }

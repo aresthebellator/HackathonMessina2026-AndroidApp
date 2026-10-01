@@ -50,12 +50,24 @@ private val DarkColorScheme = darkColorScheme(
     onPrimaryContainer = WikiWhite,
     secondary = WikiSilverSand,
     onSecondary = WikiBlack,
+    secondaryContainer = WikiShuttleGray,
+    onSecondaryContainer = WikiWhite,
+    tertiary = WikiSilverSand,
+    onTertiary = WikiBlack,
+    tertiaryContainer = WikiShuttleGray,
+    onTertiaryContainer = WikiWhite,
+    error = WikiSilverSand,
+    onError = WikiBlack,
+    errorContainer = WikiShuttleGray,
+    onErrorContainer = WikiWhite,
     background = WikiBlack,
     onBackground = WikiWhite,
     surface = WikiShuttleGray,
     onSurface = WikiWhite,
     outline = WikiOsloGray,
-    outlineVariant = WikiSilverSand
+    outlineVariant = WikiOsloGray,
+    surfaceVariant = WikiShuttleGray,
+    onSurfaceVariant = WikiSilverSand
 )
 
 @Composable
@@ -87,7 +99,11 @@ fun WikiTrainerTheme(
         SideEffect {
             val window = (view.context as Activity).window
             window.statusBarColor = (if (darkTheme) WikiBlack else WikiWhite).toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
+            window.navigationBarColor = (if (darkTheme) WikiBlack else WikiWhite).toArgb()
+            WindowCompat.getInsetsController(window, view).apply {
+                isAppearanceLightStatusBars = !darkTheme
+                isAppearanceLightNavigationBars = !darkTheme
+            }
         }
     }
 

@@ -17,7 +17,6 @@ val DuolingoTypography = Typography(
         fontSize = 28.sp,
         lineHeight = 34.sp,
         letterSpacing = (-0.5).sp,
-        color = DuoInk
     ),
     headlineMedium = TextStyle(
         fontFamily = FontFamily.SansSerif,
@@ -25,35 +24,30 @@ val DuolingoTypography = Typography(
         fontSize = 22.sp,
         lineHeight = 28.sp,
         letterSpacing = (-0.2).sp,
-        color = DuoInk
     ),
     titleLarge = TextStyle(
         fontFamily = FontFamily.SansSerif,
         fontWeight = FontWeight.Bold,
         fontSize = 20.sp,
         lineHeight = 26.sp,
-        color = DuoInk
     ),
     titleMedium = TextStyle(
         fontFamily = FontFamily.SansSerif,
         fontWeight = FontWeight.Bold,
         fontSize = 17.sp,
         lineHeight = 23.sp,
-        color = DuoInk
     ),
     bodyLarge = TextStyle(
         fontFamily = FontFamily.SansSerif,
         fontWeight = FontWeight.Medium,
         fontSize = 16.sp,
         lineHeight = 24.sp,
-        color = DuoInk
     ),
     bodyMedium = TextStyle(
         fontFamily = FontFamily.SansSerif,
         fontWeight = FontWeight.Normal,
         fontSize = 14.sp,
         lineHeight = 20.sp,
-        color = DuoInkSecondary
     ),
     labelLarge = TextStyle(
         fontFamily = FontFamily.SansSerif,

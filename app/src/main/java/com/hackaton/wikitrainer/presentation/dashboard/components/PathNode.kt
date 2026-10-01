@@ -6,6 +6,7 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -32,15 +33,23 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.layout.LayoutCoordinates
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -50,6 +59,7 @@ import com.hackaton.wikitrainer.core.designsystem.WikiOsloGray
 import com.hackaton.wikitrainer.core.designsystem.WikiShuttleGray
 import com.hackaton.wikitrainer.core.designsystem.WikiSilverSand
 import com.hackaton.wikitrainer.core.designsystem.WikiWhite
+import com.hackaton.wikitrainer.core.designsystem.LocalReduceMotion
 import com.hackaton.wikitrainer.core.i18n.i18n
 import com.hackaton.wikitrainer.domain.model.PathUnit
 
@@ -75,23 +85,26 @@ fun PathNode(
     offsetDp: Dp,
     stars: Int = 3,
     isCheckpoint: Boolean = false,
-    onClick: () -> Unit,
+    onClick: (Offset?) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val isCurrent = status == PathNodeStatus.CURRENT
     val isCompleted = status == PathNodeStatus.COMPLETED
     val isLocked = status == PathNodeStatus.LOCKED
+    val reduceMotion = LocalReduceMotion.current
+    val colors = MaterialTheme.colorScheme
 
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
+    var clickCenter by remember { mutableStateOf<Offset?>(null) }
 
     // Floating speech bubble bobbing animation for current node
     val infiniteTransition = rememberInfiniteTransition(label = "currentNodeBobbing")
     val bobbingOffset by infiniteTransition.animateFloat(
         initialValue = 0f,
-        targetValue = -6f,
+        targetValue = if (reduceMotion) 0f else -6f,
         animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 900, easing = FastOutSlowInEasing),
+            animation = tween(durationMillis = if (reduceMotion) 0 else 900, easing = FastOutSlowInEasing),
             repeatMode = RepeatMode.Reverse
         ),
         label = "bobbingY"
@@ -100,33 +113,41 @@ fun PathNode(
     // Pulsing halo scale/alpha for current node
     val haloScale by infiniteTransition.animateFloat(
         initialValue = 1f,
-        targetValue = 1.25f,
+        targetValue = if (reduceMotion) 1f else 1.25f,
         animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 1400, easing = FastOutSlowInEasing),
+            animation = tween(durationMillis = if (reduceMotion) 0 else 1400, easing = FastOutSlowInEasing),
             repeatMode = RepeatMode.Restart
         ),
         label = "haloScale"
     )
     val haloAlpha by infiniteTransition.animateFloat(
         initialValue = 0.5f,
-        targetValue = 0f,
+        targetValue = if (reduceMotion) 0f else 0f,
         animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 1400, easing = FastOutSlowInEasing),
+            animation = tween(durationMillis = if (reduceMotion) 0 else 1400, easing = FastOutSlowInEasing),
             repeatMode = RepeatMode.Restart
         ),
         label = "haloAlpha"
     )
 
     val nodeBg = when {
-        isLocked -> WikiSilverSand
-        isCurrent -> WikiBlack
+        isLocked -> colors.surfaceVariant
         else -> unit.primaryColor
     }
     val nodeBottomBorder = when {
-        isLocked -> WikiOsloGray
-        isCurrent -> WikiShuttleGray
+        isLocked -> colors.outline
         else -> unit.darkColor
     }
+    val targetScale = when {
+        isCurrent -> 1.08f
+        isCompleted -> 1.02f
+        else -> 1f
+    }
+    val nodeScale by animateFloatAsState(
+        targetValue = if (reduceMotion) 1f else targetScale,
+        animationSpec = tween(if (reduceMotion) 0 else 450, easing = FastOutSlowInEasing),
+        label = "nodeScale"
+    )
 
     Column(
         modifier = modifier
@@ -147,7 +168,7 @@ fun PathNode(
                     Row(
                         modifier = Modifier
                             .clip(RoundedCornerShape(12.dp))
-                            .background(WikiBlack)
+                            .background(unit.primaryColor)
                             .padding(horizontal = 10.dp, vertical = 4.dp),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center
@@ -155,13 +176,13 @@ fun PathNode(
                         Icon(
                             imageVector = Icons.Default.AutoAwesome,
                             contentDescription = null,
-                            tint = WikiWhite,
+                            tint = unit.textColor,
                             modifier = Modifier.size(13.dp)
                         )
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
                             text = i18n("dashboard.start_bubble"),
-                            color = WikiWhite,
+                            color = unit.textColor,
                             fontSize = 11.sp,
                             fontWeight = FontWeight.Black,
                             letterSpacing = 1.sp
@@ -175,7 +196,7 @@ fun PathNode(
                             lineTo(size.width / 2f, size.height)
                             close()
                         }
-                        drawPath(path, color = WikiBlack)
+                        drawPath(path, color = unit.primaryColor)
                     }
                 }
             }
@@ -192,7 +213,7 @@ fun PathNode(
                     modifier = Modifier
                         .size((76 * haloScale).dp)
                         .clip(CircleShape)
-                        .background(WikiShuttleGray.copy(alpha = haloAlpha))
+                        .background(unit.primaryColor.copy(alpha = haloAlpha))
                 )
             }
 
@@ -210,12 +231,17 @@ fun PathNode(
             Box(
                 modifier = Modifier
                     .size(70.dp)
+                    .scale(nodeScale)
                     .offset(y = pressOffset)
                     .clip(CircleShape)
                     .background(nodeBg)
+                    .onGloballyPositioned { coordinates: LayoutCoordinates ->
+                        clickCenter = coordinates.positionInRoot() +
+                            Offset(coordinates.size.width / 2f, coordinates.size.height / 2f)
+                    }
                     .then(
                         if (isCurrent) {
-                            Modifier.border(3.dp, WikiWhite, CircleShape)
+                            Modifier.border(3.dp, unit.textColor, CircleShape)
                         } else {
                             Modifier
                         }
@@ -223,7 +249,7 @@ fun PathNode(
                     .clickable(
                         interactionSource = interactionSource,
                         indication = null,
-                        onClick = onClick
+                        onClick = { onClick(clickCenter) }
                     ),
                 contentAlignment = Alignment.Center
             ) {
@@ -233,7 +259,7 @@ fun PathNode(
                         Icon(
                             imageVector = Icons.Default.EmojiEvents,
                             contentDescription = "Sfida checkpoint",
-                            tint = if (isLocked) WikiShuttleGray else WikiWhite,
+                            tint = if (isLocked) colors.onSurfaceVariant else unit.textColor,
                             modifier = Modifier.size(34.dp)
                         )
                     }
@@ -241,7 +267,7 @@ fun PathNode(
                         Icon(
                             imageVector = Icons.Default.Check,
                             contentDescription = "Completata",
-                            tint = WikiWhite,
+                            tint = unit.textColor,
                             modifier = Modifier.size(36.dp)
                         )
                     }
@@ -249,7 +275,7 @@ fun PathNode(
                         Icon(
                             imageVector = Icons.Default.PlayArrow,
                             contentDescription = "In corso",
-                            tint = WikiWhite,
+                            tint = unit.textColor,
                             modifier = Modifier.size(36.dp)
                         )
                     }
@@ -257,7 +283,7 @@ fun PathNode(
                         Icon(
                             imageVector = Icons.Default.Lock,
                             contentDescription = "Bloccata",
-                            tint = WikiShuttleGray,
+                            tint = colors.onSurfaceVariant,
                             modifier = Modifier.size(28.dp)
                         )
                     }
@@ -271,10 +297,10 @@ fun PathNode(
                     .offset(x = (-2).dp, y = 2.dp)
                     .size(24.dp)
                     .clip(CircleShape)
-                    .background(if (isLocked) WikiSilverSand else WikiWhite)
+                    .background(if (isLocked) colors.surfaceVariant else colors.surface)
                     .border(
                         width = 2.dp,
-                        color = if (isLocked) WikiOsloGray else WikiSilverSand,
+                        color = if (isLocked) colors.outline else colors.outlineVariant,
                         shape = CircleShape
                     ),
                 contentAlignment = Alignment.Center
@@ -283,7 +309,7 @@ fun PathNode(
                     text = "$lessonNumber",
                     fontSize = 10.sp,
                     fontWeight = FontWeight.Black,
-                    color = if (isLocked) WikiShuttleGray else WikiBlack
+                    color = if (isLocked) colors.onSurfaceVariant else colors.onSurface
                 )
             }
         }
@@ -299,7 +325,7 @@ fun PathNode(
                     Icon(
                         imageVector = Icons.Default.Star,
                         contentDescription = null,
-                        tint = if (index < stars) WikiBlack else WikiSilverSand,
+                        tint = if (index < stars) unit.primaryColor else colors.outlineVariant,
                         modifier = Modifier.size(13.dp)
                     )
                 }

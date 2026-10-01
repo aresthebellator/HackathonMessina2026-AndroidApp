@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -23,12 +24,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.hackaton.wikitrainer.core.designsystem.WikiBlack
-import com.hackaton.wikitrainer.core.designsystem.WikiOsloGray
-import com.hackaton.wikitrainer.core.designsystem.WikiShuttleGray
-import com.hackaton.wikitrainer.core.designsystem.WikiSilverSand
-import com.hackaton.wikitrainer.core.designsystem.WikiSurfaceAlt
-import com.hackaton.wikitrainer.core.designsystem.WikiWhite
 import com.hackaton.wikitrainer.core.designsystem.LocalReduceMotion
 
 enum class OptionCardState {
@@ -53,53 +48,54 @@ fun OptionCard(
     enabled: Boolean = true
 ) {
     val reduceMotion = LocalReduceMotion.current
+    val colors = MaterialTheme.colorScheme
     val targetBgColor = when (state) {
-        OptionCardState.IDLE -> WikiWhite
-        OptionCardState.SELECTED -> WikiSurfaceAlt
-        OptionCardState.CORRECT -> WikiBlack
-        OptionCardState.WRONG -> WikiShuttleGray
+        OptionCardState.IDLE -> colors.surface
+        OptionCardState.SELECTED -> colors.secondaryContainer
+        OptionCardState.CORRECT -> colors.primary
+        OptionCardState.WRONG -> colors.error
     }
 
     val targetBorderColor = when (state) {
-        OptionCardState.IDLE -> WikiSilverSand
-        OptionCardState.SELECTED -> WikiBlack
-        OptionCardState.CORRECT -> WikiBlack
-        OptionCardState.WRONG -> WikiBlack
+        OptionCardState.IDLE -> colors.outlineVariant
+        OptionCardState.SELECTED -> colors.primary
+        OptionCardState.CORRECT -> colors.primary
+        OptionCardState.WRONG -> colors.error
     }
 
     val targetBottomBevelColor = when (state) {
-        OptionCardState.IDLE -> WikiSilverSand
-        OptionCardState.SELECTED -> WikiShuttleGray
-        OptionCardState.CORRECT -> WikiShuttleGray
-        OptionCardState.WRONG -> WikiBlack
+        OptionCardState.IDLE -> colors.outline
+        OptionCardState.SELECTED -> colors.primary
+        OptionCardState.CORRECT -> colors.primary
+        OptionCardState.WRONG -> colors.onError
     }
 
     val targetTextColor = when (state) {
-        OptionCardState.CORRECT -> WikiWhite
-        OptionCardState.WRONG -> WikiWhite
-        OptionCardState.SELECTED -> WikiBlack
-        OptionCardState.IDLE -> WikiBlack
+        OptionCardState.CORRECT -> colors.onPrimary
+        OptionCardState.WRONG -> colors.onError
+        OptionCardState.SELECTED -> colors.onSecondaryContainer
+        OptionCardState.IDLE -> colors.onSurface
     }
 
     val badgeBg = when (state) {
-        OptionCardState.CORRECT -> WikiWhite
-        OptionCardState.WRONG -> WikiSilverSand
-        OptionCardState.SELECTED -> WikiBlack
-        OptionCardState.IDLE -> WikiWhite
+        OptionCardState.CORRECT -> colors.onPrimary
+        OptionCardState.WRONG -> colors.errorContainer
+        OptionCardState.SELECTED -> colors.primary
+        OptionCardState.IDLE -> colors.surface
     }
 
     val badgeBorder = when (state) {
-        OptionCardState.CORRECT -> WikiWhite
-        OptionCardState.WRONG -> WikiSilverSand
-        OptionCardState.SELECTED -> WikiBlack
-        OptionCardState.IDLE -> WikiSilverSand
+        OptionCardState.CORRECT -> colors.onPrimary
+        OptionCardState.WRONG -> colors.outline
+        OptionCardState.SELECTED -> colors.primary
+        OptionCardState.IDLE -> colors.outlineVariant
     }
 
     val badgeTextColor = when (state) {
-        OptionCardState.CORRECT -> WikiBlack
-        OptionCardState.WRONG -> WikiBlack
-        OptionCardState.SELECTED -> WikiWhite
-        OptionCardState.IDLE -> WikiShuttleGray
+        OptionCardState.CORRECT -> colors.primary
+        OptionCardState.WRONG -> colors.onErrorContainer
+        OptionCardState.SELECTED -> colors.onPrimary
+        OptionCardState.IDLE -> colors.onSurfaceVariant
     }
 
     val animationDuration = if (reduceMotion) 0 else 200

@@ -1,6 +1,7 @@
 package com.hackaton.wikitrainer.core.designsystem.components
 
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -25,11 +27,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.hackaton.wikitrainer.core.designsystem.WikiBlack
-import com.hackaton.wikitrainer.core.designsystem.WikiOsloGray
-import com.hackaton.wikitrainer.core.designsystem.WikiShuttleGray
-import com.hackaton.wikitrainer.core.designsystem.WikiSilverSand
-import com.hackaton.wikitrainer.core.designsystem.WikiWhite
+import com.hackaton.wikitrainer.core.designsystem.LocalReduceMotion
 
 enum class DuolingoButtonStyle {
     PRIMARY,
@@ -53,23 +51,26 @@ fun DuolingoButton(
     style: DuolingoButtonStyle = DuolingoButtonStyle.PRIMARY,
     height: Dp = 52.dp
 ) {
+    val colors = MaterialTheme.colorScheme
     val (faceColor, baseColor, textColor) = when {
-        !enabled -> Triple(WikiSilverSand, WikiOsloGray, WikiShuttleGray)
-        style == DuolingoButtonStyle.PRIMARY -> Triple(WikiBlack, WikiShuttleGray, WikiWhite)
-        style == DuolingoButtonStyle.SECONDARY -> Triple(WikiShuttleGray, WikiBlack, WikiWhite)
-        style == DuolingoButtonStyle.DANGER -> Triple(WikiShuttleGray, WikiBlack, WikiWhite)
-        style == DuolingoButtonStyle.OUTLINE -> Triple(WikiWhite, WikiSilverSand, WikiBlack)
-        style == DuolingoButtonStyle.INVERTED -> Triple(WikiWhite, WikiSilverSand, WikiBlack)
-        else -> Triple(WikiBlack, WikiShuttleGray, WikiWhite)
+        !enabled -> Triple(colors.surfaceVariant, colors.outline, colors.onSurfaceVariant)
+        style == DuolingoButtonStyle.PRIMARY -> Triple(colors.primary, colors.onPrimary.copy(alpha = 0.7f), colors.onPrimary)
+        style == DuolingoButtonStyle.SECONDARY -> Triple(colors.secondary, colors.onSecondary.copy(alpha = 0.7f), colors.onSecondary)
+        style == DuolingoButtonStyle.DANGER -> Triple(colors.error, colors.onError.copy(alpha = 0.7f), colors.onError)
+        style == DuolingoButtonStyle.OUTLINE -> Triple(colors.surface, colors.outline, colors.onSurface)
+        style == DuolingoButtonStyle.INVERTED -> Triple(colors.surface, colors.outline, colors.onSurface)
+        else -> Triple(colors.primary, colors.onPrimary.copy(alpha = 0.7f), colors.onPrimary)
     }
 
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
+    val reduceMotion = LocalReduceMotion.current
 
     val cornerRadius = 16.dp
     val bevelHeight = 4.dp
     val pressOffset by animateDpAsState(
         targetValue = if (isPressed && enabled) bevelHeight else 0.dp,
+        animationSpec = tween(if (reduceMotion) 0 else 120),
         label = "pressOffset"
     )
 
@@ -105,7 +106,7 @@ fun DuolingoButton(
                 .background(faceColor)
                 .then(
                     if (style == DuolingoButtonStyle.OUTLINE) {
-                        Modifier.border(2.dp, WikiSilverSand, RoundedCornerShape(cornerRadius))
+                        Modifier.border(2.dp, colors.outline, RoundedCornerShape(cornerRadius))
                     } else Modifier
                 ),
             contentAlignment = Alignment.Center

@@ -24,6 +24,7 @@ import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -73,8 +74,8 @@ fun LessonPreviewModal(
     Dialog(onDismissRequest = onDismiss) {
         Surface(
             shape = RoundedCornerShape(28.dp),
-            color = WikiWhite,
-            border = androidx.compose.foundation.BorderStroke(2.dp, WikiSilverSand),
+            color = MaterialTheme.colorScheme.surface,
+            border = androidx.compose.foundation.BorderStroke(2.dp, MaterialTheme.colorScheme.outlineVariant),
             shadowElevation = 16.dp,
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -87,7 +88,7 @@ fun LessonPreviewModal(
                     Icon(
                         imageVector = Icons.Default.Close,
                         contentDescription = i18n("path_modal.close"),
-                        tint = WikiShuttleGray
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
 
@@ -140,7 +141,7 @@ fun LessonPreviewModal(
                                 Icon(
                                     imageVector = Icons.Default.Lock,
                                     contentDescription = null,
-                                    tint = WikiShuttleGray,
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                     modifier = Modifier.size(36.dp)
                                 )
                             }
@@ -164,7 +165,7 @@ fun LessonPreviewModal(
                             text = title,
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Black,
-                            color = WikiBlack,
+                            color = MaterialTheme.colorScheme.onSurface,
                             textAlign = TextAlign.Center
                         )
                         Text(
@@ -175,7 +176,7 @@ fun LessonPreviewModal(
                             },
                             fontSize = 12.sp,
                             fontWeight = FontWeight.SemiBold,
-                            color = WikiShuttleGray,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             textAlign = TextAlign.Center,
                             modifier = Modifier.padding(horizontal = 8.dp)
                         )
@@ -191,7 +192,7 @@ fun LessonPreviewModal(
                                 Icon(
                                     imageVector = Icons.Default.Star,
                                     contentDescription = null,
-                                    tint = WikiBlack,
+                                    tint = MaterialTheme.colorScheme.onSurface,
                                     modifier = Modifier.size(24.dp)
                                 )
                             }
@@ -208,7 +209,7 @@ fun LessonPreviewModal(
                                 .weight(1f)
                                 .clip(RoundedCornerShape(16.dp))
                                 .background(WikiSurfaceAlt)
-                                .border(1.dp, WikiSilverSand, RoundedCornerShape(16.dp))
+                                .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(16.dp))
                                 .padding(vertical = 10.dp),
                             contentAlignment = Alignment.Center
                         ) {
@@ -216,14 +217,14 @@ fun LessonPreviewModal(
                                 Icon(
                                     imageVector = Icons.Default.Bolt,
                                     contentDescription = null,
-                                    tint = WikiBlack,
+                                    tint = MaterialTheme.colorScheme.onSurface,
                                     modifier = Modifier.size(18.dp)
                                 )
                                 Spacer(modifier = Modifier.width(4.dp))
                                 Text(
                                     text = xpReward,
                                     fontWeight = FontWeight.Black,
-                                    color = WikiBlack,
+                                    color = MaterialTheme.colorScheme.onSurface,
                                     fontSize = 13.sp
                                 )
                             }
@@ -234,7 +235,7 @@ fun LessonPreviewModal(
                                 .weight(1f)
                                 .clip(RoundedCornerShape(16.dp))
                                 .background(WikiSurfaceAlt)
-                                .border(1.dp, WikiSilverSand, RoundedCornerShape(16.dp))
+                                .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(16.dp))
                                 .padding(vertical = 10.dp),
                             contentAlignment = Alignment.Center
                         ) {
@@ -242,14 +243,14 @@ fun LessonPreviewModal(
                                 Icon(
                                     imageVector = Icons.Default.AutoAwesome,
                                     contentDescription = null,
-                                    tint = WikiShuttleGray,
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                     modifier = Modifier.size(16.dp)
                                 )
                                 Spacer(modifier = Modifier.width(4.dp))
                                 Text(
                                     text = gemReward,
                                     fontWeight = FontWeight.Black,
-                                    color = WikiShuttleGray,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                                     fontSize = 13.sp
                                 )
                             }

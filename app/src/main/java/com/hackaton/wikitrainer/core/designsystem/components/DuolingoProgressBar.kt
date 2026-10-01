@@ -18,9 +18,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.hackaton.wikitrainer.core.designsystem.WikiBlack
-import com.hackaton.wikitrainer.core.designsystem.WikiSilverSand
 import com.hackaton.wikitrainer.core.designsystem.LocalReduceMotion
+import androidx.compose.material3.MaterialTheme
 
 /**
  * Step Progress Bar styled with Wikipedia Brand and Logo Colors:
@@ -45,7 +44,7 @@ fun DuolingoProgressBar(
             .fillMaxWidth()
             .height(height)
             .clip(RoundedCornerShape(percent = 50))
-            .background(WikiSilverSand)
+            .background(MaterialTheme.colorScheme.surfaceVariant)
     ) {
         if (animatedProgress > 0f) {
             Box(
@@ -53,7 +52,7 @@ fun DuolingoProgressBar(
                     .fillMaxWidth(animatedProgress)
                     .fillMaxHeight()
                     .clip(RoundedCornerShape(percent = 50))
-                    .background(WikiBlack)
+                    .background(MaterialTheme.colorScheme.primary)
             ) {
                 // Top glossy specular highlight stripe
                 Box(
@@ -62,7 +61,7 @@ fun DuolingoProgressBar(
                         .height(height / 3)
                         .padding(horizontal = 4.dp, vertical = 2.dp)
                         .clip(RoundedCornerShape(percent = 50))
-                        .background(Color.White.copy(alpha = 0.35f))
+                        .background(MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.35f))
                         .align(Alignment.TopCenter)
                 )
             }

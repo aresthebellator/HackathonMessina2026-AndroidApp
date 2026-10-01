@@ -314,15 +314,13 @@ private fun CompleteView(
         // Mascot Trophy
         Box(
             modifier = Modifier
-                .size(100.dp)
-                .clip(CircleShape)
-                .background(com.hackaton.wikitrainer.core.designsystem.WikiSurfaceAlt),
+                .size(100.dp),
             contentAlignment = Alignment.Center
         ) {
             Image(
-                painter = painterResource(id = R.drawable.ic_launcher_image),
+                painter = painterResource(id = R.drawable.ic_launcher_viking),
                 contentDescription = "Completato",
-                modifier = Modifier.size(80.dp)
+                modifier = Modifier.size(100.dp)
             )
         }
 
@@ -408,7 +406,7 @@ private fun CompleteView(
                 iconRes = R.drawable.ic_bolt,
                 label = i18n("trainer.stat_total_xp"),
                 value = "+${state.xpEarned}",
-                color = com.hackaton.wikitrainer.core.designsystem.WikiBlack,
+                color = DuoInk,
                 modifier = Modifier.weight(1f)
             )
 
@@ -417,7 +415,7 @@ private fun CompleteView(
                 iconRes = R.drawable.ic_check,
                 label = i18n("trainer.stat_accuracy"),
                 value = "${state.accuracy}%",
-                color = com.hackaton.wikitrainer.core.designsystem.WikiBlack,
+                color = DuoInk,
                 modifier = Modifier.weight(1f)
             )
 
@@ -426,7 +424,7 @@ private fun CompleteView(
                 iconRes = R.drawable.ic_flame,
                 label = i18n("trainer.stat_streak"),
                 value = "${state.userStats.currentStreak} ${i18n("dashboard.streak_unit")}",
-                color = com.hackaton.wikitrainer.core.designsystem.WikiBlack,
+                color = DuoInk,
                 modifier = Modifier.weight(1f)
             )
         }
@@ -544,7 +542,7 @@ private fun LoadingView(message: String) {
         Spacer(modifier = Modifier.height(24.dp))
 
         CircularProgressIndicator(
-            color = com.hackaton.wikitrainer.core.designsystem.WikiBlack,
+            color = DuoInk,
             strokeWidth = 4.dp,
             modifier = Modifier.size(42.dp)
         )
@@ -583,7 +581,7 @@ private fun ErrorView(
         verticalArrangement = Arrangement.Center
     ) {
         Image(
-            painter = painterResource(id = R.drawable.ic_launcher_image),
+            painter = painterResource(id = R.drawable.ic_launcher_viking),
             contentDescription = i18n("common.error"),
             modifier = Modifier.size(80.dp)
         )

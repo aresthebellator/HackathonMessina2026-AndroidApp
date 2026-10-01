@@ -16,6 +16,31 @@
       "sound": "Suono",
       "language": "Lingua"
     },
+    "welcome": {
+      "title": "Wikingo",
+      "subtitle": "Impara ogni giorno con Wikipedia, una sfida alla volta.",
+      "benefit_lessons": "Lezioni brevi e coinvolgenti",
+      "benefit_wikipedia": "Curiosità direttamente da Wikipedia",
+      "start": "INIZIA A IMPARARE",
+      "mascot_description": "Il vichingo Wikingo"
+    },
+    "auth": {
+      "login_title": "Bentornato su Wikingo",
+      "register_title": "Crea il tuo account",
+      "subtitle": "Salva i tuoi progressi e continua da qualsiasi dispositivo.",
+      "login_hint": "Accedi per riprendere il tuo percorso",
+      "register_hint": "Registrati per sincronizzare il tuo percorso",
+      "email": "Email",
+      "password": "Password",
+      "login_action": "ACCEDI",
+      "register_action": "REGISTRATI",
+      "no_account": "Non hai ancora un account?",
+      "have_account": "Hai già un account?",
+      "invalid_credentials": "Inserisci un'email valida e una password di almeno 6 caratteri.",
+      "generic_error": "Impossibile completare l'operazione. Riprova.",
+      "firebase_not_configured": "Configura Firebase per abilitare l'accesso.",
+      "mascot_description": "Il vichingo Wikingo"
+    },
     "dashboard": {
       "language_toggle_it": "IT 🇮🇹",
       "language_toggle_en": "EN 🇬🇧",
@@ -67,11 +92,17 @@
     },
     "settings": {
       "title": "Impostazioni & Accessibilità",
+      "subtitle": "Personalizza il modo in cui impari con Wikingo.",
       "dark_theme": "Tema scuro",
+      "dark_theme_description": "Riduce la luce e migliora la lettura al buio.",
       "sound_effects": "Effetti sonori",
+      "sound_effects_description": "Riproduce un feedback audio durante le risposte.",
       "reduce_motion": "Riduci animazioni",
+      "reduce_motion_description": "Limita movimenti e transizioni per un'esperienza più confortevole.",
       "large_text": "Testo grande",
+      "large_text_description": "Aumenta le dimensioni del testo nell'intera app.",
       "high_contrast": "Alto contrasto",
+      "high_contrast_description": "Rende più marcati bordi e colori per una lettura più chiara.",
       "language_prefix": "Lingua:",
       "change_language": "Cambia lingua",
       "save_and_close": "Salva e chiudi"
@@ -110,6 +141,31 @@
       "error": "An unexpected error happened",
       "sound": "Sound",
       "language": "Language"
+    },
+    "welcome": {
+      "title": "Wikingo",
+      "subtitle": "Learn every day with Wikipedia, one challenge at a time.",
+      "benefit_lessons": "Short and engaging lessons",
+      "benefit_wikipedia": "Facts straight from Wikipedia",
+      "start": "START LEARNING",
+      "mascot_description": "The Wikingo mascot"
+    },
+    "auth": {
+      "login_title": "Welcome back to Wikingo",
+      "register_title": "Create your account",
+      "subtitle": "Save your progress and continue on any device.",
+      "login_hint": "Sign in to resume your journey",
+      "register_hint": "Register to sync your journey",
+      "email": "Email",
+      "password": "Password",
+      "login_action": "SIGN IN",
+      "register_action": "CREATE ACCOUNT",
+      "no_account": "Don't have an account yet?",
+      "have_account": "Already have an account?",
+      "invalid_credentials": "Enter a valid email and a password with at least 6 characters.",
+      "generic_error": "The operation could not be completed. Try again.",
+      "firebase_not_configured": "Configure Firebase to enable sign in.",
+      "mascot_description": "The Wikingo mascot"
     },
     "dashboard": {
       "language_toggle_it": "IT 🇮🇹",
@@ -161,11 +217,17 @@
     },
     "settings": {
       "title": "Settings & Accessibility",
+      "subtitle": "Personalize the way you learn with Wikingo.",
       "dark_theme": "Dark theme",
+      "dark_theme_description": "Reduces glare and improves reading in low light.",
       "sound_effects": "Sound effects",
+      "sound_effects_description": "Plays audio feedback when you answer.",
       "reduce_motion": "Reduce animations",
+      "reduce_motion_description": "Limits movement and transitions for a more comfortable experience.",
       "large_text": "Large text",
+      "large_text_description": "Increases text size throughout the app.",
       "high_contrast": "High contrast",
+      "high_contrast_description": "Strengthens borders and colors for clearer reading.",
       "language_prefix": "Language:",
       "change_language": "Switch language",
       "save_and_close": "Save & close"

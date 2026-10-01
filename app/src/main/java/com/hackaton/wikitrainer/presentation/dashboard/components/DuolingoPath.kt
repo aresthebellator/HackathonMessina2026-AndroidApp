@@ -12,10 +12,6 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -24,11 +20,10 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
+import androidx.compose.material3.MaterialTheme
 import com.hackaton.wikitrainer.domain.model.PathUnit
 import com.hackaton.wikitrainer.domain.model.UNITS_DATA
-import com.hackaton.wikitrainer.domain.model.getLessonTitle
 import com.hackaton.wikitrainer.domain.model.getSerpentineOffset
-import com.hackaton.wikitrainer.domain.model.getUnitForLesson
 import com.hackaton.wikitrainer.domain.model.isCheckpointLesson
 import com.hackaton.wikitrainer.domain.model.getLessonTopic
 import com.hackaton.wikitrainer.core.i18n.LocalI18nLanguage
@@ -37,11 +32,10 @@ import com.hackaton.wikitrainer.core.i18n.LocalI18nLanguage
 fun DuolingoPath(
     currentLessonIndex: Int,
     completedLessonsCount: Int,
-    onStartLesson: (lessonNumber: Int, topic: String) -> Unit,
+    onStartLesson: (lessonNumber: Int, topic: String, sourceCenter: Offset?) -> Unit,
     modifier: Modifier = Modifier,
     listState: LazyListState = rememberLazyListState()
 ) {
-    var previewLessonNumber by remember { mutableStateOf<Int?>(null) }
     val language = LocalI18nLanguage.current
 
     // Auto-scroll gently to the current active lesson node on first load
@@ -91,6 +85,7 @@ fun DuolingoPath(
                     isCurrent -> PathNodeStatus.CURRENT
                     else -> PathNodeStatus.LOCKED
                 }
+                val connectorColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.7f)
 
                 val prevOffsetDp = if (idx > 0) getSerpentineOffset(lessonIndexInUnit - 1) else 0.dp
 
@@ -118,7 +113,7 @@ fun DuolingoPath(
                             }
                             drawPath(
                                 path = curvePath,
-                                color = if (isCompleted) unit.lightColor else com.hackaton.wikitrainer.core.designsystem.WikiSilverSand.copy(alpha = 0.5f),
+                                color = if (isCompleted) unit.lightColor else connectorColor,
                                 style = Stroke(
                                     width = 6.dp.toPx(),
                                     pathEffect = PathEffect.dashPathEffect(floatArrayOf(18f, 14f), 0f)
@@ -134,8 +129,14 @@ fun DuolingoPath(
                         offsetDp = offsetDp,
                         stars = if (isCompleted) 3 else 0,
                         isCheckpoint = isCheckpointLesson(lessonNumber),
-                        onClick = {
-                            previewLessonNumber = lessonNumber
+                        onClick = { sourceCenter ->
+                            if (status != PathNodeStatus.LOCKED) {
+                                onStartLesson(
+                                    lessonNumber,
+                                    getLessonTopic(lessonNumber, language),
+                                    sourceCenter
+                                )
+                            }
                         }
                     )
                 }
@@ -152,29 +153,4 @@ fun DuolingoPath(
         }
     }
 
-    // Interactive Lesson Preview Modal
-    previewLessonNumber?.let { lessonNum ->
-        val unit = getUnitForLesson(lessonNum)
-        val isCompleted = lessonNum <= completedLessonsCount
-        val isCurrent = lessonNum == currentLessonIndex
-        val status = when {
-            isCompleted -> PathNodeStatus.COMPLETED
-            isCurrent -> PathNodeStatus.CURRENT
-            else -> PathNodeStatus.LOCKED
-        }
-
-        LessonPreviewModal(
-            lessonNumber = lessonNum,
-            unit = unit,
-            status = status,
-            onStartLesson = {
-                val topic = getLessonTopic(lessonNum, language)
-                previewLessonNumber = null
-                onStartLesson(lessonNum, topic)
-            },
-            onDismiss = {
-                previewLessonNumber = null
-            }
-        )
-    }
 }
