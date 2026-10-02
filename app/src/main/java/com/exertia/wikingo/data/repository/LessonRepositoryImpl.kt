@@ -1,0 +1,200 @@
+package com.exertia.wikingo.data.repository
+
+import com.exertia.wikingo.core.network.NetworkResult
+import com.exertia.wikingo.data.generator.QuestionGenerator
+import com.exertia.wikingo.data.local.dao.TopicHistoryDao
+import com.exertia.wikingo.data.local.dao.UserStreakDao
+import com.exertia.wikingo.data.local.entity.TopicHistoryEntity
+import com.exertia.wikingo.data.local.entity.UserStreakEntity
+import com.exertia.wikingo.data.remote.WikipediaClient
+import com.exertia.wikingo.domain.model.LessonSession
+import com.exertia.wikingo.domain.model.TopicHistory
+import com.exertia.wikingo.domain.model.UserStats
+import com.exertia.wikingo.domain.repository.LessonRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
+import java.time.temporal.ChronoUnit
+import java.util.Locale
+import java.util.UUID
+
+class LessonRepositoryImpl(
+    private val wikipediaClient: WikipediaClient,
+    private val questionGenerator: QuestionGenerator,
+    private val topicHistoryDao: TopicHistoryDao,
+    private val userStreakDao: UserStreakDao
+) : LessonRepository {
+
+    override suspend fun getRandomLesson(language: String): NetworkResult<LessonSession> {
+        val result = wikipediaClient.fetchRandomArticle(language)
+
+        return when (result) {
+            is NetworkResult.Success -> {
+                NetworkResult.Success(createSession(result.data, language))
+            }
+            is NetworkResult.Offline,
+            is NetworkResult.Error -> NetworkResult.Success(
+                createSession(
+                    questionGenerator.getCuratedOfflineSummary(language = language),
+                    language,
+                    offline = true
+                )
+            )
+        }
+    }
+
+    override suspend fun getLessonForTopic(topic: String, language: String): NetworkResult<LessonSession> {
+        val result = wikipediaClient.fetchArticleByTitle(topic, language)
+        return when (result) {
+            is NetworkResult.Success -> NetworkResult.Success(createSession(result.data, language))
+            is NetworkResult.Offline,
+            is NetworkResult.Error -> NetworkResult.Success(
+                createSession(
+                    questionGenerator.getCuratedOfflineSummary(topic, language),
+                    language,
+                    offline = true
+                )
+            )
+        }
+    }
+
+    private fun createSession(
+        summary: com.exertia.wikingo.data.remote.dto.WikiSummaryDto,
+        language: String,
+        offline: Boolean = false
+    ): LessonSession {
+        val title = summary.title.ifBlank { "Cultura generale" }
+        val wikiUrl = summary.contentUrls?.mobile?.page
+            ?: summary.contentUrls?.desktop?.page
+            ?: "https://$language.wikipedia.org/wiki/${title.replace(' ', '_')}"
+
+        return LessonSession(
+            id = UUID.randomUUID().toString(),
+            topicTitle = if (offline) {
+                if (language == "en") "$title (Offline)" else "$title (Offline)"
+            } else title,
+            topicDescription = summary.description ?: if (language == "en") {
+                "General knowledge topic"
+            } else {
+                "Argomento di cultura generale"
+            },
+            topicExtract = summary.extract.orEmpty(),
+            thumbnailUrl = summary.thumbnail?.source ?: summary.originalImage?.source,
+            wikiUrl = wikiUrl,
+            pageId = summary.pageId ?: System.currentTimeMillis(),
+            questions = questionGenerator.generateQuestions(summary, language)
+        )
+    }
+
+    override suspend fun saveCompletedLesson(session: LessonSession): Long {
+        val entity = TopicHistoryEntity(
+            pageId = session.pageId,
+            title = session.topicTitle,
+            description = session.topicDescription,
+            extract = session.topicExtract,
+            thumbnailUrl = session.thumbnailUrl,
+            wikiUrl = session.wikiUrl,
+            score = session.score,
+            totalQuestions = session.totalQuestions,
+            completedAt = System.currentTimeMillis(),
+            xpEarned = session.xpEarned
+        )
+        val savedId = topicHistoryDao.insertTopic(entity)
+
+        // Streak and XP calculation
+        updateStreakAndXp(session.xpEarned)
+
+        return savedId
+    }
+
+    private suspend fun updateStreakAndXp(xpEarned: Int) {
+        val today = LocalDate.now()
+        val todayString = today.toString()
+        val currentStreakEntity = userStreakDao.getStreakSync()
+
+        if (currentStreakEntity == null) {
+            val initial = UserStreakEntity(
+                id = 1,
+                currentStreak = 1,
+                bestStreak = 1,
+                totalXp = xpEarned,
+                totalLessonsCompleted = 1,
+                lastActiveDate = todayString
+            )
+            userStreakDao.saveStreak(initial)
+            return
+        }
+
+        val lastDateStr = currentStreakEntity.lastActiveDate
+        val newStreak: Int
+        if (lastDateStr.isBlank()) {
+            newStreak = 1
+        } else {
+            val lastDate = parseStoredDate(lastDateStr)
+            if (lastDate == null) {
+                newStreak = 1
+            } else {
+                val daysDiff = ChronoUnit.DAYS.between(lastDate, today)
+                newStreak = when {
+                    daysDiff == 0L -> currentStreakEntity.currentStreak // Already active today
+                    daysDiff == 1L -> currentStreakEntity.currentStreak + 1 // Streak preserved!
+                    else -> 1 // Streak lost, start again
+                }
+            }
+        }
+
+        val updatedBest = maxOf(currentStreakEntity.bestStreak, newStreak)
+        val updatedXp = currentStreakEntity.totalXp + xpEarned
+        val updatedLessons = currentStreakEntity.totalLessonsCompleted + 1
+
+        val updatedEntity = currentStreakEntity.copy(
+            currentStreak = newStreak,
+            bestStreak = updatedBest,
+            totalXp = updatedXp,
+            totalLessonsCompleted = updatedLessons,
+            lastActiveDate = todayString
+        )
+        userStreakDao.saveStreak(updatedEntity)
+    }
+
+    private fun parseStoredDate(value: String): LocalDate? {
+        val normalized = value.trim()
+        if (normalized.isBlank()) return null
+        val formats = listOf(
+            DateTimeFormatter.ISO_LOCAL_DATE,
+            DateTimeFormatter.ofPattern("yyyy:MM-dd", Locale.ROOT),
+            DateTimeFormatter.ofPattern("yyyy:MM- dd", Locale.ROOT)
+        )
+        return formats.firstNotNullOfOrNull { formatter ->
+            try {
+                LocalDate.parse(normalized, formatter)
+            } catch (_: DateTimeParseException) {
+                null
+            }
+        }
+    }
+
+    override fun getTopicHistory(): Flow<List<TopicHistory>> {
+        return topicHistoryDao.getAllTopics().map { list ->
+            list.map { it.toDomain() }
+        }
+    }
+
+    override fun getUserStats(): Flow<UserStats> {
+        return userStreakDao.getStreak().map { entity ->
+            entity?.toDomain() ?: UserStats(
+                currentStreak = 0,
+                bestStreak = 0,
+                totalXp = 0,
+                totalLessonsCompleted = 0,
+                lastActiveDate = ""
+            )
+        }
+    }
+
+    override suspend fun getTopicById(id: Long): TopicHistory? {
+        return topicHistoryDao.getTopicById(id)?.toDomain()
+    }
+}

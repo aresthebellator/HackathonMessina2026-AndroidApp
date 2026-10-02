@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Wikipedia Brand and Logo Colors -->
+    <!-- Black: #000000 (RGB: 0, 0, 0) -->
+    <color name="wiki_black">#000000</color>
+    <!-- Shuttle Gray: #636466 (RGB: 99, 100, 102) -->
+    <color name="wiki_shuttle_gray">#636466</color>
+    <!-- Oslo Gray: #939598 (RGB: 147, 149, 152) -->
+    <color name="wiki_oslo_gray">#939598</color>
+    <!-- Silver Sand: #C7C8CA (RGB: 199, 200, 202) -->
+    <color name="wiki_silver_sand">#C7C8CA</color>
+    <!-- White: #FFFFFF (RGB: 255, 255, 255) -->
+    <color name="wiki_white">#FFFFFF</color>
+
+    <!-- Semantic UI Tokens mapped to Wikipedia Brand -->
+    <color name="duo_green">@color/wiki_black</color>
+    <color name="duo_green_dark">@color/wiki_shuttle_gray</color>
+    <color name="duo_green_light">@color/wiki_silver_sand</color>
+
+    <color name="duo_red">@color/wiki_shuttle_gray</color>
+    <color name="duo_red_dark">@color/wiki_black</color>
+    <color name="duo_red_light">@color/wiki_silver_sand</color>
+
+    <color name="duo_yellow">@color/wiki_oslo_gray</color>
+    <color name="duo_yellow_dark">@color/wiki_black</color>
+
+    <color name="duo_blue">@color/wiki_black</color>
+    <color name="duo_blue_dark">@color/wiki_shuttle_gray</color>
+
+    <color name="duo_purple">@color/wiki_shuttle_gray</color>
+
+    <color name="duo_ink">@color/wiki_black</color>
+    <color name="duo_ink_secondary">@color/wiki_shuttle_gray</color>
+    <color name="duo_card_stroke">@color/wiki_silver_sand</color>
+    <color name="duo_background">@color/wiki_white</color>
+    <color name="duo_surface">#F8F9FA</color>
+
+    <!-- Adaptive launcher icons use this as the mask-independent base layer. -->
+    <color name="launcher_background">#FFFFFF</color>
+</resources>

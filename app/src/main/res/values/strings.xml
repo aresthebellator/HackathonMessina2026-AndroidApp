@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Wikingo</string>
+    <string name="app_tagline">Impara ogni giorno con Wikipedia</string>
+    <string name="continue_button">Continua</string>
+    <string name="check_button">Verifica</string>
+    <string name="got_it_button">Ho capito</string>
+    <string name="retry_button">Riprova</string>
+    <string name="new_lesson_button">Nuova Lezione</string>
+    <string name="history_title">Cronologia Argomenti</string>
+    <string name="streak_label">Streak</string>
+    <string name="xp_label">XP</string>
+</resources>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Keep the Viking inside the adaptive icon safe zone. The launcher owns the mask. -->
+    <item
+        android:width="72dp"
+        android:height="72dp"
+        android:gravity="center">
+        <bitmap
+            android:src="@drawable/ic_launcher_viking"
+            android:gravity="fill" />
+    </item>
+</layer-list>
