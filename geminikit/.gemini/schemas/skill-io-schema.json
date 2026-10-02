@@ -1,0 +1,96 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "geminikit/schemas/skill-io-schema",
+  "title": "SkillIOContract",
+  "description": "Defines the input/output contract for a skill. Each skill's SKILL.md references this schema.",
+  "type": "object",
+  "required": ["skill", "version", "input", "output"],
+  "additionalProperties": false,
+  "properties": {
+    "skill": {
+      "type": "string",
+      "description": "Skill identifier. Must match the directory name under .gemini/skills/ or .claude/skills/."
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semantic version of the skill contract. Increment minor on non-breaking changes, major on breaking."
+    },
+    "description": {
+      "type": "string",
+      "description": "One-sentence description of what the skill does."
+    },
+    "input": {
+      "type": "object",
+      "required": ["required", "schema"],
+      "additionalProperties": false,
+      "properties": {
+        "required": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Field names that must be present in every invocation.",
+          "minItems": 1
+        },
+        "optional": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Field names that may be omitted; skill must handle their absence.",
+          "default": []
+        },
+        "schema": {
+          "type": "object",
+          "description": "Field definitions: key=field name, value=type descriptor or JSON Schema fragment.",
+          "additionalProperties": true
+        },
+        "constraints": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Input-level validation rules beyond type checking.",
+          "default": []
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "required": ["format", "schema"],
+      "additionalProperties": false,
+      "properties": {
+        "format": {
+          "type": "string",
+          "enum": ["json", "markdown", "text"],
+          "description": "Primary format of the skill's output payload."
+        },
+        "schema": {
+          "type": "object",
+          "description": "Field definitions for the output object. Must be consistent with report-schema output field.",
+          "additionalProperties": true
+        },
+        "nullable": {
+          "type": "boolean",
+          "default": false,
+          "description": "If true, skill may return null output on valid no-op execution."
+        }
+      }
+    },
+    "rules": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Skill-specific behavioral constraints. Supplement global.md and safety.md rules.",
+      "default": []
+    },
+    "examples": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["input", "output"],
+        "properties": {
+          "description": { "type": "string" },
+          "input": { "type": "object", "additionalProperties": true },
+          "output": { "type": "object", "additionalProperties": true }
+        }
+      },
+      "description": "Optional worked examples for LLM context and testing.",
+      "default": []
+    }
+  }
+}

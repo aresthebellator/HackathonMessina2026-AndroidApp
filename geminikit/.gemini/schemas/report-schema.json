@@ -1,0 +1,99 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "geminikit/schemas/report-schema",
+  "title": "AgentReport",
+  "description": "Structured output report produced by any agent upon task completion, failure, or block.",
+  "type": "object",
+  "required": ["from", "status", "summary"],
+  "additionalProperties": false,
+  "properties": {
+    "from": {
+      "type": "string",
+      "description": "Name of the agent producing this report."
+    },
+    "to": {
+      "type": "string",
+      "description": "Recipient: agent name or 'orchestrator'.",
+      "default": "orchestrator"
+    },
+    "taskId": {
+      "type": "string",
+      "description": "The taskId this report corresponds to."
+    },
+    "status": {
+      "type": "string",
+      "enum": ["completed", "blocked", "failed"],
+      "description": "Final execution status of the task."
+    },
+    "summary": {
+      "type": "string",
+      "maxLength": 200,
+      "description": "One-sentence description of what was done or what went wrong."
+    },
+    "findings": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Bullet-level findings, observations, or changes made.",
+      "default": []
+    },
+    "recommendations": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Suggested next actions or improvements.",
+      "default": []
+    },
+    "blockers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["taskId", "reason"],
+        "properties": {
+          "taskId": { "type": "string" },
+          "reason": { "type": "string" }
+        }
+      },
+      "description": "Populated only when status=blocked. Lists taskIds and reasons.",
+      "default": []
+    },
+    "errors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["code", "message"],
+        "properties": {
+          "code": { "type": "string" },
+          "message": { "type": "string" },
+          "context": { "type": "object", "additionalProperties": true }
+        }
+      },
+      "description": "Populated when status=failed. Structured error objects.",
+      "default": []
+    },
+    "next_steps": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Ordered list of follow-up actions for the orchestrator or next agent.",
+      "default": []
+    },
+    "output": {
+      "type": "object",
+      "description": "Structured result payload. Schema varies by agent and skill.",
+      "additionalProperties": true
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Operational metadata attached by the agent.",
+      "properties": {
+        "agent": { "type": "string" },
+        "skill": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "filesModified": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "linesChanged": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    }
+  }
+}

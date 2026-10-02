@@ -1,0 +1,1253 @@
+{
+    "name": "agent-skills",
+    "version": "1.0.0",
+    "description": "Advanced Laravel AI agent skills and guidelines for Laravel Boost, skills.sh, and coding assistants.",
+    "author": "Ali Harb",
+    "skills": [
+        {
+            "name": "audit-ai-agent-instructions",
+            "category": "ai-agent",
+            "description": "Use when auditing AGENTS.md, CLAUDE.md, Cursor rules, Copilot instructions, Boost guidelines, or skill files for safety and clarity.",
+            "path": "skills/audit-ai-agent-instructions/SKILL.md",
+            "guidelines": [
+                "ai-agent-safety",
+                "ai-development"
+            ],
+            "tags": [
+                "ai-agent",
+                "audit",
+                "ai",
+                "agent",
+                "instructions"
+            ]
+        },
+        {
+            "name": "audit-package-version",
+            "category": "operations",
+            "description": "Use when checking whether a Laravel package or feature should be used and which version-specific APIs are safe.",
+            "path": "skills/audit-package-version/SKILL.md",
+            "guidelines": [
+                "package-development",
+                "ai-development"
+            ],
+            "tags": [
+                "operations",
+                "audit",
+                "package",
+                "version"
+            ]
+        },
+        {
+            "name": "configure-local-environment",
+            "category": "operations",
+            "description": "Use when setting up site domain mapping, configuring Mailpit SMTP credentials, and switching PHP versions locally using Laravel Herd.",
+            "path": "skills/configure-local-environment/SKILL.md",
+            "guidelines": [
+                "package-development",
+                "ai-development"
+            ],
+            "tags": [
+                "operations",
+                "configure",
+                "local",
+                "environment"
+            ]
+        },
+        {
+            "name": "configure-secure-storage",
+            "category": "operations",
+            "description": "Use when setting up file uploads, configuring private/public disks, and serving sensitive document URLs.",
+            "path": "skills/configure-secure-storage/SKILL.md",
+            "guidelines": [
+                "package-development",
+                "ai-development"
+            ],
+            "tags": [
+                "operations",
+                "configure",
+                "secure",
+                "storage"
+            ]
+        },
+        {
+            "name": "create-action",
+            "category": "architecture",
+            "description": "Use when creating or changing an Action class for a Laravel business operation. Applies to reusable operations called from controllers, Livewire, jobs, commands, APIs, MCP handlers, or services.",
+            "path": "skills/create-action/SKILL.md",
+            "guidelines": [
+                "application-architecture",
+                "ai-development"
+            ],
+            "tags": [
+                "architecture",
+                "create",
+                "action"
+            ]
+        },
+        {
+            "name": "create-api-endpoint",
+            "category": "laravel-core",
+            "description": "Use when creating or changing Laravel API routes, controllers, requests, resources, or endpoint behavior.",
+            "path": "skills/create-api-endpoint/SKILL.md",
+            "guidelines": [
+                "modern-php-laravel",
+                "ai-development"
+            ],
+            "tags": [
+                "laravel-core",
+                "create",
+                "api",
+                "endpoint"
+            ]
+        },
+        {
+            "name": "create-api-integration",
+            "category": "laravel-core",
+            "description": "Use when building custom external integrations, Stripe webhooks, CRM integrations, or external HTTP clients.",
+            "path": "skills/create-api-integration/SKILL.md",
+            "guidelines": [
+                "modern-php-laravel",
+                "ai-development"
+            ],
+            "tags": [
+                "laravel-core",
+                "create",
+                "api",
+                "integration"
+            ]
+        },
+        {
+            "name": "create-architecture-test",
+            "category": "architecture",
+            "description": "Use when creating or updating Pest architecture tests for Laravel layer boundaries.",
+            "path": "skills/create-architecture-test/SKILL.md",
+            "guidelines": [
+                "application-architecture",
+                "ai-development",
+                "testing-best-practices"
+            ],
+            "tags": [
+                "architecture",
+                "create",
+                "test"
+            ]
+        },
+        {
+            "name": "create-console-command",
+            "category": "laravel-core",
+            "description": "Use when creating or changing a Laravel console command and its prompts, output, signature, or supporting tests.",
+            "path": "skills/create-console-command/SKILL.md",
+            "guidelines": [
+                "modern-php-laravel",
+                "ai-development"
+            ],
+            "tags": [
+                "laravel-core",
+                "create",
+                "console",
+                "command"
+            ]
+        },
+        {
+            "name": "create-database-migration",
+            "category": "laravel-core",
+            "description": "Use when creating, altering, or adding new database tables, indexes, or constraints in Laravel migrations.",
+            "path": "skills/create-database-migration/SKILL.md",
+            "guidelines": [
+                "modern-php-laravel",
+                "ai-development"
+            ],
+            "tags": [
+                "laravel-core",
+                "create",
+                "database",
+                "migration"
+            ]
+        },
+        {
+            "name": "create-domain-feature",
+            "category": "architecture",
+            "description": "Use when building a general Laravel domain feature that spans routes, UI, API, actions, policies, DTOs, events, jobs, or tests.",
+            "path": "skills/create-domain-feature/SKILL.md",
+            "guidelines": [
+                "application-architecture",
+                "ai-development"
+            ],
+            "tags": [
+                "architecture",
+                "create",
+                "domain",
+                "feature"
+            ]
+        },
+        {
+            "name": "create-dto",
+            "category": "architecture",
+            "description": "Use when creating or changing DTOs, data objects, value objects, or input/output contracts for Laravel features.",
+            "path": "skills/create-dto/SKILL.md",
+            "guidelines": [
+                "application-architecture",
+                "ai-development"
+            ],
+            "tags": [
+                "architecture",
+                "create",
+                "dto"
+            ]
+        },
+        {
+            "name": "create-eloquent-builder",
+            "category": "architecture",
+            "description": "Use when creating or changing an Eloquent builder or query object so reusable query constraints live outside the model.",
+            "path": "skills/create-eloquent-builder/SKILL.md",
+            "guidelines": [
+                "application-architecture",
+                "ai-development"
+            ],
+            "tags": [
+                "architecture",
+                "create",
+                "eloquent",
+                "builder"
+            ]
+        },
+        {
+            "name": "create-event-listener",
+            "category": "laravel-core",
+            "description": "Use when creating or changing Laravel events, listeners, subscribers, or event-driven side effects.",
+            "path": "skills/create-event-listener/SKILL.md",
+            "guidelines": [
+                "modern-php-laravel",
+                "ai-development"
+            ],
+            "tags": [
+                "laravel-core",
+                "create",
+                "event",
+                "listener"
+            ]
+        },
+        {
+            "name": "create-inertia-page",
+            "category": "frontend",
+            "description": "Use when creating Vue/React Inertia pages, configuring controllers to render Inertia views, and managing form submissions.",
+            "path": "skills/create-inertia-page/SKILL.md",
+            "guidelines": [
+                "frontend-styling",
+                "ai-development"
+            ],
+            "tags": [
+                "frontend",
+                "create",
+                "inertia",
+                "page"
+            ]
+        },
+        {
+            "name": "create-job",
+            "category": "laravel-core",
+            "description": "Use when creating or changing Laravel queued jobs, batches, asynchronous workflows, or retryable background work.",
+            "path": "skills/create-job/SKILL.md",
+            "guidelines": [
+                "modern-php-laravel",
+                "ai-development"
+            ],
+            "tags": [
+                "laravel-core",
+                "create",
+                "job"
+            ]
+        },
+        {
+            "name": "create-laravel-boost-guidelines",
+            "category": "ai-agent",
+            "description": "Use when adding Laravel Boost guidelines for a package or application.",
+            "path": "skills/create-laravel-boost-guidelines/SKILL.md",
+            "guidelines": [
+                "ai-agent-safety",
+                "ai-development"
+            ],
+            "tags": [
+                "ai-agent",
+                "create",
+                "laravel",
+                "boost",
+                "guidelines"
+            ]
+        },
+        {
+            "name": "create-laravel-package",
+            "category": "operations",
+            "description": "Use when creating a Laravel package with Composer metadata, service provider, config publishing, commands, tests, CI, and release docs.",
+            "path": "skills/create-laravel-package/SKILL.md",
+            "guidelines": [
+                "package-development",
+                "ai-development"
+            ],
+            "tags": [
+                "operations",
+                "create",
+                "laravel",
+                "package"
+            ]
+        },
+        {
+            "name": "create-livewire-component",
+            "category": "frontend",
+            "description": "Use when creating or changing Livewire pages or components in a Laravel application.",
+            "path": "skills/create-livewire-component/SKILL.md",
+            "guidelines": [
+                "frontend-styling",
+                "ai-development"
+            ],
+            "tags": [
+                "frontend",
+                "create",
+                "livewire",
+                "component"
+            ]
+        },
+        {
+            "name": "create-php-attribute",
+            "category": "laravel-core",
+            "description": "Use when creating or reviewing a custom PHP 8 attribute for metadata, framework integration, architecture checks, tests, middleware, scanners, or support tooling in this Laravel application.",
+            "path": "skills/create-php-attribute/SKILL.md",
+            "guidelines": [
+                "modern-php-laravel",
+                "ai-development"
+            ],
+            "tags": [
+                "laravel-core",
+                "create",
+                "php",
+                "attribute"
+            ]
+        },
+        {
+            "name": "create-policy",
+            "category": "laravel-core",
+            "description": "Use when creating or changing Laravel policies, gates, or authorization checks for protected resources and operations.",
+            "path": "skills/create-policy/SKILL.md",
+            "guidelines": [
+                "modern-php-laravel",
+                "ai-development"
+            ],
+            "tags": [
+                "laravel-core",
+                "create",
+                "policy"
+            ]
+        },
+        {
+            "name": "create-request",
+            "category": "laravel-core",
+            "description": "Use when creating Laravel Form Request classes for validation and authorization.",
+            "path": "skills/create-request/SKILL.md",
+            "guidelines": [
+                "modern-php-laravel",
+                "ai-development"
+            ],
+            "tags": [
+                "laravel-core",
+                "create",
+                "request"
+            ]
+        },
+        {
+            "name": "create-service",
+            "category": "architecture",
+            "description": "Use when creating or changing a Laravel service class that coordinates workflows, external integrations, or multiple Actions without becoming a dumping ground.",
+            "path": "skills/create-service/SKILL.md",
+            "guidelines": [
+                "application-architecture",
+                "ai-development"
+            ],
+            "tags": [
+                "architecture",
+                "create",
+                "service"
+            ]
+        },
+        {
+            "name": "debug-composer-conflicts",
+            "category": "operations",
+            "description": "Use when Composer cannot install or update because of dependency conflicts, platform requirements, or security advisories.",
+            "path": "skills/debug-composer-conflicts/SKILL.md",
+            "guidelines": [
+                "package-development",
+                "ai-development"
+            ],
+            "tags": [
+                "operations",
+                "debug",
+                "composer",
+                "conflicts"
+            ]
+        },
+        {
+            "name": "debug-failing-tests",
+            "category": "quality",
+            "description": "Use when Pest, PHPUnit, Livewire, browser, or package tests fail and need systematic diagnosis.",
+            "path": "skills/debug-failing-tests/SKILL.md",
+            "guidelines": [
+                "testing-best-practices",
+                "ai-development"
+            ],
+            "tags": [
+                "quality",
+                "debug",
+                "failing",
+                "tests"
+            ]
+        },
+        {
+            "name": "debug-phpstan",
+            "category": "quality",
+            "description": "Use when PHPStan or Larastan reports type, generic, nullability, or framework inference issues.",
+            "path": "skills/debug-phpstan/SKILL.md",
+            "guidelines": [
+                "testing-best-practices",
+                "ai-development"
+            ],
+            "tags": [
+                "quality",
+                "debug",
+                "phpstan"
+            ]
+        },
+        {
+            "name": "decompose-model",
+            "category": "architecture",
+            "description": "Use when a model is getting too large and needs concerns, casts, builders, or other extractions.",
+            "path": "skills/decompose-model/SKILL.md",
+            "guidelines": [
+                "application-architecture",
+                "ai-development"
+            ],
+            "tags": [
+                "architecture",
+                "decompose",
+                "model"
+            ]
+        },
+        {
+            "name": "deploying-laravel-cloud",
+            "category": "operations",
+            "description": "Deploys and manages Laravel applications on Laravel Cloud using the `cloud` CLI. Use when the user wants to deploy an app, ship to cloud, create/manage environments, databases, caches, domains, instances, background processes, check billing/usage/spend, or any Laravel Cloud infrastructure. Triggers on deploy, ship, cloud management, environment setup, database provisioning, billing/usage queries, and similar cloud operations.",
+            "path": "skills/deploying-laravel-cloud/SKILL.md",
+            "guidelines": [
+                "package-development",
+                "ai-development"
+            ],
+            "tags": [
+                "operations",
+                "deploying",
+                "laravel",
+                "cloud"
+            ]
+        },
+        {
+            "name": "design-blade-component",
+            "category": "frontend",
+            "description": "Use when creating or refactoring Blade components, partials, and reusable view pieces.",
+            "path": "skills/design-blade-component/SKILL.md",
+            "guidelines": [
+                "frontend-styling",
+                "ai-development"
+            ],
+            "tags": [
+                "frontend",
+                "design",
+                "blade",
+                "component"
+            ]
+        },
+        {
+            "name": "design-multi-tenant-feature",
+            "category": "laravel-core",
+            "description": "Use when designing Laravel features that must be tenant-aware, isolated, authorized, and testable.",
+            "path": "skills/design-multi-tenant-feature/SKILL.md",
+            "guidelines": [
+                "modern-php-laravel",
+                "ai-development"
+            ],
+            "tags": [
+                "laravel-core",
+                "design",
+                "multi",
+                "tenant",
+                "feature"
+            ]
+        },
+        {
+            "name": "filament-development",
+            "category": "filament",
+            "description": "Use when creating or changing Filament v5 panels, resources, relation managers, pages, widgets, forms, tables, infolists, actions, notifications, query-builder filters, or Filament-related extensions.",
+            "path": "skills/filament-development/SKILL.md",
+            "guidelines": [
+                "filament",
+                "ai-development"
+            ],
+            "tags": [
+                "filament",
+                "development"
+            ]
+        },
+        {
+            "name": "filament-shield",
+            "category": "filament",
+            "description": "Use when installing, configuring, generating, or reviewing Filament Shield authorization for Filament v5 panels.",
+            "path": "skills/filament-shield/SKILL.md",
+            "guidelines": [
+                "filament",
+                "ai-development"
+            ],
+            "tags": [
+                "filament",
+                "shield"
+            ]
+        },
+        {
+            "name": "fix-github-actions",
+            "category": "architecture",
+            "description": "Use when GitHub Actions are failing because of Composer, PHP versions, test matrices, linting, or workflow configuration.",
+            "path": "skills/fix-github-actions/SKILL.md",
+            "guidelines": [
+                "application-architecture",
+                "ai-development",
+                "github-actions"
+            ],
+            "tags": [
+                "architecture",
+                "fix",
+                "github",
+                "actions"
+            ]
+        },
+        {
+            "name": "format-codebase-pint",
+            "category": "quality",
+            "description": "Use when running Laravel Pint to fix styling drift, verifying import sorting, or configuring custom rules inside pint.json.",
+            "path": "skills/format-codebase-pint/SKILL.md",
+            "guidelines": [
+                "testing-best-practices",
+                "ai-development"
+            ],
+            "tags": [
+                "quality",
+                "format",
+                "codebase",
+                "pint"
+            ]
+        },
+        {
+            "name": "implement-api-rate-limiting",
+            "category": "laravel-core",
+            "description": "Use when adding API rate limits, abuse controls, throttles, and tests for Laravel routes or integrations.",
+            "path": "skills/implement-api-rate-limiting/SKILL.md",
+            "guidelines": [
+                "modern-php-laravel",
+                "ai-development"
+            ],
+            "tags": [
+                "laravel-core",
+                "implement",
+                "api",
+                "rate",
+                "limiting"
+            ]
+        },
+        {
+            "name": "implement-import-export",
+            "category": "laravel-core",
+            "description": "Use when building CSV, Excel, or structured import/export workflows in Laravel or Filament.",
+            "path": "skills/implement-import-export/SKILL.md",
+            "guidelines": [
+                "modern-php-laravel",
+                "ai-development"
+            ],
+            "tags": [
+                "laravel-core",
+                "implement",
+                "import",
+                "export"
+            ]
+        },
+        {
+            "name": "implement-notifications",
+            "category": "laravel-core",
+            "description": "Use when adding Laravel notifications across mail, database, broadcast, Slack, or custom channels.",
+            "path": "skills/implement-notifications/SKILL.md",
+            "guidelines": [
+                "modern-php-laravel",
+                "ai-development"
+            ],
+            "tags": [
+                "laravel-core",
+                "implement",
+                "notifications"
+            ]
+        },
+        {
+            "name": "implement-observability",
+            "category": "laravel-core",
+            "description": "Use when adding logs, metrics, traces, health checks, Pulse recorders, or operational dashboards.",
+            "path": "skills/implement-observability/SKILL.md",
+            "guidelines": [
+                "modern-php-laravel",
+                "ai-development"
+            ],
+            "tags": [
+                "laravel-core",
+                "implement",
+                "observability"
+            ]
+        },
+        {
+            "name": "implement-permissions",
+            "category": "laravel-core",
+            "description": "Use when implementing Laravel permissions, roles, gates, policies, or Filament authorization.",
+            "path": "skills/implement-permissions/SKILL.md",
+            "guidelines": [
+                "modern-php-laravel",
+                "ai-development"
+            ],
+            "tags": [
+                "laravel-core",
+                "implement",
+                "permissions"
+            ]
+        },
+        {
+            "name": "implement-subscription-billing",
+            "category": "operations",
+            "description": "Use when configuring Laravel Cashier, setting up billing portals, handling S3/Stripe webhooks, or verifying user tiers.",
+            "path": "skills/implement-subscription-billing/SKILL.md",
+            "guidelines": [
+                "package-development",
+                "ai-development"
+            ],
+            "tags": [
+                "operations",
+                "implement",
+                "subscription",
+                "billing"
+            ]
+        },
+        {
+            "name": "implement-webhooks",
+            "category": "laravel-core",
+            "description": "Use when implementing inbound or outbound webhooks with validation, signatures, retries, idempotency, and tests.",
+            "path": "skills/implement-webhooks/SKILL.md",
+            "guidelines": [
+                "modern-php-laravel",
+                "ai-development"
+            ],
+            "tags": [
+                "laravel-core",
+                "implement",
+                "webhooks"
+            ]
+        },
+        {
+            "name": "laravel-pennant-feature-flags",
+            "category": "operations",
+            "description": "Use when creating feature toggles, checking flag status, or configuring class-based features using Laravel Pennant.",
+            "path": "skills/laravel-pennant-feature-flags/SKILL.md",
+            "guidelines": [
+                "package-development",
+                "ai-development"
+            ],
+            "tags": [
+                "operations",
+                "laravel",
+                "pennant",
+                "feature",
+                "flags"
+            ]
+        },
+        {
+            "name": "laravel-pulse-monitoring",
+            "category": "operations",
+            "description": "Use when configuring, integrating, or parsing application metrics and performance bottlenecks using Laravel Pulse.",
+            "path": "skills/laravel-pulse-monitoring/SKILL.md",
+            "guidelines": [
+                "package-development",
+                "ai-development"
+            ],
+            "tags": [
+                "operations",
+                "laravel",
+                "pulse",
+                "monitoring"
+            ]
+        },
+        {
+            "name": "laravel-reverb-websockets",
+            "category": "operations",
+            "description": "Use when setting up, configuring, or debugging real-time broadcasting and websockets using Laravel Reverb and Echo.",
+            "path": "skills/laravel-reverb-websockets/SKILL.md",
+            "guidelines": [
+                "package-development",
+                "ai-development"
+            ],
+            "tags": [
+                "operations",
+                "laravel",
+                "reverb",
+                "websockets"
+            ]
+        },
+        {
+            "name": "manage-frontend-styling",
+            "category": "frontend",
+            "description": "Use when creating or updating Tailwind CSS 4, Flux, or Blade UI patterns and shared components.",
+            "path": "skills/manage-frontend-styling/SKILL.md",
+            "guidelines": [
+                "frontend-styling",
+                "ai-development"
+            ],
+            "tags": [
+                "frontend",
+                "manage",
+                "styling"
+            ]
+        },
+        {
+            "name": "manage-localization",
+            "category": "frontend",
+            "description": "Use when adding or restructuring Laravel translation files and localization keys.",
+            "path": "skills/manage-localization/SKILL.md",
+            "guidelines": [
+                "frontend-styling",
+                "ai-development"
+            ],
+            "tags": [
+                "frontend",
+                "manage",
+                "localization"
+            ]
+        },
+        {
+            "name": "prepare-package-release",
+            "category": "operations",
+            "description": "Use when preparing a package release with changelog, semantic versioning, validation, tags, and GitHub release notes.",
+            "path": "skills/prepare-package-release/SKILL.md",
+            "guidelines": [
+                "package-development",
+                "ai-development"
+            ],
+            "tags": [
+                "operations",
+                "prepare",
+                "package",
+                "release"
+            ]
+        },
+        {
+            "name": "refactor-business-logic",
+            "category": "laravel-core",
+            "description": "Use when moving business logic out of controllers, Livewire components, models, routes, Blade views, or duplicated client layers.",
+            "path": "skills/refactor-business-logic/SKILL.md",
+            "guidelines": [
+                "modern-php-laravel",
+                "ai-development"
+            ],
+            "tags": [
+                "laravel-core",
+                "refactor",
+                "business",
+                "logic"
+            ]
+        },
+        {
+            "name": "reuse-filament-resources",
+            "category": "filament",
+            "description": "Use when building Filament relation managers, pages, or admin screens that should reuse existing resource form and table definitions.",
+            "path": "skills/reuse-filament-resources/SKILL.md",
+            "guidelines": [
+                "filament",
+                "ai-development"
+            ],
+            "tags": [
+                "filament",
+                "reuse",
+                "resources"
+            ]
+        },
+        {
+            "name": "review-accessibility",
+            "category": "quality",
+            "description": "Use when reviewing Blade, Livewire, Inertia, Tailwind, Flux, or Filament UI for accessibility.",
+            "path": "skills/review-accessibility/SKILL.md",
+            "guidelines": [
+                "testing-best-practices",
+                "ai-development"
+            ],
+            "tags": [
+                "quality",
+                "review",
+                "accessibility"
+            ]
+        },
+        {
+            "name": "review-ai-generated-code",
+            "category": "quality",
+            "description": "Use when reviewing code written by an AI assistant for correctness, safety, maintainability, and project fit.",
+            "path": "skills/review-ai-generated-code/SKILL.md",
+            "guidelines": [
+                "testing-best-practices",
+                "ai-development"
+            ],
+            "tags": [
+                "quality",
+                "review",
+                "ai",
+                "generated",
+                "code"
+            ]
+        },
+        {
+            "name": "review-feature",
+            "category": "quality",
+            "description": "Use when reviewing a Laravel feature for architecture, authorization, validation, testing, API readiness, performance, security, and maintainability.",
+            "path": "skills/review-feature/SKILL.md",
+            "guidelines": [
+                "testing-best-practices",
+                "ai-development"
+            ],
+            "tags": [
+                "quality",
+                "review",
+                "feature"
+            ]
+        },
+        {
+            "name": "review-open-source-package",
+            "category": "quality",
+            "description": "Use when reviewing a Laravel or PHP package for public release readiness.",
+            "path": "skills/review-open-source-package/SKILL.md",
+            "guidelines": [
+                "testing-best-practices",
+                "ai-development",
+                "package-development"
+            ],
+            "tags": [
+                "quality",
+                "review",
+                "open",
+                "source",
+                "package"
+            ]
+        },
+        {
+            "name": "review-package-readme",
+            "category": "quality",
+            "description": "Use when reviewing or improving a package README for installation, examples, requirements, and release readiness.",
+            "path": "skills/review-package-readme/SKILL.md",
+            "guidelines": [
+                "testing-best-practices",
+                "ai-development",
+                "package-development"
+            ],
+            "tags": [
+                "quality",
+                "review",
+                "package",
+                "readme"
+            ]
+        },
+        {
+            "name": "review-performance",
+            "category": "quality",
+            "description": "Use when reviewing Laravel code for database, queue, cache, API, Livewire, or rendering performance.",
+            "path": "skills/review-performance/SKILL.md",
+            "guidelines": [
+                "testing-best-practices",
+                "ai-development"
+            ],
+            "tags": [
+                "quality",
+                "review",
+                "performance"
+            ]
+        },
+        {
+            "name": "review-security",
+            "category": "quality",
+            "description": "Use when reviewing Laravel code for authorization, validation, data exposure, authentication, secrets, file uploads, queues, events, and unsafe input handling.",
+            "path": "skills/review-security/SKILL.md",
+            "guidelines": [
+                "testing-best-practices",
+                "ai-development",
+                "security-and-data-protection"
+            ],
+            "tags": [
+                "quality",
+                "review",
+                "security"
+            ]
+        },
+        {
+            "name": "review-static-analysis",
+            "category": "quality",
+            "description": "Use when reviewing code for PHPStan, typing, and maintainability issues before they become noisy failures.",
+            "path": "skills/review-static-analysis/SKILL.md",
+            "guidelines": [
+                "testing-best-practices",
+                "ai-development"
+            ],
+            "tags": [
+                "quality",
+                "review",
+                "static",
+                "analysis"
+            ]
+        },
+        {
+            "name": "review-tailwind-flux",
+            "category": "frontend",
+            "description": "Use when reviewing Tailwind CSS 4 and Flux UI for accessibility, responsiveness, RTL, and maintainability.",
+            "path": "skills/review-tailwind-flux/SKILL.md",
+            "guidelines": [
+                "frontend-styling",
+                "ai-development"
+            ],
+            "tags": [
+                "frontend",
+                "review",
+                "tailwind",
+                "flux"
+            ]
+        },
+        {
+            "name": "schedule-artisan-task",
+            "category": "laravel-core",
+            "description": "Use when scheduling daily jobs, cleanups, statistics generation, or configuring Laravel scheduler options.",
+            "path": "skills/schedule-artisan-task/SKILL.md",
+            "guidelines": [
+                "modern-php-laravel",
+                "ai-development"
+            ],
+            "tags": [
+                "laravel-core",
+                "schedule",
+                "artisan",
+                "task"
+            ]
+        },
+        {
+            "name": "write-pest-test",
+            "category": "quality",
+            "description": "Use when writing or updating Pest PHP tests for controllers, Livewire components, API endpoints, actions, or console commands.",
+            "path": "skills/write-pest-test/SKILL.md",
+            "guidelines": [
+                "testing-best-practices",
+                "ai-development"
+            ],
+            "tags": [
+                "quality",
+                "write",
+                "pest",
+                "test"
+            ]
+        },
+        {
+            "name": "write-release-notes",
+            "category": "operations",
+            "description": "Use when writing concise, copy-ready Markdown release notes from changelog entries and commits.",
+            "path": "skills/write-release-notes/SKILL.md",
+            "guidelines": [
+                "package-development",
+                "ai-development"
+            ],
+            "tags": [
+                "operations",
+                "write",
+                "release",
+                "notes"
+            ]
+        },
+        {
+            "name": "write-tests",
+            "category": "quality",
+            "description": "Use when writing or updating Pest tests for Laravel features, actions, APIs, Livewire components, authorization, architecture, jobs, events, or regressions.",
+            "path": "skills/write-tests/SKILL.md",
+            "guidelines": [
+                "testing-best-practices",
+                "ai-development"
+            ],
+            "tags": [
+                "quality",
+                "write",
+                "tests"
+            ]
+        }
+    ],
+    "guidelines": [
+        {
+            "name": "accessibility",
+            "category": "general",
+            "description": "Accessibility guidelines.",
+            "path": "guidelines/accessibility.md"
+        },
+        {
+            "name": "actions",
+            "category": "architecture",
+            "description": "Actions guidelines.",
+            "path": "guidelines/actions.md"
+        },
+        {
+            "name": "agent-verification",
+            "category": "ai-agent",
+            "description": "Agent Verification guidelines.",
+            "path": "guidelines/agent-verification.md"
+        },
+        {
+            "name": "ai-agent-safety",
+            "category": "ai-agent",
+            "description": "Ai Agent Safety guidelines.",
+            "path": "guidelines/ai-agent-safety.md"
+        },
+        {
+            "name": "ai-development",
+            "category": "general",
+            "description": "Ai Development guidelines.",
+            "path": "guidelines/ai-development.md"
+        },
+        {
+            "name": "api-and-boundaries",
+            "category": "laravel-core",
+            "description": "Api And Boundaries guidelines.",
+            "path": "guidelines/api-and-boundaries.md"
+        },
+        {
+            "name": "application-architecture",
+            "category": "architecture",
+            "description": "Application Architecture guidelines.",
+            "path": "guidelines/application-architecture.md"
+        },
+        {
+            "name": "architecture-tests",
+            "category": "architecture",
+            "description": "Architecture Tests guidelines.",
+            "path": "guidelines/architecture-tests.md"
+        },
+        {
+            "name": "background-queues-and-horizon",
+            "category": "general",
+            "description": "Background Queues And Horizon guidelines.",
+            "path": "guidelines/background-queues-and-horizon.md"
+        },
+        {
+            "name": "billing-and-subscriptions",
+            "category": "operations",
+            "description": "Billing And Subscriptions guidelines.",
+            "path": "guidelines/billing-and-subscriptions.md"
+        },
+        {
+            "name": "caching-and-performance",
+            "category": "quality",
+            "description": "Caching And Performance guidelines.",
+            "path": "guidelines/caching-and-performance.md"
+        },
+        {
+            "name": "code-review",
+            "category": "quality",
+            "description": "Code Review guidelines.",
+            "path": "guidelines/code-review.md"
+        },
+        {
+            "name": "code-styling-and-pint",
+            "category": "quality",
+            "description": "Code Styling And Pint guidelines.",
+            "path": "guidelines/code-styling-and-pint.md"
+        },
+        {
+            "name": "composer-dependencies",
+            "category": "operations",
+            "description": "Composer Dependencies guidelines.",
+            "path": "guidelines/composer-dependencies.md"
+        },
+        {
+            "name": "container-attributes",
+            "category": "laravel-core",
+            "description": "Container Attributes guidelines.",
+            "path": "guidelines/container-attributes.md"
+        },
+        {
+            "name": "database-indexing",
+            "category": "general",
+            "description": "Database Indexing guidelines.",
+            "path": "guidelines/database-indexing.md"
+        },
+        {
+            "name": "database-migrations-and-schema",
+            "category": "laravel-core",
+            "description": "Database Migrations And Schema guidelines.",
+            "path": "guidelines/database-migrations-and-schema.md"
+        },
+        {
+            "name": "dirty-worktree-safety",
+            "category": "general",
+            "description": "Dirty Worktree Safety guidelines.",
+            "path": "guidelines/dirty-worktree-safety.md"
+        },
+        {
+            "name": "documentation-quality",
+            "category": "general",
+            "description": "Documentation Quality guidelines.",
+            "path": "guidelines/documentation-quality.md"
+        },
+        {
+            "name": "external-api-integrations",
+            "category": "laravel-core",
+            "description": "External Api Integrations guidelines.",
+            "path": "guidelines/external-api-integrations.md"
+        },
+        {
+            "name": "filament",
+            "category": "filament",
+            "description": "Filament guidelines.",
+            "path": "guidelines/filament.md"
+        },
+        {
+            "name": "frontend-styling",
+            "category": "frontend",
+            "description": "Frontend Styling guidelines.",
+            "path": "guidelines/frontend-styling.md"
+        },
+        {
+            "name": "github-actions",
+            "category": "architecture",
+            "description": "Github Actions guidelines.",
+            "path": "guidelines/github-actions.md"
+        },
+        {
+            "name": "imports-and-exports",
+            "category": "general",
+            "description": "Imports And Exports guidelines.",
+            "path": "guidelines/imports-and-exports.md"
+        },
+        {
+            "name": "inertia-js-and-spa",
+            "category": "frontend",
+            "description": "Inertia Js And Spa guidelines.",
+            "path": "guidelines/inertia-js-and-spa.md"
+        },
+        {
+            "name": "laravel-boost",
+            "category": "ai-agent",
+            "description": "Laravel Boost guidelines.",
+            "path": "guidelines/laravel-boost.md"
+        },
+        {
+            "name": "laravel-modern-features",
+            "category": "general",
+            "description": "Laravel Modern Features guidelines.",
+            "path": "guidelines/laravel-modern-features.md"
+        },
+        {
+            "name": "livewire",
+            "category": "frontend",
+            "description": "Livewire guidelines.",
+            "path": "guidelines/livewire.md"
+        },
+        {
+            "name": "local-development",
+            "category": "general",
+            "description": "Local Development guidelines.",
+            "path": "guidelines/local-development.md"
+        },
+        {
+            "name": "localization",
+            "category": "frontend",
+            "description": "Localization guidelines.",
+            "path": "guidelines/localization.md"
+        },
+        {
+            "name": "model-structure",
+            "category": "architecture",
+            "description": "Model Structure guidelines.",
+            "path": "guidelines/model-structure.md"
+        },
+        {
+            "name": "modern-php-laravel",
+            "category": "general",
+            "description": "Modern Php Laravel guidelines.",
+            "path": "guidelines/modern-php-laravel.md"
+        },
+        {
+            "name": "observability",
+            "category": "general",
+            "description": "Observability guidelines.",
+            "path": "guidelines/observability.md"
+        },
+        {
+            "name": "open-source-maintenance",
+            "category": "general",
+            "description": "Open Source Maintenance guidelines.",
+            "path": "guidelines/open-source-maintenance.md"
+        },
+        {
+            "name": "package-audit",
+            "category": "operations",
+            "description": "Package Audit guidelines.",
+            "path": "guidelines/package-audit.md"
+        },
+        {
+            "name": "package-development",
+            "category": "operations",
+            "description": "Package Development guidelines.",
+            "path": "guidelines/package-development.md"
+        },
+        {
+            "name": "prompt-injection-resistance",
+            "category": "general",
+            "description": "Prompt Injection Resistance guidelines.",
+            "path": "guidelines/prompt-injection-resistance.md"
+        },
+        {
+            "name": "release-management",
+            "category": "operations",
+            "description": "Release Management guidelines.",
+            "path": "guidelines/release-management.md"
+        },
+        {
+            "name": "security-and-data-protection",
+            "category": "quality",
+            "description": "Security And Data Protection guidelines.",
+            "path": "guidelines/security-and-data-protection.md"
+        },
+        {
+            "name": "semantic-versioning",
+            "category": "general",
+            "description": "Semantic Versioning guidelines.",
+            "path": "guidelines/semantic-versioning.md"
+        },
+        {
+            "name": "task-scheduling-and-cron",
+            "category": "general",
+            "description": "Task Scheduling And Cron guidelines.",
+            "path": "guidelines/task-scheduling-and-cron.md"
+        },
+        {
+            "name": "testing-best-practices",
+            "category": "quality",
+            "description": "Testing Best Practices guidelines.",
+            "path": "guidelines/testing-best-practices.md"
+        },
+        {
+            "name": "transactions-events",
+            "category": "architecture",
+            "description": "Transactions Events guidelines.",
+            "path": "guidelines/transactions-events.md"
+        },
+        {
+            "name": "webhooks",
+            "category": "general",
+            "description": "Webhooks guidelines.",
+            "path": "guidelines/webhooks.md"
+        }
+    ]
+}

@@ -1,0 +1,8 @@
+{
+  "name": "gemini-hooks",
+  "version": "1.0.0",
+  "type": "commonjs",
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0"
+  }
+}

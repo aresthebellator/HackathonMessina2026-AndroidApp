@@ -1,0 +1,47 @@
+name: Skill proposal
+description: Propose a new skill (one clear job).
+title: "[proposal]: "
+labels: ["proposal", "skill"]
+body:
+  - type: input
+    id: name
+    attributes:
+      label: Proposed skill name
+      description: Lowercase, hyphens only (matches folder name).
+      placeholder: e.g. test-hygiene
+    validations:
+      required: true
+  - type: textarea
+    id: job
+    attributes:
+      label: One job
+      description: What single failure mode does this prevent?
+      placeholder: e.g. Stop agents from adding unrequested test frameworks and snapshot spam.
+    validations:
+      required: true
+  - type: textarea
+    id: when
+    attributes:
+      label: When should it load?
+      description: Routing keywords and situations.
+    validations:
+      required: true
+  - type: textarea
+    id: when_not
+    attributes:
+      label: When must it NOT load?
+      description: Escape hatches — user asked for X, repo already does Y, etc.
+    validations:
+      required: true
+  - type: textarea
+    id: why_new
+    attributes:
+      label: Why not an existing skill?
+      description: Why can't kill-slop, security-review, or pr-hygiene absorb this?
+    validations:
+      required: true
+  - type: textarea
+    id: sketch
+    attributes:
+      label: Draft MUST/NEVER rules (optional)
+      description: A short checklist sketch helps review.

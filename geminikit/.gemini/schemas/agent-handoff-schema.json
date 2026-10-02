@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AgentHandoff",
+  "description": "Handoff envelope written to .gemini/.agent-handoff-{session}.json. Max 8KB.",
+  "type": "object",
+  "required": ["from", "to", "status", "summary"],
+  "additionalProperties": false,
+  "properties": {
+    "v": {
+      "type": "integer",
+      "description": "Schema version. Auto-injected by writeHandoff().",
+      "const": 1
+    },
+    "from": {
+      "type": "string",
+      "description": "Agent name that produced this handoff."
+    },
+    "to": {
+      "type": "string",
+      "description": "Agent name or 'orchestrator' that should receive it."
+    },
+    "status": {
+      "type": "string",
+      "enum": ["ready", "blocked", "partial", "completed", "failed"],
+      "description": "ready=proceed; blocked=next agent cannot start; partial=proceed with caveats; completed/failed=terminal."
+    },
+    "summary": {
+      "type": "string",
+      "maxLength": 300,
+      "description": "One-sentence description of what was done or what went wrong."
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "path": { "type": "string" },
+          "action": { "type": "string", "enum": ["created", "modified", "deleted"] },
+          "summary": { "type": "string" }
+        }
+      },
+      "description": "Files created/modified/deleted by the agent."
+    },
+    "key_decisions": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Important decisions made that downstream agents should know."
+    },
+    "blockers": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Required when status=blocked. Reasons why next agent cannot proceed."
+    },
+    "context": {
+      "type": "string",
+      "description": "Free-form additional context for the receiving agent."
+    },
+    "confidence": {
+      "type": "string",
+      "enum": ["high", "medium", "low"],
+      "description": "If low, receiving agent must re-verify artifacts before acting."
+    }
+  }
+}

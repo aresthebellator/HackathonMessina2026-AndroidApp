@@ -1,0 +1,136 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "geminikit/schemas/claude-plan-schema",
+  "title": "ClaudePlanSchema",
+  "description": "Field mapping contract for parsing Claude-generated markdown plans into Gemini Kit task-schema format. Used by /gk-plan --from pipeline.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["source", "phase_field_mapping", "plan_field_mapping", "validation"],
+  "properties": {
+    "source": {
+      "type": "object",
+      "description": "How to locate and parse Claude-generated plan files.",
+      "additionalProperties": false,
+      "required": ["format", "entry_file", "phase_pattern"],
+      "properties": {
+        "format": {
+          "type": "string",
+          "const": "markdown",
+          "description": "Input format. Always 'markdown' for Claude-generated plans."
+        },
+        "entry_file": {
+          "type": "string",
+          "const": "plan.md",
+          "description": "Top-level plan file name in the plan directory."
+        },
+        "phase_pattern": {
+          "type": "string",
+          "const": "phase-{NN}-{name}.md",
+          "description": "Naming convention for phase files. NN = zero-padded sequence number."
+        },
+        "required_sections": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Sections required in plan.md for successful ingestion.",
+          "default": ["## Overview", "## Phases"]
+        }
+      }
+    },
+    "phase_field_mapping": {
+      "type": "object",
+      "description": "Extraction rules mapping Claude phase markdown sections to task-schema fields.",
+      "additionalProperties": false,
+      "required": ["taskId", "command", "agent", "status", "blockedBy"],
+      "properties": {
+        "taskId": {
+          "type": "string",
+          "description": "Derived from phase filename numeric prefix. 'phase-01-setup.md' → taskId 'phase-01-001'."
+        },
+        "command": {
+          "type": "string",
+          "description": "H1 heading text of the phase file. Falls back to YAML frontmatter title if H1 absent."
+        },
+        "agent": {
+          "type": "string",
+          "description": "YAML frontmatter field 'agent:'. Required. Must match task-schema agent enum."
+        },
+        "skill": {
+          "type": "string",
+          "description": "YAML frontmatter field 'skill:'. Optional skill hint for the assigned agent."
+        },
+        "priority": {
+          "type": "string",
+          "description": "YAML frontmatter field 'priority:'. Defaults to 'P2' if absent."
+        },
+        "status": {
+          "type": "string",
+          "description": "YAML frontmatter field 'status:'. Maps directly to task-schema status enum."
+        },
+        "blockedBy": {
+          "type": "string",
+          "description": "YAML frontmatter field 'depends_on:'. Array of phase IDs e.g. ['phase-01']. Resolved to taskIds during CHR-4."
+        },
+        "fileOwnership": {
+          "type": "string",
+          "description": "File paths listed under '## Related Code Files' section (Create/Modify/Delete subsections). Each path becomes a glob entry."
+        },
+        "success_criteria": {
+          "type": "string",
+          "description": "Checklist items under '## Success Criteria' section. Stored as string array in task input.constraints."
+        }
+      }
+    },
+    "plan_field_mapping": {
+      "type": "object",
+      "description": "Extraction rules mapping plan.md top-level sections to plan metadata.",
+      "additionalProperties": false,
+      "required": ["title", "phases"],
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "YAML frontmatter 'title:' or H1 heading of plan.md."
+        },
+        "summary": {
+          "type": "string",
+          "description": "YAML frontmatter 'description:' or first paragraph of '## Overview' section."
+        },
+        "phases": {
+          "type": "string",
+          "description": "Table rows under '## Phases' section. Each row provides phase number, status, and link to phase file."
+        }
+      }
+    },
+    "validation": {
+      "type": "object",
+      "description": "Validation rules applied during CHR-3 phase field validation.",
+      "additionalProperties": false,
+      "required": ["required_phase_frontmatter", "required_phase_sections"],
+      "properties": {
+        "required_phase_frontmatter": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "YAML frontmatter fields each phase file MUST declare for CHR-3 to pass.",
+          "default": ["agent", "depends_on", "status"]
+        },
+        "required_phase_sections": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Markdown section headers each phase file MUST contain for CHR-3 to pass.",
+          "default": ["## Related Code Files", "## Success Criteria"]
+        },
+        "agent_enum": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Valid agent values. Mirrors task-schema agent enum for CHR-5 validation.",
+          "default": ["planner", "developer", "tester", "reviewer", "debugger", "researcher", "docs-manager"]
+        },
+        "status_enum": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Valid status values. Mirrors task-schema status enum for CHR-6 writeback.",
+          "default": ["pending", "in_progress", "completed", "failed", "blocked"]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="anti-slop">
+  <rect width="128" height="128" rx="28" fill="#0A0A0A"/>
+  <!-- stacked layers = agent overbuild -->
+  <path d="M36 40h56M36 58h56M36 76h40" stroke="#F5F5F5" stroke-width="8" stroke-linecap="round" opacity="0.35"/>
+  <!-- the cut -->
+  <path d="M40 88L88 36" stroke="#F5F5F5" stroke-width="10" stroke-linecap="round"/>
+</svg>

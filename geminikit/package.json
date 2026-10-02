@@ -1,0 +1,54 @@
+{
+  "name": "geminicli-kit",
+  "version": "1.1.8",
+  "description": "Multi-agent AI development framework for Gemini CLI",
+  "bin": {
+    "gk": "./bin/gk.js"
+  },
+  "pkg": {
+    "assets": [
+      ".gemini/**/*",
+      "src/**/*",
+      "GEMINI.md"
+    ],
+    "targets": [
+      "node18-win-x64"
+    ],
+    "outputPath": "dist"
+  },
+  "scripts": {
+    "build": "node src/scripts/sync-scaffold.js",
+    "prepublishOnly": "npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "files": [
+    "bin/",
+    "src/",
+    "scaffold/",
+    "GEMINI.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hieund-it/geminikit.git"
+  },
+  "keywords": [
+    "gemini",
+    "ai",
+    "cli",
+    "agents",
+    "multi-agent"
+  ],
+  "dependencies": {
+    "@clack/prompts": "^1.1.0",
+    "commander": "^12.0.0",
+    "fs-extra": "^11.0.0",
+    "picocolors": "^1.0.0"
+  },
+  "devDependencies": {
+    "pkg": "^5.8.1"
+  }
+}
