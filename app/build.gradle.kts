@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "com.hackaton.wikitrainer"
+    namespace = "com.exertia.wikingo"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.hackaton.wikitrainer"
+        applicationId = "com.exertia.wikingo"
         minSdk = 34
         targetSdk = 35
         versionCode = 1
