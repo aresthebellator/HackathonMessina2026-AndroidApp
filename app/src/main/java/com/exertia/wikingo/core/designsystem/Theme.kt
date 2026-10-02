@@ -18,6 +18,10 @@ import androidx.core.view.WindowCompat
 
 val LocalReduceMotion = staticCompositionLocalOf { false }
 
+private val WikiDarkSurface = Color(0xFF1C1C1E)          // near-black dark surface
+private val WikiDarkSurfaceVariant = Color(0xFF2C2C2E)    // slightly lighter for cards
+private val WikiDarkBackground = Color(0xFF000000)        // true black background
+
 private val LightColorScheme = lightColorScheme(
     primary = WikiBlack,
     onPrimary = WikiWhite,
@@ -25,22 +29,24 @@ private val LightColorScheme = lightColorScheme(
     onPrimaryContainer = WikiWhite,
     secondary = WikiShuttleGray,
     onSecondary = WikiWhite,
-    secondaryContainer = WikiSilverSand,
+    secondaryContainer = Color(0xFFEEEEEE),   // very light gray for selected state
     onSecondaryContainer = WikiBlack,
     tertiary = WikiOsloGray,
     onTertiary = WikiWhite,
     tertiaryContainer = WikiSilverSand,
     onTertiaryContainer = WikiBlack,
-    error = WikiShuttleGray,
+    error = Color(0xFFCC0000),                // proper red for errors in light mode
     onError = WikiWhite,
-    errorContainer = WikiSilverSand,
-    onErrorContainer = WikiBlack,
+    errorContainer = Color(0xFFFFDAD6),
+    onErrorContainer = Color(0xFF410002),
     background = WikiWhite,
     onBackground = WikiBlack,
-    surface = WikiSurface,
+    surface = WikiWhite,
     onSurface = WikiBlack,
-    outline = WikiSilverSand,
-    outlineVariant = WikiOsloGray
+    surfaceVariant = Color(0xFFF5F5F5),       // very light gray for surface variants
+    onSurfaceVariant = WikiShuttleGray,
+    outline = Color(0xFFD0D0D0),              // lighter borders for cleaner look
+    outlineVariant = Color(0xFFE5E5E5)        // even lighter for subtle dividers
 )
 
 private val DarkColorScheme = darkColorScheme(
@@ -50,24 +56,24 @@ private val DarkColorScheme = darkColorScheme(
     onPrimaryContainer = WikiWhite,
     secondary = WikiSilverSand,
     onSecondary = WikiBlack,
-    secondaryContainer = WikiShuttleGray,
+    secondaryContainer = Color(0xFF3A3A3C),   // dark selected state
     onSecondaryContainer = WikiWhite,
     tertiary = WikiSilverSand,
     onTertiary = WikiBlack,
     tertiaryContainer = WikiShuttleGray,
     onTertiaryContainer = WikiWhite,
-    error = WikiSilverSand,
+    error = Color(0xFFFF6B6B),               // bright red for dark mode
     onError = WikiBlack,
-    errorContainer = WikiShuttleGray,
-    onErrorContainer = WikiWhite,
-    background = WikiBlack,
+    errorContainer = Color(0xFF8B0000),
+    onErrorContainer = Color(0xFFFFDAD6),
+    background = WikiDarkBackground,
     onBackground = WikiWhite,
-    surface = WikiShuttleGray,
+    surface = WikiDarkSurface,               // fixed: near-black instead of mid-grey
     onSurface = WikiWhite,
-    outline = WikiOsloGray,
-    outlineVariant = WikiOsloGray,
-    surfaceVariant = WikiShuttleGray,
-    onSurfaceVariant = WikiSilverSand
+    surfaceVariant = WikiDarkSurfaceVariant, // slightly lighter for cards/containers
+    onSurfaceVariant = WikiSilverSand,
+    outline = Color(0xFF48484A),             // subtle dark borders
+    outlineVariant = Color(0xFF3A3A3C)       // very subtle dividers
 )
 
 @Composable

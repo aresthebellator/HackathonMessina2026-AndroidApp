@@ -26,6 +26,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bookmark
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.LightMode
@@ -53,6 +54,8 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandIn
@@ -114,6 +117,7 @@ fun DashboardScreen(
     onHistory: () -> Unit,
     onSettings: () -> Unit,
     onSavedArticles: () -> Unit,
+    onAuth: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var logoTapCount by remember { mutableStateOf(0) }
@@ -284,6 +288,19 @@ fun DashboardScreen(
                              )
                          }
 
+                         // Account
+                         IconButton(
+                             onClick = onAuth,
+                             modifier = Modifier.size(36.dp)
+                         ) {
+                             Icon(
+                                 Icons.Default.AccountCircle,
+                                 contentDescription = i18n("dashboard.account_tooltip"),
+                                 tint = DuoInkSecondary,
+                                 modifier = Modifier.size(20.dp)
+                             )
+                         }
+
                          // Settings & Accessibility
                          IconButton(
                              onClick = onSettings,
@@ -325,7 +342,7 @@ fun DashboardScreen(
                      Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .background(com.exertia.wikingo.core.designsystem.WikiSurfaceAlt)
+                            .background(MaterialTheme.colorScheme.surfaceVariant)
                             .padding(horizontal = 16.dp, vertical = 8.dp),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
@@ -356,8 +373,8 @@ fun DashboardScreen(
                          // Quick Quiz Button
                          Surface(
                              shape = RoundedCornerShape(10.dp),
-                             color = com.exertia.wikingo.core.designsystem.WikiSurfaceAlt,
-                             border = androidx.compose.foundation.BorderStroke(1.dp, com.exertia.wikingo.core.designsystem.WikiSilverSand),
+                             color = MaterialTheme.colorScheme.surfaceVariant,
+                             border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
                              modifier = Modifier.clickable(onClick = onQuickQuiz)
                          ) {
                              Row(
@@ -398,26 +415,38 @@ fun DashboardScreen(
             )
         }
 
-        // Floating Sticky Bottom Bar (Continue Current Lesson)
-        FloatingContinueBar(
-            currentLesson = currentLesson,
-            lessonTitle = currentLessonTitle,
-            unit = currentUnit,
-            onContinue = {
-                val topic = getLessonTopic(currentLesson, language)
-                startLessonWithTransition(
-                    topic = topic,
-                    lessonNumber = currentLesson,
-                    sourceCenter = lessonLaunchCenter
-                )
-            },
-            isLaunching = isStartingLesson,
-            onClickPosition = { lessonLaunchCenter = it },
+        // Floating Sticky Bottom Bar (Continue Current Lesson) — slides up on first load
+        AnimatedVisibility(
+            visible = !isStartingLesson,
+            enter = if (reduceMotion) fadeIn() else slideInVertically(
+                initialOffsetY = { it },
+                animationSpec = tween(durationMillis = 400, easing = FastOutSlowInEasing)
+            ) + fadeIn(tween(300)),
+            exit = if (reduceMotion) fadeOut() else slideOutVertically(
+                targetOffsetY = { 0 },
+                animationSpec = tween(durationMillis = 0)
+            ) + fadeOut(tween(180)),
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .navigationBarsPadding()
                 .padding(horizontal = 16.dp, vertical = 14.dp)
-        )
+        ) {
+            FloatingContinueBar(
+                currentLesson = currentLesson,
+                lessonTitle = currentLessonTitle,
+                unit = currentUnit,
+                onContinue = {
+                    val topic = getLessonTopic(currentLesson, language)
+                    startLessonWithTransition(
+                        topic = topic,
+                        lessonNumber = currentLesson,
+                        sourceCenter = lessonLaunchCenter
+                    )
+                },
+                isLaunching = isStartingLesson,
+                onClickPosition = { lessonLaunchCenter = it }
+            )
+        }
 
         if (isStartingLesson) {
             LessonLaunchOverlay(

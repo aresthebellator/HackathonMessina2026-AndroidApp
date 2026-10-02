@@ -42,6 +42,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import com.exertia.wikingo.core.designsystem.DuoBackground
 import com.exertia.wikingo.core.designsystem.DuoBorder
@@ -50,9 +51,12 @@ import com.exertia.wikingo.core.designsystem.DuoInkSecondary
 import com.exertia.wikingo.core.designsystem.DuoSurface
 import com.exertia.wikingo.core.designsystem.WikiTrainerTheme
 import com.exertia.wikingo.data.local.SavedArticleStore
+import com.exertia.wikingo.data.auth.FirebaseAuthRepository
 import com.exertia.wikingo.presentation.dashboard.DashboardScreen
 import com.exertia.wikingo.presentation.history.HistoryScreen
 import com.exertia.wikingo.presentation.history.HistoryViewModel
+import com.exertia.wikingo.presentation.auth.AuthScreen
+import com.exertia.wikingo.presentation.onboarding.WelcomeScreen
 import com.exertia.wikingo.presentation.saved.SavedArticlesScreen
 import com.exertia.wikingo.presentation.trainer.TrainerScreen
 import com.exertia.wikingo.presentation.trainer.TrainerViewModel
@@ -65,6 +69,7 @@ enum class AppDestination {
     SAVED
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,11 +79,13 @@ class MainActivity : ComponentActivity() {
             val settings = remember {
                 getSharedPreferences("wikingo_settings", MODE_PRIVATE)
             }
+            val authRepository = remember { FirebaseAuthRepository(this@MainActivity) }
             var darkMode by remember { mutableStateOf(settings.getBoolean("dark_mode", false)) }
             var highContrast by remember { mutableStateOf(settings.getBoolean("high_contrast", false)) }
             var reducedMotion by remember { mutableStateOf(settings.getBoolean("reduced_motion", false)) }
             var largeText by remember { mutableStateOf(settings.getBoolean("large_text", false)) }
             var soundEnabled by remember { mutableStateOf(settings.getBoolean("sound_enabled", true)) }
+            var welcomeVisible by remember { mutableStateOf(!settings.getBoolean("welcome_seen", false)) }
             WikiTrainerTheme(
                 darkTheme = darkMode,
                 highContrast = highContrast,
@@ -92,6 +99,7 @@ class MainActivity : ComponentActivity() {
                     var currentDestination by remember { mutableStateOf(AppDestination.DASHBOARD) }
                     var language by remember { mutableStateOf(settings.getString("language", "it") ?: "it") }
                     var settingsOpen by remember { mutableStateOf(false) }
+                    var authOpen by remember { mutableStateOf(false) }
                     val historyViewModel: HistoryViewModel = koinViewModel()
                     val historyState by historyViewModel.uiState.collectAsState()
                     val trainerViewModel: TrainerViewModel = koinViewModel()
@@ -136,7 +144,8 @@ class MainActivity : ComponentActivity() {
                                         },
                                         onHistory = { currentDestination = AppDestination.HISTORY },
                                         onSettings = { settingsOpen = true },
-                                        onSavedArticles = { currentDestination = AppDestination.SAVED }
+                                        onSavedArticles = { currentDestination = AppDestination.SAVED },
+                                        onAuth = { authOpen = true }
                                     )
                                 }
                                 AppDestination.TRAINER -> {
@@ -197,7 +206,36 @@ class MainActivity : ComponentActivity() {
                                 onLanguageChange = {
                                     language = it
                                     settings.edit().putString("language", it).apply()
+                                },
+                                onOpenWelcome = {
+                                    settingsOpen = false
+                                    welcomeVisible = true
                                 }
+                            )
+                        }
+
+                        if (authOpen) {
+                            androidx.compose.material3.ModalBottomSheet(
+                                onDismissRequest = { authOpen = false },
+                                containerColor = DuoBackground
+                            ) {
+                                AuthScreen(
+                                    repository = authRepository,
+                                    onAuthenticated = { authOpen = false },
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .heightIn(min = 560.dp)
+                                )
+                            }
+                        }
+
+                        if (welcomeVisible) {
+                            WelcomeScreen(
+                                onContinue = {
+                                    welcomeVisible = false
+                                    settings.edit().putBoolean("welcome_seen", true).apply()
+                                },
+                                modifier = Modifier.fillMaxSize()
                             )
                         }
                     }
@@ -222,7 +260,8 @@ private fun SettingsSheet(
     onReducedMotionChange: (Boolean) -> Unit,
     onLargeTextChange: (Boolean) -> Unit,
     onHighContrastChange: (Boolean) -> Unit,
-    onLanguageChange: (String) -> Unit
+    onLanguageChange: (String) -> Unit,
+    onOpenWelcome: () -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     ModalBottomSheet(
@@ -313,6 +352,12 @@ private fun SettingsSheet(
                         Text(label)
                     }
                 }
+            }
+            TextButton(
+                onClick = onOpenWelcome,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(com.exertia.wikingo.core.i18n.i18n("settings.open_welcome"))
             }
             TextButton(
                 onClick = onDismiss,

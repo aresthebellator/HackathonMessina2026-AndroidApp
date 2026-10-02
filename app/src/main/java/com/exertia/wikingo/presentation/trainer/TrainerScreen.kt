@@ -3,9 +3,14 @@ package com.exertia.wikingo.presentation.trainer
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -35,8 +40,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -84,48 +93,78 @@ fun TrainerScreen(
     val uiState by viewModel.uiState.collectAsState()
     val reduceMotion = LocalReduceMotion.current
 
-    Scaffold(
-        containerColor = DuoBackground,
+    // Drive a smooth slide-up + fade-in entrance when the screen first appears
+    var screenVisible by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) { screenVisible = true }
+
+    AnimatedVisibility(
+        visible = screenVisible,
+        enter = if (reduceMotion) fadeIn() else {
+            slideInVertically(
+                initialOffsetY = { fullHeight -> (fullHeight * 0.08f).toInt() },
+                animationSpec = androidx.compose.animation.core.spring(
+                    dampingRatio = androidx.compose.animation.core.Spring.DampingRatioLowBouncy,
+                    stiffness = androidx.compose.animation.core.Spring.StiffnessMediumLow
+                )
+            ) + fadeIn(animationSpec = tween(durationMillis = 280))
+        },
+        exit = fadeOut(animationSpec = tween(if (reduceMotion) 0 else 180)),
         modifier = modifier.fillMaxSize()
-    ) { paddingValues ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-        ) {
-            AnimatedContent(
-                targetState = uiState,
-                transitionSpec = {
-                    fadeIn(animationSpec = tween(if (reduceMotion) 0 else 250)) togetherWith
-                        fadeOut(animationSpec = tween(if (reduceMotion) 0 else 200))
-                },
-                label = "screenTransition"
-            ) { state ->
-                when (state) {
-                    is TrainerUiState.Loading -> LoadingView(state.message)
-                    is TrainerUiState.QuestionState -> QuestionView(
-                        state = state,
-                        onSelectOption = { viewModel.onEvent(TrainerUiEvent.SelectOption(it)) },
-                        onCheckAnswer = { viewModel.onEvent(TrainerUiEvent.CheckAnswer) },
-                        onNextQuestion = { viewModel.onEvent(TrainerUiEvent.NextQuestion) },
-                        onToggleSound = { viewModel.onEvent(TrainerUiEvent.ToggleSound) },
-                        onOpenHistory = onNavigateToHistory
-                    )
-                    is TrainerUiState.CompleteState -> CompleteView(
-                        state = state,
-                        onNewLesson = { viewModel.onEvent(TrainerUiEvent.StartNewLesson) },
-                        onOpenHistory = onNavigateToHistory,
-                        onSaveArticle = onSaveArticle
-                    )
-                    is TrainerUiState.Error -> ErrorView(
-                        message = state.message,
-                        onRetry = { viewModel.onEvent(TrainerUiEvent.Retry) }
-                    )
+    ) {
+        Scaffold(
+            containerColor = DuoBackground,
+            modifier = Modifier.fillMaxSize()
+        ) { paddingValues ->
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+            ) {
+                AnimatedContent(
+                    targetState = uiState,
+                    transitionSpec = {
+                        // Loading→Question: slide up (sense of the lesson "arriving")
+                        // Any other transition: fade
+                        if (initialState is TrainerUiState.Loading && targetState is TrainerUiState.QuestionState) {
+                            (slideInVertically(
+                                initialOffsetY = { (it * 0.12f).toInt() },
+                                animationSpec = tween(if (reduceMotion) 0 else 340)
+                            ) + fadeIn(tween(if (reduceMotion) 0 else 300))) togetherWith
+                                fadeOut(tween(if (reduceMotion) 0 else 150))
+                        } else {
+                            fadeIn(animationSpec = tween(if (reduceMotion) 0 else 250)) togetherWith
+                                fadeOut(animationSpec = tween(if (reduceMotion) 0 else 200))
+                        }
+                    },
+                    label = "screenTransition"
+                ) { state ->
+                    when (state) {
+                        is TrainerUiState.Loading -> LoadingView(state.message)
+                        is TrainerUiState.QuestionState -> QuestionView(
+                            state = state,
+                            onSelectOption = { viewModel.onEvent(TrainerUiEvent.SelectOption(it)) },
+                            onCheckAnswer = { viewModel.onEvent(TrainerUiEvent.CheckAnswer) },
+                            onNextQuestion = { viewModel.onEvent(TrainerUiEvent.NextQuestion) },
+                            onToggleSound = { viewModel.onEvent(TrainerUiEvent.ToggleSound) },
+                            onOpenHistory = onNavigateToHistory
+                        )
+                        is TrainerUiState.CompleteState -> CompleteView(
+                            state = state,
+                            onNewLesson = { viewModel.onEvent(TrainerUiEvent.StartNewLesson) },
+                            onOpenHistory = onNavigateToHistory,
+                            onSaveArticle = onSaveArticle
+                        )
+                        is TrainerUiState.Error -> ErrorView(
+                            message = state.message,
+                            onRetry = { viewModel.onEvent(TrainerUiEvent.Retry) }
+                        )
+                    }
                 }
             }
         }
     }
 }
+
 
 @Composable
 private fun QuestionView(
@@ -301,6 +340,16 @@ private fun CompleteView(
 ) {
     val context = LocalContext.current
     val scrollState = rememberScrollState()
+    val reduceMotion = LocalReduceMotion.current
+
+    // Celebratory entrance animations
+    var mascotVisible by remember { mutableStateOf(false) }
+    var contentVisible by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) {
+        mascotVisible = true
+        kotlinx.coroutines.delay(if (reduceMotion) 0L else 180L)
+        contentVisible = true
+    }
 
     Column(
         modifier = Modifier
@@ -311,38 +360,60 @@ private fun CompleteView(
     ) {
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Mascot Trophy
-        Box(
-            modifier = Modifier
-                .size(100.dp),
-            contentAlignment = Alignment.Center
+        // Mascot Trophy — bounces in with a spring
+        AnimatedVisibility(
+            visible = mascotVisible,
+            enter = if (reduceMotion) fadeIn() else scaleIn(
+                initialScale = 0.4f,
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioMediumBouncy,
+                    stiffness = Spring.StiffnessMedium
+                )
+            ) + fadeIn(animationSpec = tween(220))
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_launcher_viking),
-                contentDescription = "Completato",
-                modifier = Modifier.size(100.dp)
-            )
+            Box(
+                modifier = Modifier.size(100.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_launcher_viking),
+                    contentDescription = "Completato",
+                    modifier = Modifier.size(100.dp)
+                )
+            }
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Text(
-            text = i18n("trainer.lesson_complete_title"),
-            fontSize = 26.sp,
-            fontWeight = FontWeight.Black,
-            color = DuoInk,
-            textAlign = TextAlign.Center
-        )
+        // Title + stats slide up with a slight delay after mascot
+        AnimatedVisibility(
+            visible = contentVisible,
+            enter = if (reduceMotion) fadeIn() else slideInVertically(
+                initialOffsetY = { (it * 0.3f).toInt() },
+                animationSpec = spring(stiffness = Spring.StiffnessMediumLow)
+            ) + fadeIn(animationSpec = tween(280))
+        ) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(
+                    text = i18n("trainer.lesson_complete_title"),
+                    fontSize = 26.sp,
+                    fontWeight = FontWeight.Black,
+                    color = DuoInk,
+                    textAlign = TextAlign.Center
+                )
 
-        Text(
-            text = i18n("trainer.lesson_complete_subtitle"),
-            fontSize = 15.sp,
-            color = DuoInkSecondary,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(top = 4.dp)
-        )
+                Text(
+                    text = i18n("trainer.lesson_complete_subtitle"),
+                    fontSize = 15.sp,
+                    color = DuoInkSecondary,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(top = 4.dp)
+                )
+            }
+        }
 
         Spacer(modifier = Modifier.height(24.dp))
+
 
         // Wikipedia Article Summary Card
         Box(

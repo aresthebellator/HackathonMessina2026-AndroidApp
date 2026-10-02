@@ -45,6 +45,7 @@
       "language_toggle_it": "IT 🇮🇹",
       "language_toggle_en": "EN 🇬🇧",
       "saved_articles_tooltip": "Voci salvate",
+      "account_tooltip": "Account",
       "settings_tooltip": "Impostazioni",
       "history_tooltip": "Cronologia",
       "streak_unit": "gg",
@@ -105,7 +106,8 @@
       "high_contrast_description": "Rende più marcati bordi e colori per una lettura più chiara.",
       "language_prefix": "Lingua:",
       "change_language": "Cambia lingua",
-      "save_and_close": "Salva e chiudi"
+      "save_and_close": "Salva e chiudi",
+      "open_welcome": "Riapri la guida iniziale"
     },
     "saved": {
       "title": "Voci salvate",
@@ -171,6 +173,7 @@
       "language_toggle_it": "IT 🇮🇹",
       "language_toggle_en": "EN 🇬🇧",
       "saved_articles_tooltip": "Saved articles",
+      "account_tooltip": "Account",
       "settings_tooltip": "Settings",
       "history_tooltip": "Streak",
       "streak_unit": "days",
@@ -230,7 +233,8 @@
       "high_contrast_description": "Strengthens borders and colors for clearer reading.",
       "language_prefix": "Language:",
       "change_language": "Switch language",
-      "save_and_close": "Save & close"
+      "save_and_close": "Save & close",
+      "open_welcome": "Open welcome guide again"
     },
     "saved": {
       "title": "Saved articles",
