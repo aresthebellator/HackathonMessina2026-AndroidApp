@@ -1,6 +1,7 @@
 package com.exertia.wikingo
 
 import android.os.Bundle
+import androidx.activity.compose.BackHandler
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -110,6 +111,18 @@ class MainActivity : ComponentActivity() {
                         SavedArticleStore(this@MainActivity)
                     }
 
+                    BackHandler(
+                        enabled = settingsOpen || authOpen || currentDestination != AppDestination.DASHBOARD
+                    ) {
+                        when {
+                            settingsOpen -> settingsOpen = false
+                            authOpen -> authOpen = false
+                            currentDestination != AppDestination.DASHBOARD -> {
+                                currentDestination = AppDestination.DASHBOARD
+                            }
+                        }
+                    }
+
                     androidx.compose.runtime.CompositionLocalProvider(
                         com.exertia.wikingo.core.i18n.LocalI18nLanguage provides language
                     ) {
@@ -152,6 +165,9 @@ class MainActivity : ComponentActivity() {
                                     TrainerScreen(
                                         viewModel = trainerViewModel,
                                         onNavigateToHistory = {
+                                            currentDestination = AppDestination.DASHBOARD
+                                        },
+                                        onNavigateHome = {
                                             currentDestination = AppDestination.DASHBOARD
                                         },
                                         onSaveArticle = { savedArticleStore.toggle(it) }

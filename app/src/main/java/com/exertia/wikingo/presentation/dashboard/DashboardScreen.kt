@@ -70,6 +70,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.layout.ContentScale
@@ -198,7 +199,7 @@ fun DashboardScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 16.dp, vertical = 10.dp),
+                            .padding(horizontal = 16.dp, vertical = 8.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         // Viking Logo Box
@@ -222,118 +223,87 @@ fun DashboardScreen(
                             )
                         }
 
-                        Spacer(Modifier.width(10.dp))
+                        Spacer(Modifier.weight(1f))
 
-                        // Title
-                        Text(
-                            text = "Wikingo",
-                            color = DuoInk,
-                            fontSize = 22.sp,
-                            fontWeight = FontWeight.Black,
-                            modifier = Modifier.weight(1f)
-                        )
-
-                        // Language Toggle Pill
-                        Surface(
-                            shape = RoundedCornerShape(12.dp),
-                            color = MaterialTheme.colorScheme.surface,
-                            border = androidx.compose.foundation.BorderStroke(1.5.dp, DuoBorder),
-                            modifier = Modifier.clickable(onClick = onLanguageToggle)
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(4.dp)
                         ) {
-                            Row(
-                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 5.dp),
-                                verticalAlignment = Alignment.CenterVertically
+                            // Language Toggle Pill
+                            Surface(
+                                shape = RoundedCornerShape(12.dp),
+                                color = MaterialTheme.colorScheme.surface,
+                                border = androidx.compose.foundation.BorderStroke(1.5.dp, DuoBorder),
+                                modifier = Modifier.clickable(onClick = onLanguageToggle)
                             ) {
-                                Icon(
-                                    Icons.Default.Language,
-                                    contentDescription = i18n("common.language"),
-                                    tint = com.exertia.wikingo.core.designsystem.WikiShuttleGray,
-                                    modifier = Modifier.size(14.dp)
-                                 )
-                                 Spacer(Modifier.width(4.dp))
-                                 Text(
-                                     text = if (language == "it") i18n("dashboard.language_toggle_it") else i18n("dashboard.language_toggle_en"),
-                                     fontSize = 11.sp,
-                                     fontWeight = FontWeight.Black,
-                                     color = DuoInk
-                                 )
-                             }
-                         }
+                                Row(
+                                    modifier = Modifier.padding(horizontal = 9.dp, vertical = 7.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Icon(
+                                        Icons.Default.Language,
+                                        contentDescription = i18n("common.language"),
+                                        tint = com.exertia.wikingo.core.designsystem.WikiShuttleGray,
+                                        modifier = Modifier.size(15.dp)
+                                    )
+                                    Spacer(Modifier.width(5.dp))
+                                    Text(
+                                        text = if (language == "it") i18n("dashboard.language_toggle_it") else i18n("dashboard.language_toggle_en"),
+                                        fontSize = 11.sp,
+                                        fontWeight = FontWeight.Black,
+                                        color = DuoInk
+                                    )
+                                }
+                            }
 
-                         Spacer(Modifier.width(6.dp))
-
-                         // Light/dark theme toggle
-                         IconButton(
-                             onClick = onThemeToggle,
-                             modifier = Modifier.size(36.dp)
-                         ) {
-                             Icon(
-                                 imageVector = if (darkMode) Icons.Default.DarkMode else Icons.Default.LightMode,
-                                 contentDescription = i18n("settings.dark_theme"),
-                                 tint = DuoInkSecondary,
-                                 modifier = Modifier.size(20.dp)
-                             )
-                         }
-
-                         // Saved Articles
-                         IconButton(
-                             onClick = onSavedArticles,
-                             modifier = Modifier.size(36.dp)
-                         ) {
-                             Icon(
-                                 Icons.Default.Bookmark,
-                                 contentDescription = i18n("dashboard.saved_articles_tooltip"),
-                                 tint = DuoInkSecondary,
-                                 modifier = Modifier.size(20.dp)
-                             )
-                         }
-
-                         // Account
-                         IconButton(
-                             onClick = onAuth,
-                             modifier = Modifier.size(36.dp)
-                         ) {
-                             Icon(
-                                 Icons.Default.AccountCircle,
-                                 contentDescription = i18n("dashboard.account_tooltip"),
-                                 tint = DuoInkSecondary,
-                                 modifier = Modifier.size(20.dp)
-                             )
-                         }
-
-                         // Settings & Accessibility
-                         IconButton(
-                             onClick = onSettings,
-                             modifier = Modifier.size(36.dp)
-                         ) {
-                             Icon(
-                                 Icons.Default.Settings,
-                                 contentDescription = i18n("dashboard.settings_tooltip"),
-                                 tint = DuoInkSecondary,
-                                 modifier = Modifier.size(20.dp)
-                             )
-                         }
+                            HeaderIconButton(
+                                onClick = onThemeToggle,
+                                icon = if (darkMode) Icons.Default.DarkMode else Icons.Default.LightMode,
+                                contentDescription = i18n("settings.dark_theme")
+                            )
+                            HeaderIconButton(
+                                onClick = onSavedArticles,
+                                icon = Icons.Default.Bookmark,
+                                contentDescription = i18n("dashboard.saved_articles_tooltip")
+                            )
+                            HeaderIconButton(
+                                onClick = onAuth,
+                                icon = Icons.Default.AccountCircle,
+                                contentDescription = i18n("dashboard.account_tooltip")
+                            )
+                            HeaderIconButton(
+                                onClick = onSettings,
+                                icon = Icons.Default.Settings,
+                                contentDescription = i18n("dashboard.settings_tooltip")
+                            )
+                        }
                      }
 
                      // Gamification Stats Row
                      Row(
                          modifier = Modifier
                              .fillMaxWidth()
-                             .padding(horizontal = 16.dp, vertical = 4.dp),
-                         horizontalArrangement = Arrangement.SpaceEvenly,
+                             .padding(horizontal = 16.dp, vertical = 6.dp),
+                          horizontalArrangement = Arrangement.spacedBy(4.dp),
                          verticalAlignment = Alignment.CenterVertically
                      ) {
-                         StatPill("🔥", "${stats.currentStreak} ${i18n("dashboard.streak_unit")}", i18n("dashboard.streak_label"), DuoInk)
-                         StatPill("⚡", "${stats.totalXp} ${i18n("dashboard.xp_suffix")}", i18n("dashboard.xp_label"), DuoInk)
-                         StatPill("✓", "${stats.totalLessonsCompleted}/$MAX_LESSON_NUMBER", i18n("dashboard.lessons_label"), DuoInk)
-                         IconButton(onClick = onHistory, modifier = Modifier.size(36.dp)) {
-                             Icon(
-                                 Icons.Default.History,
-                                 contentDescription = i18n("dashboard.history_tooltip"),
-                                 tint = DuoInkSecondary,
-                                 modifier = Modifier.size(20.dp)
-                             )
-                         }
+                          Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
+                              StatPill("🔥", "${stats.currentStreak} ${i18n("dashboard.streak_unit")}", i18n("dashboard.streak_label"), DuoInk)
+                          }
+                          Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
+                              StatPill("⚡", "${stats.totalXp} ${i18n("dashboard.xp_suffix")}", i18n("dashboard.xp_label"), DuoInk)
+                          }
+                          Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
+                              StatPill("✓", "${stats.totalLessonsCompleted}/$MAX_LESSON_NUMBER", i18n("dashboard.lessons_label"), DuoInk)
+                          }
+                          IconButton(onClick = onHistory, modifier = Modifier.size(40.dp)) {
+                              Icon(
+                                  Icons.Default.History,
+                                  contentDescription = i18n("dashboard.history_tooltip"),
+                                  tint = DuoInkSecondary,
+                                  modifier = Modifier.size(21.dp)
+                              )
+                          }
                      }
 
                      HorizontalDivider(color = DuoBorder, thickness = 1.dp)
@@ -686,6 +656,27 @@ private fun LessonLaunchOverlay(
                     transformOrigin = TransformOrigin.Center
                 }
                 .background(unit.primaryColor)
+        )
+    }
+}
+
+@Composable
+private fun HeaderIconButton(
+    onClick: () -> Unit,
+    icon: ImageVector,
+    contentDescription: String
+) {
+    IconButton(
+        onClick = onClick,
+        modifier = Modifier
+            .size(40.dp)
+            .clip(RoundedCornerShape(12.dp))
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = contentDescription,
+            tint = DuoInkSecondary,
+            modifier = Modifier.size(20.dp)
         )
     }
 }

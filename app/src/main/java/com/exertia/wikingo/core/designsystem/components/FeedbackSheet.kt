@@ -60,6 +60,8 @@ fun FeedbackSheet(
     isCorrect: Boolean,
     correctAnswerText: String,
     explanation: String,
+    showDeepeningAction: Boolean,
+    onDeepen: () -> Unit,
     onContinue: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -165,6 +167,24 @@ fun FeedbackSheet(
                             }
                         }
                     }
+                }
+
+                if (showDeepeningAction) {
+                    Spacer(modifier = Modifier.height(10.dp))
+                    FeedbackActionButton(
+                        text = i18n("trainer.deepen_question"),
+                        faceColor = Color.Transparent,
+                        textColor = titleColor,
+                        baseColor = Color.Transparent,
+                        onClick = onDeepen,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .border(
+                                width = 1.dp,
+                                color = titleColor.copy(alpha = 0.65f),
+                                shape = RoundedCornerShape(16.dp)
+                            )
+                    )
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))

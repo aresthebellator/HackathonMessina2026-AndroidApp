@@ -32,13 +32,17 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.VolumeMute
 import androidx.compose.material.icons.filled.VolumeUp
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -87,6 +91,7 @@ import com.exertia.wikingo.data.local.SavedArticle
 fun TrainerScreen(
     viewModel: TrainerViewModel,
     onNavigateToHistory: () -> Unit,
+    onNavigateHome: () -> Unit = onNavigateToHistory,
     onSaveArticle: (SavedArticle) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
@@ -151,6 +156,7 @@ fun TrainerScreen(
                         is TrainerUiState.CompleteState -> CompleteView(
                             state = state,
                             onNewLesson = { viewModel.onEvent(TrainerUiEvent.StartNewLesson) },
+                            onNavigateHome = onNavigateHome,
                             onOpenHistory = onNavigateToHistory,
                             onSaveArticle = onSaveArticle
                         )
@@ -175,7 +181,9 @@ private fun QuestionView(
     onToggleSound: () -> Unit,
     onOpenHistory: () -> Unit
 ) {
+    val context = LocalContext.current
     val scrollState = rememberScrollState()
+    var isTopicHelpVisible by remember { mutableStateOf(false) }
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -255,6 +263,15 @@ private fun QuestionView(
                 modifier = Modifier.padding(horizontal = 20.dp)
             )
 
+            Spacer(modifier = Modifier.height(12.dp))
+
+            DuolingoButton(
+                text = i18n("trainer.explain_topic"),
+                style = DuolingoButtonStyle.OUTLINE,
+                onClick = { isTopicHelpVisible = true },
+                modifier = Modifier.padding(horizontal = 20.dp)
+            )
+
             Spacer(modifier = Modifier.height(20.dp))
 
             // Options List
@@ -296,6 +313,39 @@ private fun QuestionView(
                     )
                 }
             }
+
+            if (isTopicHelpVisible) {
+                AlertDialog(
+                    onDismissRequest = { isTopicHelpVisible = false },
+                    title = {
+                        Text(
+                            text = state.session.topicTitle,
+                            fontWeight = FontWeight.ExtraBold
+                        )
+                    },
+                    text = {
+                        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            if (state.session.topicDescription.isNotBlank()) {
+                                Text(
+                                    text = state.session.topicDescription,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                            Text(
+                                text = state.session.topicExtract
+                                    .takeIf { it.isNotBlank() }
+                                    ?.let { extract -> extract.take(500) + if (extract.length > 500) "..." else "" }
+                                    ?: i18n("trainer.topic_help_unavailable")
+                            )
+                        }
+                    },
+                    confirmButton = {
+                        TextButton(onClick = { isTopicHelpVisible = false }) {
+                            Text(i18n("common.got_it"))
+                        }
+                    }
+                )
+            }
         }
 
         // Bottom Action Bar: "VERIFICA" or Feedback Banner Sheet
@@ -323,6 +373,11 @@ private fun QuestionView(
                     isCorrect = feedback.isCorrect,
                     correctAnswerText = feedback.correctAnswerText,
                     explanation = feedback.explanation,
+                    showDeepeningAction = state.currentQuestion.shouldOfferDeepening,
+                    onDeepen = {
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(state.session.wikiUrl))
+                        context.startActivity(intent)
+                    },
                     onContinue = onNextQuestion,
                     modifier = Modifier.align(Alignment.BottomCenter)
                 )
@@ -335,6 +390,7 @@ private fun QuestionView(
 private fun CompleteView(
     state: TrainerUiState.CompleteState,
     onNewLesson: () -> Unit,
+    onNavigateHome: () -> Unit,
     onOpenHistory: () -> Unit,
     onSaveArticle: (SavedArticle) -> Unit
 ) {
@@ -358,7 +414,18 @@ private fun CompleteView(
             .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(modifier = Modifier.height(16.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Start
+        ) {
+            IconButton(onClick = onNavigateHome) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = i18n("common.back"),
+                    tint = DuoInk
+                )
+            }
+        }
 
         // Mascot Trophy — bounces in with a spring
         AnimatedVisibility(

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Keep the Viking inside the adaptive icon safe zone. The launcher owns the mask. -->
+    <!-- Adaptive launcher icons use a centered, conservative foreground. The system applies the device mask and scale. -->
     <item
-        android:width="72dp"
-        android:height="72dp"
+        android:width="42dp"
+        android:height="42dp"
         android:gravity="center">
         <bitmap
             android:src="@drawable/ic_launcher_viking"
