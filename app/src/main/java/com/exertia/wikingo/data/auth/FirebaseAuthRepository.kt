@@ -3,8 +3,10 @@ package com.exertia.wikingo.data.auth
 import android.app.Activity
 import android.content.Context
 import com.google.firebase.FirebaseApp
+import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuth.AuthStateListener
+import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.OAuthProvider
 import com.google.firebase.FirebaseOptions
 import com.google.firebase.firestore.FirebaseFirestore
@@ -35,6 +37,24 @@ class FirebaseAuthRepository(context: Context) {
         val provider = OAuthProvider.newBuilder("google.com", requireConfigured()).build()
         requireConfigured().startActivityForSignInWithProvider(activity, provider).await()
     }
+
+    fun authErrorMessage(exception: Exception): String =
+        when ((exception as? FirebaseAuthException)?.errorCode) {
+            "ERROR_OPERATION_NOT_ALLOWED" ->
+                "Abilita Google come provider in Firebase Authentication e riprova."
+            "ERROR_INVALID_CREDENTIAL" ->
+                "La configurazione OAuth Android non è valida. Verifica google-services.json, package name e SHA-1 in Firebase."
+            "ERROR_NETWORK_REQUEST_FAILED" ->
+                "Connessione non disponibile. Controlla Internet e riprova."
+            "ERROR_TOO_MANY_REQUESTS" ->
+                "Troppi tentativi. Attendi qualche minuto e riprova."
+            "ERROR_WEB_STORAGE_UNSUPPORTED" ->
+                "Il dispositivo non supporta il salvataggio richiesto per l'accesso Google."
+            else -> when ((exception as? FirebaseException)?.message) {
+                null, "" -> "Impossibile completare l'accesso Google. Verifica la configurazione Firebase."
+                else -> exception.message ?: "Impossibile completare l'accesso Google. Riprova."
+            }
+        }
 
     suspend fun register(email: String, password: String) {
         val result = requireConfigured()

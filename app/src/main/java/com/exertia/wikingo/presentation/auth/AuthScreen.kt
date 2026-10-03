@@ -121,7 +121,7 @@ fun AuthScreen(
                         } catch (exception: CancellationException) {
                             throw exception
                         } catch (exception: Exception) {
-                            errorMessage = exception.message ?: genericErrorMessage
+                            errorMessage = repository.authErrorMessage(exception)
                         } finally {
                             isLoading = false
                             isGoogleLoading = false
