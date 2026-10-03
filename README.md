@@ -1,7 +1,9 @@
-# Wikipedia's Hackathon - 2-4 October '26
+# Wikipedia's Hackathon Messina - 2-4 October '26
 
-Discover our project's codebase by changing the branch.
+Wikingo originated at the Wikipedia Hackathon held in Messina in October 2026. The concept is to enable users to expand their knowledge through a game based on daily streaks, covering a wide range of topics; each chapter addresses different themes, allowing users to learn even when they answer a quiz question incorrectly. The project is fully open-source, welcoming improvements from external contributors.
 
-android-app/ | Our android app's codebase, along with the APK that has been built;
+# Web-App repository
 
-web-app/     | Our web app, built on React, JS and that can be used with all devices.
+To find the web code, this is the other repository: https://github.com/aresthebellator/HackatonMessina2026-WebApp.git
+
+  
