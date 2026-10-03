@@ -4,6 +4,6 @@ Wikingo originated at the Wikipedia Hackathon held in Messina in October 2026. T
 
 # Web-App repository
 
-To find the web code, this is the other repository: https://github.com/aresthebellator/HackatonMessina2026-WebApp.git
+To find the web code, this is the other repository: https://github.com/aresthebellator/HackathonMessina2026-WebApp.git
 
   
