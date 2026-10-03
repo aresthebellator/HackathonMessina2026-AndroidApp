@@ -13,4 +13,6 @@ To find the web code, this is the other repository: https://github.com/aresthebe
 3. Download that Android app's `google-services.json` into `android-app/app/`.
 4. Build the app. The Google Services Gradle plugin is applied when this file is present; its generated `default_web_client_id` is used by Credential Manager to obtain a Google ID token, which the app exchanges with Firebase Authentication.
 
-Without `google-services.json`, the project still builds, but Firebase authentication remains unavailable in the app.
+Email/password Firebase authentication uses the bundled public project configuration as a
+fallback, so the app remains usable without `google-services.json`. Add the file to enable
+the Android-specific OAuth configuration required by Google Sign-In.
