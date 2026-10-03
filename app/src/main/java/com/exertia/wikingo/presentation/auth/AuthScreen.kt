@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -16,16 +17,19 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Mail
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -37,15 +41,23 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.credentials.CredentialManager
+import androidx.credentials.CustomCredential
+import androidx.credentials.GetCredentialRequest
+import androidx.credentials.exceptions.GetCredentialCancellationException
 import com.exertia.wikingo.R
 import com.exertia.wikingo.data.auth.FirebaseAuthRepository
 import com.exertia.wikingo.core.i18n.i18n
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 
 @Composable
@@ -59,9 +71,20 @@ fun AuthScreen(
     var password by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf<String?>(null) }
     var isLoading by remember { mutableStateOf(false) }
+    var isGoogleLoading by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
+    val googleClientId = remember(context) {
+        val resourceId = context.resources.getIdentifier(
+            "default_web_client_id",
+            "string",
+            context.packageName
+        )
+        if (resourceId == 0) null else context.getString(resourceId)
+    }
     val invalidCredentialsMessage = i18n("auth.invalid_credentials")
     val genericErrorMessage = i18n("auth.generic_error")
+    val googleNotConfiguredMessage = i18n("auth.google_not_configured")
 
     Box(
         modifier = modifier
@@ -71,7 +94,9 @@ fun AuthScreen(
         contentAlignment = Alignment.Center
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
@@ -92,6 +117,84 @@ fun AuthScreen(
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Spacer(Modifier.height(22.dp))
+
+            OutlinedButton(
+                onClick = {
+                    val clientId = googleClientId
+                    if (clientId.isNullOrBlank()) {
+                        errorMessage = googleNotConfiguredMessage
+                        return@OutlinedButton
+                    }
+                    scope.launch {
+                        isLoading = true
+                        isGoogleLoading = true
+                        errorMessage = null
+                        try {
+                            val googleIdOption = GetGoogleIdOption.Builder()
+                                .setFilterByAuthorizedAccounts(false)
+                                .setServerClientId(clientId)
+                                .setAutoSelectEnabled(false)
+                                .build()
+                            val request = GetCredentialRequest.Builder()
+                                .addCredentialOption(googleIdOption)
+                                .build()
+                            val result = CredentialManager.create(context)
+                                .getCredential(context, request)
+                            val credential = result.credential
+                            if (
+                                credential !is CustomCredential ||
+                                credential.type != GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
+                            ) {
+                                errorMessage = genericErrorMessage
+                            } else {
+                                val googleCredential =
+                                    GoogleIdTokenCredential.createFrom(credential.data)
+                                repository.signInWithGoogle(googleCredential.idToken)
+                                onAuthenticated()
+                            }
+                        } catch (_: GetCredentialCancellationException) {
+                            errorMessage = null
+                        } catch (exception: CancellationException) {
+                            throw exception
+                        } catch (exception: Exception) {
+                            errorMessage = exception.message ?: genericErrorMessage
+                        } finally {
+                            isLoading = false
+                            isGoogleLoading = false
+                        }
+                    }
+                },
+                enabled = !isLoading && repository.isConfigured,
+                modifier = Modifier.fillMaxWidth().height(52.dp),
+                shape = RoundedCornerShape(16.dp),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    containerColor = MaterialTheme.colorScheme.surface,
+                    contentColor = MaterialTheme.colorScheme.onSurface
+                )
+            ) {
+                if (isGoogleLoading) {
+                    CircularProgressIndicator(modifier = Modifier.size(22.dp))
+                } else {
+                    Text("G", color = Color(0xFF4285F4), fontWeight = FontWeight.Black)
+                    Spacer(Modifier.size(10.dp))
+                    Text(i18n("auth.google_action"), fontWeight = FontWeight.Bold)
+                }
+            }
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                HorizontalDivider(modifier = Modifier.weight(1f))
+                Text(
+                    text = i18n("auth.or_divider"),
+                    modifier = Modifier.padding(horizontal = 12.dp),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    fontSize = 12.sp
+                )
+                HorizontalDivider(modifier = Modifier.weight(1f))
+            }
 
             AnimatedContent(
                 targetState = isRegistering,
@@ -159,8 +262,11 @@ fun AuthScreen(
                     contentColor = MaterialTheme.colorScheme.onPrimary
                 )
             ) {
-                if (isLoading) CircularProgressIndicator(modifier = Modifier.size(22.dp))
-                else Text(i18n(if (isRegistering) "auth.register_action" else "auth.login_action"))
+                if (isLoading && !isGoogleLoading) {
+                    CircularProgressIndicator(modifier = Modifier.size(22.dp))
+                } else {
+                    Text(i18n(if (isRegistering) "auth.register_action" else "auth.login_action"))
+                }
             }
 
             if (!repository.isConfigured) {
