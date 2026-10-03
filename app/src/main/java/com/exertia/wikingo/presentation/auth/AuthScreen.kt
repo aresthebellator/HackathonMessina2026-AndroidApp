@@ -1,5 +1,6 @@
 package com.exertia.wikingo.presentation.auth
 
+import android.app.Activity
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -48,15 +49,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.credentials.CredentialManager
-import androidx.credentials.CustomCredential
-import androidx.credentials.GetCredentialRequest
-import androidx.credentials.exceptions.GetCredentialCancellationException
 import com.exertia.wikingo.R
 import com.exertia.wikingo.data.auth.FirebaseAuthRepository
 import com.exertia.wikingo.core.i18n.i18n
-import com.google.android.libraries.identity.googleid.GetGoogleIdOption
-import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 
@@ -74,17 +69,8 @@ fun AuthScreen(
     var isGoogleLoading by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
-    val googleClientId = remember(context) {
-        val resourceId = context.resources.getIdentifier(
-            "default_web_client_id",
-            "string",
-            context.packageName
-        )
-        if (resourceId == 0) null else context.getString(resourceId)
-    }
     val invalidCredentialsMessage = i18n("auth.invalid_credentials")
     val genericErrorMessage = i18n("auth.generic_error")
-    val googleNotConfiguredMessage = i18n("auth.google_not_configured")
 
     Box(
         modifier = modifier
@@ -120,9 +106,9 @@ fun AuthScreen(
 
             OutlinedButton(
                 onClick = {
-                    val clientId = googleClientId
-                    if (clientId.isNullOrBlank()) {
-                        errorMessage = googleNotConfiguredMessage
+                    val activity = context as? Activity
+                    if (activity == null) {
+                        errorMessage = genericErrorMessage
                         return@OutlinedButton
                     }
                     scope.launch {
@@ -130,30 +116,8 @@ fun AuthScreen(
                         isGoogleLoading = true
                         errorMessage = null
                         try {
-                            val googleIdOption = GetGoogleIdOption.Builder()
-                                .setFilterByAuthorizedAccounts(false)
-                                .setServerClientId(clientId)
-                                .setAutoSelectEnabled(false)
-                                .build()
-                            val request = GetCredentialRequest.Builder()
-                                .addCredentialOption(googleIdOption)
-                                .build()
-                            val result = CredentialManager.create(context)
-                                .getCredential(context, request)
-                            val credential = result.credential
-                            if (
-                                credential !is CustomCredential ||
-                                credential.type != GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
-                            ) {
-                                errorMessage = genericErrorMessage
-                            } else {
-                                val googleCredential =
-                                    GoogleIdTokenCredential.createFrom(credential.data)
-                                repository.signInWithGoogle(googleCredential.idToken)
-                                onAuthenticated()
-                            }
-                        } catch (_: GetCredentialCancellationException) {
-                            errorMessage = null
+                            repository.signInWithGoogle(activity)
+                            onAuthenticated()
                         } catch (exception: CancellationException) {
                             throw exception
                         } catch (exception: Exception) {

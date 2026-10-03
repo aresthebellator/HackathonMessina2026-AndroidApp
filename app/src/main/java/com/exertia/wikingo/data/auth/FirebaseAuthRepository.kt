@@ -1,10 +1,11 @@
 package com.exertia.wikingo.data.auth
 
+import android.app.Activity
 import android.content.Context
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuth.AuthStateListener
-import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.OAuthProvider
 import com.google.firebase.FirebaseOptions
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
@@ -30,9 +31,9 @@ class FirebaseAuthRepository(context: Context) {
         requireConfigured().signInWithEmailAndPassword(email, password).await()
     }
 
-    suspend fun signInWithGoogle(idToken: String) {
-        val credential = GoogleAuthProvider.getCredential(idToken, null)
-        requireConfigured().signInWithCredential(credential).await()
+    suspend fun signInWithGoogle(activity: Activity) {
+        val provider = OAuthProvider.newBuilder("google.com", requireConfigured()).build()
+        requireConfigured().startActivityForSignInWithProvider(activity, provider).await()
     }
 
     suspend fun register(email: String, password: String) {

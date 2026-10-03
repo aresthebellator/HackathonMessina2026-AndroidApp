@@ -11,8 +11,8 @@ To find the web code, this is the other repository: https://github.com/aresthebe
 1. Register an Android app in the `wikingo-auth` Firebase project with package name `com.exertia.wikingo`.
 2. Add the SHA-1 signing fingerprints for the debug and release builds in the Firebase app settings, and enable Google as a sign-in provider in Firebase Authentication.
 3. Download that Android app's `google-services.json` into `android-app/app/`.
-4. Build the app. The Google Services Gradle plugin is applied when this file is present; its generated `default_web_client_id` is used by Credential Manager to obtain a Google ID token, which the app exchanges with Firebase Authentication.
+4. Build the app. When the file is present, the Google Services Gradle plugin supplies the Android OAuth configuration. The app starts Firebase's Google OAuth flow directly, then completes authentication with Firebase.
 
-Email/password Firebase authentication uses the bundled public project configuration as a
-fallback, so the app remains usable without `google-services.json`. Add the file to enable
-the Android-specific OAuth configuration required by Google Sign-In.
+Email/password and Google authentication use the bundled public project configuration as a
+fallback, so the app can start Firebase authentication without `google-services.json`. Add
+the file for the Android app's SHA-1/package registration and production Google OAuth setup.
